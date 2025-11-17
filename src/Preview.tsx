@@ -7,7 +7,7 @@ const LOGO_TEXT = 'ARCHIVE 404';
 const FONT_STACK = 'Helvetica Neue, Helvetica, Arial, sans-serif';
 const INSTAGRAM_URL = 'https://instagram.com/archv404';
 const MAILTO_URL = 'mailto:info@archv404.com';
-const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4U78ZN';
+const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
 
 // ABOUT text as a single block paragraph
 const ABOUT_TEXT: string =
