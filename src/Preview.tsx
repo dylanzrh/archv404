@@ -611,7 +611,7 @@ html, body {
   z-index: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(0, 0, 0, 0.26), rgba(0, 0, 0, 0.36)),
+    linear-gradient(rgba(0, 0, 0, 0.34), rgba(0, 0, 0, 0.44)),
     url('https://res.cloudinary.com/dsas5i0fx/image/upload/v1763336289/IMG_5984_wjkvk6.jpg');
   background-position: center center, center 48%; /* chandelier slightly lower, closer to middle on desktop */
   background-size: cover, 115%; /* subtle base zoom-in on the photo */
@@ -1105,7 +1105,7 @@ input:-webkit-autofill:active {
   /* Mobile background framing */
   .bg-layer {
     background-image:
-      linear-gradient(rgba(0, 0, 0, 0.20), rgba(0, 0, 0, 0.30)),
+      linear-gradient(rgba(0, 0, 0, 0.30), rgba(0, 0, 0, 0.40)),
       url('https://res.cloudinary.com/dsas5i0fx/image/upload/v1763336289/IMG_5984_wjkvk6.jpg');
     background-position: center center, center 55%;
     background-size: cover, 118%;
