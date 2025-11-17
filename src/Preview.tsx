@@ -76,6 +76,7 @@ export default function Preview() {
   const [bgZoom, setBgZoom] = useState(1);
   const scrollYRef = useRef(0);
   const rafRef = useRef<number | null>(null);
+  const inputFocusedRef = useRef(false);
 
   const [rowVisible, setRowVisible] = useState<boolean[]>(() =>
     Array.from({ length: Math.ceil(PAST_FLYERS.length / 2) }, (_, i) => i === 0)
@@ -147,6 +148,8 @@ export default function Preview() {
     }
 
     const handleScroll = () => {
+      // When typing in the email field (or any focused input), freeze the zoom effect
+      if (inputFocusedRef.current) return;
       const scrollY = window.scrollY || window.pageYOffset || 0;
       scrollYRef.current = scrollY;
 
@@ -321,6 +324,12 @@ export default function Preview() {
             placeholder="EMAIL"
             value={newsletterEmail}
             onChange={(e) => setNewsletterEmail(e.target.value)}
+            onFocus={() => {
+              inputFocusedRef.current = true;
+            }}
+            onBlur={() => {
+              inputFocusedRef.current = false;
+            }}
             className="newsletter-input"
           />
           <button
@@ -783,7 +792,6 @@ html, body {
 }
 
 .upcoming {
-  font-weight: 700; /* keep UPCOMING titles bold */ /* make UPCOMING titles bold */
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.2em;
@@ -791,8 +799,17 @@ html, body {
   font-size: 16px;
   opacity: 0.95;
   margin-top: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  line-height: 1.45;
+  font-size: 16px;
+  opacity: 0.95;
+  margin-top: 10px;
 }
-.upcoming p,
+.upcoming p {
+  font-weight: 700; /* dates & locations bold */
+}
+
 .upcoming .tba {
   font-weight: 400; /* TBA stays regular weight */
 }
@@ -1104,12 +1121,10 @@ input:-webkit-autofill:active {
   /* HOME (mobile): logo upper third, buttons lower third, no extra scroll */
   .center-home {
     padding-top: 16vh;             /* logo comfortably in upper third */
-    padding-bottom: 24vh;          /* buttons lower, but not causing huge scroll area */
+    padding-bottom: 24vh;          /* overall layout height */
     min-height: calc(100vh - 64px);/* account for footer spacing so you can't scroll text away */
     justify-content: flex-start;
   }
-
-
 
   /* LANDING PAGES */
   .center-subpage,
@@ -1126,39 +1141,9 @@ input:-webkit-autofill:active {
     gap: 16px;
   }
 
-  .panel {
-    margin-top: 20px;
-  }
-
-  .newsletter {
-    margin-top: 28px;
-  }
-
-  .newsletter-message {
-    margin-bottom: 32px;
-  }
-
-  .homebtn-wrapper {
-    margin-top: 40px;
-  }
-
-  .flyer-row {
-    grid-template-columns: repeat(2, 1fr);
-    max-width: 460px;
-  }
-
-  .flyer-cell img {
-    width: 100%;
-    height: auto;
-  }
-
-    /* About width tuned for most even phone spacing */
-  .about {
-    max-width: 34ch; /* sweet spot: not too narrow, not too wide on phone */
-  }
-
-  .about-section {
-    padding-bottom: 40px; /* ensure no overlap with HOME button on ABOUT */
+  /* On HOME specifically, push nav (buttons) one button-height further down */
+  .center-home .nav {
+    margin-top: 56px;
   }
 }
 
