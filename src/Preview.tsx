@@ -484,6 +484,7 @@ html, body {
   justify-content: flex-start;
   color: #fff;
   overflow: hidden;
+  padding-bottom: 64px; /* space so fixed footer doesn't cover content */
 }
 
 /* Fixed background image that stays in place while content scrolls */
@@ -493,7 +494,7 @@ html, body {
   z-index: 0;
   pointer-events: none;
   background:
-    linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.45)),
+    linear-gradient(rgba(0, 0, 0, 0.26), rgba(0, 0, 0, 0.36)),
     url('https://res.cloudinary.com/dsas5i0fx/image/upload/v1763336289/IMG_5984_wjkvk6.jpg')
       center center / cover no-repeat;
 }
@@ -541,10 +542,9 @@ html, body {
   will-change: transform, opacity;
 }
 
-
 .tag {
   margin-top: 20px;
-  margin-bottom: 56px;
+  margin-bottom: 40px; /* slightly less space under logo */
   letter-spacing: 0.28em;
   text-transform: uppercase;
   font-size: clamp(12px, 2.4vw, 16px);
@@ -605,7 +605,7 @@ html, body {
 }
 
 .panel {
-  margin: 20px auto 0;
+  margin: 12px auto 0; /* slightly closer to logo/tag */
   padding: 0;
   max-width: 900px;
 }
@@ -621,7 +621,7 @@ html, body {
 
 .section {
   text-align: left;
-  margin: 24px auto 0;
+  margin: 18px auto 0; /* slightly reduced top margin */
   max-width: 900px;
 }
 .section-past {
@@ -653,7 +653,6 @@ html, body {
   opacity: 0.95;
   text-align: justify;
 }
-
 
 .upcoming {
   text-align: center;
@@ -803,13 +802,15 @@ html, body {
 
 .footer {
   width: 100%;
-  margin-top: auto;
-  padding: 18px 0;
+  padding: 14px 0 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  z-index: 1;
+  position: fixed;   /* always visible without scrolling */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
 }
 .footer-hidden {
   opacity: 0;
@@ -853,7 +854,7 @@ html, body {
     border-color: rgba(255, 255, 255, 0.28);
   }
   .panel {
-    margin-top: 24px;
+    margin-top: 16px; /* still slightly reduced vs before */
   }
   .flyer-row {
     grid-template-columns: repeat(2, 1fr);
