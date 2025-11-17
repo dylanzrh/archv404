@@ -1088,43 +1088,43 @@ input:-webkit-autofill:active {
     white-space: nowrap;
   }
 
-  /* HOME: logo in upper third, buttons further down */
+  /* HOME: logo upper third, buttons lower third */
   .center-home {
-    padding-top: 13vh;      /* logo high, comfortably above chandelier */
-    padding-bottom: 26vh;   /* buttons clearly below chandelier + room for footer */
+    padding-top: 22vh;
+    padding-bottom: 30vh;
     min-height: 100vh;
     justify-content: flex-start;
   }
 
-  /* LANDING PAGES: similar frame, a bit more room for content */
+  /* LANDING PAGES */
   .center-subpage,
   .center-about,
   .center-upcoming {
-    padding-top: 12vh;      /* similar frame on all landing pages */
-    padding-bottom: 22vh;   /* space for content + footer */
+    padding-top: 12vh;
+    padding-bottom: 22vh;
     min-height: 100vh;
     justify-content: flex-start;
   }
 
   .nav {
-    margin-top: 32px; /* buttons further down on mobile for nicer chandelier framing */
+    margin-top: 32px;
     gap: 16px;
   }
 
   .panel {
-    margin-top: 20px; /* consistent content distance below buttons/tag */
+    margin-top: 20px;
   }
 
   .newsletter {
-    margin-top: 28px; /* spacing between UPCOMING dates and email box */
+    margin-top: 28px;
   }
 
   .newsletter-message {
-    margin-bottom: 32px; /* extra breathing room before HOME button */
+    margin-bottom: 32px;
   }
 
   .homebtn-wrapper {
-    margin-top: 40px; /* avoid HOME being too close to any content */
+    margin-top: 40px;
   }
 
   .flyer-row {
@@ -1137,8 +1137,9 @@ input:-webkit-autofill:active {
     height: auto;
   }
 
+  /* About narrower on mobile */
   .about {
-    max-width: 36ch; /* wider block for smoother, more even justification */
+    max-width: 32ch;
   }
 
   .about-section {
