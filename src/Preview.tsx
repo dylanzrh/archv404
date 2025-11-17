@@ -1118,20 +1118,34 @@ input:-webkit-autofill:active {
     white-space: nowrap;
   }
 
-      /* HOME (mobile): logo upper third, buttons lower third, limited scroll like landing pages */
+        /* HOME (mobile): logo upper third, buttons lower third, limited scroll like landing pages */
   .center-home {
     padding-top: 16vh;             /* keep logo comfortably in upper third */
-    padding-bottom: 10vh;          /* same bottom padding as landing pages to limit scroll */
-    min-height: 100vh;             /* match landing pages so scrolling behaves the same */
+    padding-bottom: 4vh;           /* less bottom padding to reduce scroll */
+    min-height: 100vh;             /* still fill the viewport */
     justify-content: flex-start;
   }
 
-  /* LANDING PAGES */
-  .center-subpage,
-  .center-about,
-  .center-upcoming {
+    /* LANDING PAGES BASE (artists & past) */
+  .center-subpage {
     padding-top: 12vh;
-    padding-bottom: 10vh; /* reduced to prevent excessive scroll */
+    padding-bottom: 10vh;
+    min-height: 100vh;
+    justify-content: flex-start;
+  }
+
+  /* UPCOMING: slightly tighter to avoid too much scroll */
+  .center-upcoming {
+    padding-top: 10vh;
+    padding-bottom: 4vh;
+    min-height: 100vh;
+    justify-content: flex-start;
+  }
+
+  /* ABOUT: slightly tighter as well */
+  .center-about {
+    padding-top: 10vh;
+    padding-bottom: 4vh;
     min-height: 100vh;
     justify-content: flex-start;
   }
