@@ -1072,7 +1072,7 @@ input:-webkit-autofill:active {
 }
 
 @media (max-width: 640px) {
-  /* Mobile background framing: chandelier slightly lower */
+  /* Mobile background framing */
   .bg-layer {
     background-image:
       linear-gradient(rgba(0, 0, 0, 0.20), rgba(0, 0, 0, 0.30)),
@@ -1088,10 +1088,10 @@ input:-webkit-autofill:active {
     white-space: nowrap;
   }
 
-  /* HOME: logo upper third, buttons lower third */
+  /* HOME: logo upper third, buttons lower third, no excessive scroll */
   .center-home {
     padding-top: 22vh;
-    padding-bottom: 30vh;
+    padding-bottom: 15vh; /* reduced to prevent long scroll area */
     min-height: 100vh;
     justify-content: flex-start;
   }
@@ -1137,9 +1137,9 @@ input:-webkit-autofill:active {
     height: auto;
   }
 
-  /* About narrower on mobile */
+    /* About width tuned for most even phone spacing */
   .about {
-    max-width: 32ch;
+    max-width: 34ch; /* sweet spot: not too narrow, not too wide on phone */
   }
 
   .about-section {
