@@ -1118,10 +1118,10 @@ input:-webkit-autofill:active {
     white-space: nowrap;
   }
 
-  /* HOME (mobile): logo upper third, buttons lower third, no extra scroll */
+    /* HOME (mobile): logo upper third, buttons lower third, no extra scroll */
   .center-home {
-    padding-top: 16vh;             /* logo comfortably in upper third */
-    padding-bottom: 24vh;          /* overall layout height */
+    padding-top: 16vh;             /* keep logo comfortably in upper third */
+    padding-bottom: 20vh;          /* slightly less bottom padding to avoid excess scroll */
     min-height: calc(100vh - 64px);/* account for footer spacing so you can't scroll text away */
     justify-content: flex-start;
   }
@@ -1143,7 +1143,7 @@ input:-webkit-autofill:active {
 
   /* On HOME specifically, push nav (buttons) one button-height further down */
   .center-home .nav {
-    margin-top: 56px;
+    margin-top: 96px; /* push buttons ~one button-height further down on HOME mobile */
   }
 }
 
