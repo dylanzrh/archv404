@@ -833,15 +833,56 @@ html, body {
 }
 
 @media (max-width: 640px) {
-  /* Slightly brighter + more zoom on phone */
+  /* Slightly brighter + more zoom on phone and consistent framing */
   .bg-layer {
     background-image:
       linear-gradient(rgba(0, 0, 0, 0.20), rgba(0, 0, 0, 0.30)),
       url('https://res.cloudinary.com/dsas5i0fx/image/upload/v1763336289/IMG_5984_wjkvk6.jpg');
-    background-position: center center, center 50%;
+    /* chandelier sits clearly below the logo area */
+    background-position: center center, center 55%;
     background-size: cover, 118%;
     background-repeat: no-repeat, no-repeat;
   }
+
+  .logo-main {
+    font-size: clamp(36px, 16vw, 72px);
+    white-space: nowrap;
+  }
+
+  /* CONSISTENT vertical layout for ALL pages on phone */
+  .center,
+  .center-subpage,
+  .center-about,
+  .center-upcoming {
+    padding-top: 12vh;    /* moves layout slightly up */
+    padding-bottom: 12vh; /* keeps space for chandelier + footer */
+    min-height: calc(100vh - 120px); /* account for fixed footer */
+    justify-content: flex-start;      /* avoids over-centering / dropping too low */
+  }
+
+  .nav {
+    margin-top: 16px;
+    gap: 16px;
+  }
+  .navbtn {
+    min-width: 140px;
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+  .panel {
+    margin-top: 16px; /* still slightly reduced vs before */
+  }
+  .flyer-row {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 460px;
+  }
+  .flyer-cell img {
+    width: 100%;
+    height: auto;
+  }
+  .about {
+    max-width: 28ch;
+  }
+}
 
   .logo-main {
     font-size: clamp(36px, 16vw, 72px);
