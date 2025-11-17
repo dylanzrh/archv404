@@ -1118,11 +1118,11 @@ input:-webkit-autofill:active {
     white-space: nowrap;
   }
 
-    /* HOME (mobile): logo upper third, buttons lower third, no extra scroll */
+      /* HOME (mobile): logo upper third, buttons lower third, limited scroll like landing pages */
   .center-home {
     padding-top: 16vh;             /* keep logo comfortably in upper third */
-    padding-bottom: 20vh;          /* slightly less bottom padding to avoid excess scroll */
-    min-height: calc(100vh - 64px);/* account for footer spacing so you can't scroll text away */
+    padding-bottom: 10vh;          /* same bottom padding as landing pages to limit scroll */
+    min-height: 100vh;             /* match landing pages so scrolling behaves the same */
     justify-content: flex-start;
   }
 
