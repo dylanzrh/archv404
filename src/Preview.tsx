@@ -673,10 +673,8 @@ html, body {
 
 .nav {
   position: relative;
-  z-index: 30; /* nav above all layers */
-  position: relative;
-  z-index: 20;
-    margin-top: 32px; /* more space between logo + buttons */
+  z-index: 10; /* above panel, below any overlay if added */
+  margin-top: 32px; /* nice distance below logo/tag */
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
@@ -726,10 +724,8 @@ html, body {
 
 .panel {
   position: relative;
-  z-index: 1; /* panel goes UNDER nav buttons to avoid blocking */
-  position: relative;
-  z-index: 5; /* ensure panel never covers nav */
-  margin: 12px auto 0; /* slightly closer to logo/tag */
+  z-index: 1; /* safely below nav so it never blocks buttons */
+  margin: 12px auto 0;
   padding: 0;
   max-width: 900px;
 }
@@ -798,22 +794,9 @@ html, body {
 }
 .upcoming p,
 .upcoming .tba {
-  font-size: 14px;
-  letter-spacing: 0.2em;
-  opacity: 0;
-  animation: line-in 0.45s ease forwards;
+  font-weight: 400; /* TBA stays regular weight */
 }
 
-/* Make only the DATE + PLACE bold */
-.upcoming p:not(.tba) {
-  font-weight: 700;
-}
-
-/* TBA stays regular weight */
-.upcoming .tba {
-  font-weight: 400;
-} line-in 0.45s ease forwards;
-}
 .tba {
   font-size: 14px;
   letter-spacing: 0.2em;
@@ -1070,9 +1053,6 @@ input:-webkit-autofill:active {
 
 .footer {
   pointer-events: none; /* footer never intercepts taps */
-  z-index: 0;
-  pointer-events: none;
-  z-index: 1; /* footer stays behind everything, no block on taps */
   width: 100%;
   padding: 14px 0 18px;
   display: flex;
@@ -1096,15 +1076,13 @@ input:-webkit-autofill:active {
 
 .fade-hidden {
   opacity: 0;
-  /* REMOVE pointer-events none to prevent dead‑tap bug */
-  pointer-events: auto;
 }
-}
+
 .fade-visible {
   opacity: 1;
-  pointer-events: auto !important; /* guarantee first-tap response */ /* ensure first‑tap works */
-  pointer-events: auto; /* ensure buttons can be clicked immediately */
 }
+
+
 
 @media (max-width: 640px) {
   /* Mobile background framing */
@@ -1123,13 +1101,15 @@ input:-webkit-autofill:active {
     white-space: nowrap;
   }
 
-  /* HOME: logo upper third, buttons lower third, no excessive scroll */
+  /* HOME (mobile): logo upper third, buttons lower third, no extra scroll */
   .center-home {
-    padding-top: 18vh; /* bring logo slightly lower */
-    padding-bottom: 38vh; /* push buttons further down */ /* move buttons further down */
-    min-height: 100vh;
+    padding-top: 16vh;             /* logo comfortably in upper third */
+    padding-bottom: 24vh;          /* buttons lower, but not causing huge scroll area */
+    min-height: calc(100vh - 64px);/* account for footer spacing so you can't scroll text away */
     justify-content: flex-start;
   }
+
+
 
   /* LANDING PAGES */
   .center-subpage,
