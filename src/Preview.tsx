@@ -871,12 +871,6 @@ input.newsletter-input:-webkit-autofill:active {
   -webkit-text-fill-color: #fff !important;
   color: #fff !important;
 }
-: all 0.2s ease;
-  letter-spacing: 0.12em;
-  font-size: 11px;
-  outline: none;
-  transition: all 0.2s ease;
-}
 
 .newsletter-input::placeholder {
   color: rgba(255, 255, 255, 0.45);
@@ -1107,10 +1101,10 @@ input.newsletter-input:-webkit-autofill:active {
   .center-subpage,
   .center-about,
   .center-upcoming {
-    padding-top: 7vh;      /* move layout further up */
-    padding-bottom: 15vh;  /* enough space for chandelier + footer */
-    min-height: calc(100vh - 120px); /* account for fixed footer */
-    justify-content: flex-start;
+    padding-top: 10vh;      /* move layout a bit further up */
+    padding-bottom: 16vh;   /* space for chandelier + footer */
+    min-height: calc(100vh - 110px); /* account for fixed footer height */
+    justify-content: center; /* center logo + content vertically */
   }
 
   .nav {
