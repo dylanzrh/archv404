@@ -292,7 +292,7 @@ export default function Preview() {
 
     // Always bring the user back to the top of the layout on page change
     if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'auto' });
     }
   };
 
@@ -689,6 +689,7 @@ html, body {
 }
 
 .nav {
+    margin-top: 32px; /* more space between logo + buttons */
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
@@ -759,7 +760,7 @@ html, body {
 
 .about-section {
   padding-top: 0;
-  padding-bottom: 8px;
+  padding-bottom: 24px; /* more breathing room so text and HOME button never overlap */
 }
 
 .about {
@@ -776,7 +777,7 @@ html, body {
   animation: about-line-in 0.6s ease forwards;
 }
 .about-block {
-  margin: 0;
+  margin: 0 0 24px; /* add bottom margin before the HOME button */
   line-height: 1.45;
   font-size: 15px;
   opacity: 0.95;
@@ -811,7 +812,7 @@ html, body {
 }
 
 .newsletter {
-  margin: 28px auto 0;
+  margin: 40px auto 0; /* more breathing room above email box */
   max-width: 420px;
   text-align: center;
 }
@@ -859,11 +860,11 @@ html, body {
   caret-color: #fff !important;
 }
 
-/* Fully neutralize Chrome/Safari autofill */
-input.newsletter-input:-webkit-autofill,
-input.newsletter-input:-webkit-autofill:hover,
-input.newsletter-input:-webkit-autofill:focus,
-input.newsletter-input:-webkit-autofill:active {
+/* Fully neutralize Chrome/Safari autofill for all inputs */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
   box-shadow: 0 0 0px 1000px transparent inset !important;
   background: transparent !important;
@@ -922,6 +923,7 @@ input.newsletter-input:-webkit-autofill:active {
 }
 
 .newsletter-message {
+  margin-bottom: 26px; /* spacing before HOME button */
   margin-top: 10px;
   font-size: 11px;
   letter-spacing: 0.16em;
@@ -1021,7 +1023,7 @@ input.newsletter-input:-webkit-autofill:active {
 .homebtn-wrapper {
   display: flex;
   justify-content: center;
-  margin-top: 40px;
+  margin-top: 54px; /* more distance from mailbox or content */
 }
 .homebtn {
   display: inline-flex;
@@ -1079,6 +1081,12 @@ input.newsletter-input:-webkit-autofill:active {
 }
 
 @media (max-width: 640px) {
+  /* EXTRA SPACING FOR MOBILE HOME PAGE */
+  .center.home,
+  .center {
+    padding-top: 10vh; /* move layout further up */
+    padding-bottom: 22vh; /* more room for chandelier + buttons */
+  }
   /* Slightly brighter + more zoom on phone and consistent framing */
   .bg-layer {
     background-image:
@@ -1096,16 +1104,18 @@ input.newsletter-input:-webkit-autofill:active {
     white-space: nowrap;
   }
 
-  /* CONSISTENT vertical layout for ALL pages on phone */
+  /* CONSISTENT vertical layout for all pages on phone */
   .center,
   .center-subpage,
   .center-about,
   .center-upcoming {
-    padding-top: 10vh;      /* move layout a bit further up */
-    padding-bottom: 16vh;   /* space for chandelier + footer */
-    min-height: calc(100vh - 110px); /* account for fixed footer height */
-    justify-content: center; /* center logo + content vertically */
+    padding-top: 8vh;      /* move layout a bit further up on phone */
+    padding-bottom: 18vh;  /* room for chandelier + fixed footer */
+    min-height: 100vh;     /* each page fills the viewport height */
+    justify-content: flex-start; /* logo + content start at a fixed height */
   }
+
+  
 
   .nav {
     margin-top: 16px;
