@@ -11,7 +11,7 @@ const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
 
 // ABOUT text as a single block paragraph
 const ABOUT_TEXT: string =
-  'ARCHIVE 404 IS A ZURICH-BASED EVENT LABEL KNOWN FOR CURATING CAREFULLY DESIGNED EXPERIENCES WHERE MUSIC, LIGHT AND SPACE COME TOGETHER. ITS NAME REINTERPRETS A DIGITAL ERROR AS AN INVITATION TO RECONNECT THROUGH PEOPLE AND SOUND. BRINGING TOGETHER SOUGHT-AFTER INTERNATIONAL ARTISTS AND SOME OF THE MOST PROMISING LOCAL TALENTS, ARCHIVE 404 CREATES A DISTINCT ENERGY THAT FEELS BOTH CONTEMPORARY AND TIMELESS.';
+  'ARCHIVE 404 IS A ZURICH-BASED EVENT LABEL CURATING CAREFULLY DESIGNED EXPERIENCES WHERE MUSIC, LIGHT AND SPACE COME TOGETHER. ITS NAME REINTERPRETS A DIGITAL ERROR AS AN INVITATION TO RECONNECT THROUGH PEOPLE AND SOUND. BY BRINGING TOGETHER SOUGHT-AFTER INTERNATIONAL ARTISTS AND SOME OF THE MOST PROMISING LOCAL TALENTS, ARCHIVE 404 CREATES AN ENERGY THAT FEELS CONTEMPORARY YET TIMELESS.';
 
 const PAST_FLYERS: string[] = [
   'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060268/archive404_251025_post_yus7xj.jpg',
@@ -489,8 +489,8 @@ export default function Preview() {
         />
 
         <div
-          className={`center ${page === 'upcoming' ? 'center-upcoming' : ''} ${
-            page !== 'home' ? 'center-subpage' : ''
+          className={`center ${page === 'home' ? 'center-home' : 'center-subpage'} ${
+            page === 'upcoming' ? 'center-upcoming' : ''
           } ${page === 'about' ? 'center-about' : ''}`}
         >
           {/* Logo uses its own keyframe animation, restarted via key on every page transition */}
@@ -518,24 +518,7 @@ export default function Preview() {
             {page === 'about' && (
               <section className="section about-section">
                 <article className="about">
-                  <p className="about-block">
-                    {ABOUT_TEXT.split('. ').map((raw, idx) => {
-                      const text = raw.trim();
-                      if (!text) return null;
-                      const finalText = text.endsWith('.') ? text : `${text}.`;
-                      return (
-                        <span
-                          key={idx}
-                          className="about-line"
-                          style={{
-                            animationDelay: `${idx * 120}ms`,
-                          }}
-                        >
-                          {finalText + ' '}
-                        </span>
-                      );
-                    })}
-                  </p>
+                  <p className="about-block">{ABOUT_TEXT}</p>
                 </article>
                 <div className="homebtn-wrapper" style={{ marginTop: '40px' }}>
                   <button
@@ -764,7 +747,7 @@ html, body {
 }
 
 .about {
-  max-width: 32ch;
+  max-width: 38ch; /* slightly wider for ultra‑even justification */
   margin: 0 auto;
   text-transform: uppercase;
 }
@@ -777,11 +760,19 @@ html, body {
   animation: about-line-in 0.6s ease forwards;
 }
 .about-block {
-  margin: 0 0 24px; /* add bottom margin before the HOME button */
-  line-height: 1.45;
+  margin: 0 0 24px;
+  line-height: 1.5;              /* slightly more air for smoother rhythm */
   font-size: 15px;
   opacity: 0.95;
   text-align: justify;
+  text-align-last: justify;      /* last sentence also full width */
+  text-justify: inter-word;
+  word-spacing: normal;          /* let browser balance spacing */
+  letter-spacing: 0.02em;        /* subtle tracking for all-caps */
+  hyphens: none;                 /* no dashes */
+  text-rendering: optimizeLegibility;
+  display: block;
+  width: 100%;
 }
 
 .upcoming {
@@ -1081,18 +1072,11 @@ input:-webkit-autofill:active {
 }
 
 @media (max-width: 640px) {
-  /* EXTRA SPACING FOR MOBILE HOME PAGE */
-  .center.home,
-  .center {
-    padding-top: 10vh; /* move layout further up */
-    padding-bottom: 22vh; /* more room for chandelier + buttons */
-  }
-  /* Slightly brighter + more zoom on phone and consistent framing */
+  /* Mobile background framing: chandelier slightly lower */
   .bg-layer {
     background-image:
       linear-gradient(rgba(0, 0, 0, 0.20), rgba(0, 0, 0, 0.30)),
       url('https://res.cloudinary.com/dsas5i0fx/image/upload/v1763336289/IMG_5984_wjkvk6.jpg');
-    /* chandelier sits clearly below the logo area */
     background-position: center center, center 55%;
     background-size: cover, 118%;
     background-repeat: no-repeat, no-repeat;
@@ -1104,42 +1088,64 @@ input:-webkit-autofill:active {
     white-space: nowrap;
   }
 
-  /* CONSISTENT vertical layout for all pages on phone */
-  .center,
+  /* HOME: logo in upper third, buttons further down */
+  .center-home {
+    padding-top: 13vh;      /* logo high, comfortably above chandelier */
+    padding-bottom: 26vh;   /* buttons clearly below chandelier + room for footer */
+    min-height: 100vh;
+    justify-content: flex-start;
+  }
+
+  /* LANDING PAGES: similar frame, a bit more room for content */
   .center-subpage,
   .center-about,
   .center-upcoming {
-    padding-top: 8vh;      /* move layout a bit further up on phone */
-    padding-bottom: 18vh;  /* room for chandelier + fixed footer */
-    min-height: 100vh;     /* each page fills the viewport height */
-    justify-content: flex-start; /* logo + content start at a fixed height */
+    padding-top: 12vh;      /* similar frame on all landing pages */
+    padding-bottom: 22vh;   /* space for content + footer */
+    min-height: 100vh;
+    justify-content: flex-start;
   }
-
-  
 
   .nav {
-    margin-top: 16px;
+    margin-top: 32px; /* buttons further down on mobile for nicer chandelier framing */
     gap: 16px;
   }
-  .navbtn {
-    min-width: 140px;
-    border-color: rgba(255, 255, 255, 0.28);
-  }
+
   .panel {
-    margin-top: 16px; /* still slightly reduced vs before */
+    margin-top: 20px; /* consistent content distance below buttons/tag */
   }
+
+  .newsletter {
+    margin-top: 28px; /* spacing between UPCOMING dates and email box */
+  }
+
+  .newsletter-message {
+    margin-bottom: 32px; /* extra breathing room before HOME button */
+  }
+
+  .homebtn-wrapper {
+    margin-top: 40px; /* avoid HOME being too close to any content */
+  }
+
   .flyer-row {
     grid-template-columns: repeat(2, 1fr);
     max-width: 460px;
   }
+
   .flyer-cell img {
     width: 100%;
     height: auto;
   }
+
   .about {
-    max-width: 28ch;
+    max-width: 36ch; /* wider block for smoother, more even justification */
+  }
+
+  .about-section {
+    padding-bottom: 40px; /* ensure no overlap with HOME button on ABOUT */
   }
 }
+
 
 @keyframes logo-intro {
   from {
