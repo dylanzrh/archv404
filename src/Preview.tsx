@@ -673,6 +673,8 @@ html, body {
 
 .nav {
   position: relative;
+  z-index: 30; /* nav above all layers */
+  position: relative;
   z-index: 20;
     margin-top: 32px; /* more space between logo + buttons */
   margin: 0 auto;
@@ -683,6 +685,9 @@ html, body {
 }
 
 .navbtn {
+  position: relative;
+  z-index: 9999; /* ensure buttons sit above EVERYTHING */
+  pointer-events: auto !important; /* first‑tap ALWAYS works */
   min-height: 48px;
   min-width: 160px;
   padding: 12px 18px;
@@ -720,6 +725,10 @@ html, body {
 }
 
 .panel {
+  position: relative;
+  z-index: 1; /* panel goes UNDER nav buttons to avoid blocking */
+  position: relative;
+  z-index: 5; /* ensure panel never covers nav */
   margin: 12px auto 0; /* slightly closer to logo/tag */
   padding: 0;
   max-width: 900px;
@@ -1060,7 +1069,10 @@ input:-webkit-autofill:active {
 }
 
 .footer {
+  pointer-events: none; /* footer never intercepts taps */
+  z-index: 0;
   pointer-events: none;
+  z-index: 1; /* footer stays behind everything, no block on taps */
   width: 100%;
   padding: 14px 0 18px;
   display: flex;
@@ -1084,11 +1096,13 @@ input:-webkit-autofill:active {
 
 .fade-hidden {
   opacity: 0;
-  pointer-events: none;
+  /* REMOVE pointer-events none to prevent dead‑tap bug */
+  pointer-events: auto;
+}
 }
 .fade-visible {
   opacity: 1;
-  pointer-events: auto !important; /* ensure first‑tap works */
+  pointer-events: auto !important; /* guarantee first-tap response */ /* ensure first‑tap works */
   pointer-events: auto; /* ensure buttons can be clicked immediately */
 }
 
@@ -1111,8 +1125,8 @@ input:-webkit-autofill:active {
 
   /* HOME: logo upper third, buttons lower third, no excessive scroll */
   .center-home {
-    padding-top: 14vh; /* move logo back up */
-    padding-bottom: 34vh; /* move buttons further down */
+    padding-top: 18vh; /* bring logo slightly lower */
+    padding-bottom: 38vh; /* push buttons further down */ /* move buttons further down */
     min-height: 100vh;
     justify-content: flex-start;
   }
