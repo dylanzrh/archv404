@@ -72,6 +72,10 @@ export default function Preview() {
   const [isEntering, setIsEntering] = useState(true);
   // Separate key for logo so we can replay keyframe animation on every page switch
   const [logoAnimKey, setLogoAnimKey] = useState(0);
+  // Background zoom factor for scroll effect
+  const [bgZoom, setBgZoom] = useState(1);
+  const scrollYRef = useRef(0);
+  const rafRef = useRef<number | null>(null);
 
   const [rowVisible, setRowVisible] = useState<boolean[]>(() =>
     Array.from({ length: Math.ceil(PAST_FLYERS.length / 2) }, (_, i) => i === 0)
@@ -79,6 +83,11 @@ export default function Preview() {
   const [artistVisible, setArtistVisible] = useState<boolean[]>(() =>
     ARTISTS.map(() => false)
   );
+
+  // Newsletter state (UPCOMING page)
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [isSubmittingNewsletter, setIsSubmittingNewsletter] = useState(false);
+  const [newsletterMessage, setNewsletterMessage] = useState<string | null>(null);
 
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
   const artistRefs = useRef<(HTMLParagraphElement | null)[]>([]);
@@ -109,6 +118,56 @@ export default function Preview() {
     playIntro();
   }, []);
 
+  // Background zoom on scroll (subtle, smooth + eased)
+  useEffect(() => {
+    const maxZoom = 1.08; // slightly less aggressive for a refined look
+    const maxScroll = 600; // more scroll distance for a slower zoom curve
+
+    const calcZoom = (scrollY: number) => {
+      const clamped = Math.min(Math.max(scrollY, 0), maxScroll);
+      return 1 + (clamped / maxScroll) * (maxZoom - 1);
+    };
+
+    function tick() {
+      const target = calcZoom(scrollYRef.current);
+
+      setBgZoom((prev) => {
+        // Easing factor – smaller = smoother and more "inertial"
+        const eased = prev + (target - prev) * 0.08;
+
+        // If we're extremely close to target, snap and stop the loop
+        if (Math.abs(eased - target) < 0.001) {
+          rafRef.current = null;
+          return target;
+        }
+
+        rafRef.current = window.requestAnimationFrame(tick);
+        return eased;
+      });
+    }
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY || window.pageYOffset || 0;
+      scrollYRef.current = scrollY;
+
+      // Only start a new RAF loop if one isn't already running
+      if (rafRef.current === null) {
+        rafRef.current = window.requestAnimationFrame(tick);
+      }
+    };
+
+    // Initialize once on mount to match current scroll position
+    handleScroll();
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, []);
+
   // Reveal past flyers row-by-row on scroll
   useEffect(() => {
     if (page !== 'past') return;
@@ -136,8 +195,11 @@ export default function Preview() {
       { threshold: 0.1 }
     );
 
-    rowRefs.current.forEach((row) => {
-      if (row) observer.observe(row);
+    rowRefs.current.forEach((row, index) => {
+      if (row) {
+        (row as HTMLElement).dataset.rowIndex = String(index);
+        observer.observe(row);
+      }
     });
 
     return () => {
@@ -184,6 +246,33 @@ export default function Preview() {
     };
   }, [page]);
 
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newsletterEmail.trim()) return;
+
+    setIsSubmittingNewsletter(true);
+    setNewsletterMessage(null);
+
+    try {
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: newsletterEmail.trim() }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Request failed');
+      }
+
+      setNewsletterMessage('YOU ARE IN. CHECK YOUR INBOX.');
+      setNewsletterEmail('');
+    } catch (err) {
+      setNewsletterMessage('SOMETHING WENT WRONG. PLEASE TRY AGAIN.');
+    } finally {
+      setIsSubmittingNewsletter(false);
+    }
+  };
+
   const handleNavigate = (next: Page) => {
     if (next === page) return;
 
@@ -200,6 +289,11 @@ export default function Preview() {
     setPage(next);
     setLogoAnimKey((k) => k + 1); // remount logo to replay its keyframe animation
     playIntro();
+
+    // Always bring the user back to the top of the layout on page change
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const renderUpcoming = () => (
@@ -215,6 +309,33 @@ export default function Preview() {
           TBA
         </p>
       </div>
+
+      {/* Newsletter signup – inline section, no popup */}
+      <div className="newsletter">
+        <p className="newsletter-label">FOR THOSE WHO KNOW.</p>
+        
+        <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
+          <input
+            type="email"
+            required
+            placeholder="EMAIL"
+            value={newsletterEmail}
+            onChange={(e) => setNewsletterEmail(e.target.value)}
+            className="newsletter-input"
+          />
+          <button
+            type="submit"
+            className="newsletter-btn"
+            disabled={isSubmittingNewsletter}
+          >
+            {isSubmittingNewsletter ? 'SENDING…' : 'JOIN'}
+          </button>
+        </form>
+        {newsletterMessage && (
+          <p className="newsletter-message">{newsletterMessage}</p>
+        )}
+      </div>
+
       <div className="homebtn-wrapper">
         <button className="homebtn" onClick={() => handleNavigate('home')}>
           HOME
@@ -361,7 +482,11 @@ export default function Preview() {
     <>
       <div className="root" style={{ fontFamily: FONT_STACK }}>
         {/* Fixed background image layer – content scrolls on top */}
-        <div className="bg-layer" aria-hidden="true" />
+        <div
+          className="bg-layer"
+          aria-hidden="true"
+          style={{ transform: `scale(${bgZoom})` }}
+        />
 
         <div
           className={`center ${page === 'upcoming' ? 'center-upcoming' : ''} ${
@@ -497,8 +622,10 @@ html, body {
     linear-gradient(rgba(0, 0, 0, 0.26), rgba(0, 0, 0, 0.36)),
     url('https://res.cloudinary.com/dsas5i0fx/image/upload/v1763336289/IMG_5984_wjkvk6.jpg');
   background-position: center center, center 48%; /* chandelier slightly lower, closer to middle on desktop */
-  background-size: cover, 115%; /* subtle zoom-in on the photo */
+  background-size: cover, 115%; /* subtle base zoom-in on the photo */
   background-repeat: no-repeat, no-repeat;
+  transform-origin: center center;
+  transition: transform 0.18s ease-out;
 }
 
 .center {
@@ -683,6 +810,131 @@ html, body {
   background: rgba(255, 255, 255, 0.35);
 }
 
+.newsletter {
+  margin: 28px auto 0;
+  max-width: 420px;
+  text-align: center;
+}
+
+.newsletter-label {
+  font-size: 13px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+
+.newsletter-sub {
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  margin-bottom: 16px;
+}
+
+.newsletter-form {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.newsletter-input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  letter-spacing: 0.12em;
+  font-size: 11px;
+  outline: none;
+  transition: all 0.2s ease;
+
+  /* REMOVE ALL AUTOFILL COLORS (browser default yellow/blue) */
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  -webkit-text-fill-color: #fff !important;
+  caret-color: #fff !important;
+}
+
+/* Fully neutralize Chrome/Safari autofill */
+input.newsletter-input:-webkit-autofill,
+input.newsletter-input:-webkit-autofill:hover,
+input.newsletter-input:-webkit-autofill:focus,
+input.newsletter-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  box-shadow: 0 0 0px 1000px transparent inset !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  -webkit-text-fill-color: #fff !important;
+  color: #fff !important;
+}
+: all 0.2s ease;
+  letter-spacing: 0.12em;
+  font-size: 11px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.newsletter-input::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.newsletter-input:hover,
+.newsletter-input:focus {
+  border-color: rgba(255, 255, 255, 0.32);
+  box-shadow: 0 0 20px 6px rgba(255, 180, 90, 0.20);
+}
+
+.newsletter-input::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.newsletter-btn {
+  padding: 10px 18px;
+  border-radius: 8px;
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.newsletter-btn:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.32);
+  box-shadow: 0 0 20px 6px rgba(255, 180, 90, 0.26);
+  transform: translateY(-1px);
+}
+
+.newsletter-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.newsletter-btn:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 18px 4px rgba(255, 180, 90, 0.25);
+  transform: translateY(-1px);
+}
+
+.newsletter-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.newsletter-message {
+  margin-top: 10px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
 .flyer-grid {
   display: flex;
   flex-direction: column;
@@ -842,6 +1094,7 @@ html, body {
     background-position: center center, center 55%;
     background-size: cover, 118%;
     background-repeat: no-repeat, no-repeat;
+    transform-origin: center center;
   }
 
   .logo-main {
