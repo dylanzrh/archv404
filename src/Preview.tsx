@@ -776,6 +776,7 @@ html, body {
 }
 
 .upcoming {
+  font-weight: 700; /* keep UPCOMING titles bold */ /* make UPCOMING titles bold */
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.2em;
@@ -786,8 +787,21 @@ html, body {
 }
 .upcoming p,
 .upcoming .tba {
+  font-size: 14px;
+  letter-spacing: 0.2em;
   opacity: 0;
   animation: line-in 0.45s ease forwards;
+}
+
+/* Make only the DATE + PLACE bold */
+.upcoming p:not(.tba) {
+  font-weight: 700;
+}
+
+/* TBA stays regular weight */
+.upcoming .tba {
+  font-weight: 400;
+} line-in 0.45s ease forwards;
 }
 .tba {
   font-size: 14px;
@@ -958,6 +972,7 @@ input:-webkit-autofill:active {
   text-align: center;
 }
 .az-label {
+  font-weight: 700; /* A–Z now bold */
   color: rgba(255, 255, 255, 0.55);
   letter-spacing: 0.22em;
   font-size: 16px;
@@ -1101,7 +1116,7 @@ input:-webkit-autofill:active {
   .center-about,
   .center-upcoming {
     padding-top: 12vh;
-    padding-bottom: 22vh;
+    padding-bottom: 10vh; /* reduced to prevent excessive scroll */
     min-height: 100vh;
     justify-content: flex-start;
   }
