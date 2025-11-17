@@ -1005,7 +1005,7 @@ input:-webkit-autofill:active {
   justify-content: center;
 }
 .iconlink {
-  pointer-events: auto; {
+  pointer-events: auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1088,6 +1088,7 @@ input:-webkit-autofill:active {
 }
 .fade-visible {
   opacity: 1;
+  pointer-events: auto !important; /* ensure first‑tap works */
   pointer-events: auto; /* ensure buttons can be clicked immediately */
 }
 
@@ -1110,8 +1111,8 @@ input:-webkit-autofill:active {
 
   /* HOME: logo upper third, buttons lower third, no excessive scroll */
   .center-home {
-    padding-top: 20vh;
-    padding-bottom: 30vh;
+    padding-top: 14vh; /* move logo back up */
+    padding-bottom: 34vh; /* move buttons further down */
     min-height: 100vh;
     justify-content: flex-start;
   }
