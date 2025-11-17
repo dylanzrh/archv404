@@ -672,6 +672,8 @@ html, body {
 }
 
 .nav {
+  position: relative;
+  z-index: 20;
     margin-top: 32px; /* more space between logo + buttons */
   margin: 0 auto;
   display: flex;
@@ -1003,6 +1005,7 @@ input:-webkit-autofill:active {
   justify-content: center;
 }
 .iconlink {
+  pointer-events: auto; {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1057,6 +1060,7 @@ input:-webkit-autofill:active {
 }
 
 .footer {
+  pointer-events: none;
   width: 100%;
   padding: 14px 0 18px;
   display: flex;
@@ -1106,11 +1110,8 @@ input:-webkit-autofill:active {
 
   /* HOME: logo upper third, buttons lower third, no excessive scroll */
   .center-home {
-    padding-top: 22vh;
-    padding-bottom: 22vh; /* push buttons even lower without extra scroll */
-    min-height: 100vh;
-    justify-content: flex-start;
-  } /* reduced to prevent long scroll area */
+    padding-top: 20vh;
+    padding-bottom: 30vh;
     min-height: 100vh;
     justify-content: flex-start;
   }
