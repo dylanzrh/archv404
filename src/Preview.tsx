@@ -493,10 +493,12 @@ html, body {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background:
+  background-image:
     linear-gradient(rgba(0, 0, 0, 0.26), rgba(0, 0, 0, 0.36)),
-    url('https://res.cloudinary.com/dsas5i0fx/image/upload/v1763336289/IMG_5984_wjkvk6.jpg')
-      center center / cover no-repeat;
+    url('https://res.cloudinary.com/dsas5i0fx/image/upload/v1763336289/IMG_5984_wjkvk6.jpg');
+  background-position: center center, center 48%; /* chandelier slightly lower, closer to middle on desktop */
+  background-size: cover, 115%; /* subtle zoom-in on the photo */
+  background-repeat: no-repeat, no-repeat;
 }
 
 .center {
@@ -831,20 +833,42 @@ html, body {
 }
 
 @media (max-width: 640px) {
+  /* Slightly brighter + more zoom on phone */
+  .bg-layer {
+    background-image:
+      linear-gradient(rgba(0, 0, 0, 0.20), rgba(0, 0, 0, 0.30)),
+      url('https://res.cloudinary.com/dsas5i0fx/image/upload/v1763336289/IMG_5984_wjkvk6.jpg');
+    background-position: center center, center 50%;
+    background-size: cover, 118%;
+    background-repeat: no-repeat, no-repeat;
+  }
+
   .logo-main {
     font-size: clamp(36px, 16vw, 72px);
     white-space: nowrap;
   }
+
+  /* Center everything more nicely on phone, incl. landing pages */
   .center {
-    padding-top: 10vh;
-    padding-bottom: 6vh;
+    padding-top: 8vh;
+    padding-bottom: 10vh;
+    min-height: calc(100vh - 120px); /* account for fixed footer */
+    justify-content: center;
   }
   .center-subpage {
-    justify-content: flex-start;
-    min-height: auto;
+    justify-content: center;
+    min-height: calc(100vh - 120px);
+    padding-top: 6vh;
+    padding-bottom: 10vh;
+  }
+  .center-about {
+    padding-top: 8vh;
+  }
+  .center-upcoming {
     padding-top: 8vh;
     padding-bottom: 8vh;
   }
+
   .nav {
     margin-top: 16px;
     gap: 16px;
