@@ -267,7 +267,7 @@ export default function Preview() {
         throw new Error('Request failed');
       }
 
-      setNewsletterMessage('YOU ARE IN. CHECK YOUR INBOX.');
+      setNewsletterMessage('WELCOME TO THE ARCHIVE FAMILY.');
       setNewsletterEmail('');
     } catch (err) {
       setNewsletterMessage('SOMETHING WENT WRONG. PLEASE TRY AGAIN.');
@@ -601,7 +601,7 @@ html, body {
   justify-content: flex-start;
   color: #fff;
   overflow: hidden;
-  padding-bottom: 64px; /* space so fixed footer doesn't cover content */
+  padding-bottom: 0; /* no extra empty scroll area below content */
 }
 
 /* Fixed background image that stays in place while content scrolls */
@@ -1118,35 +1118,35 @@ input:-webkit-autofill:active {
     white-space: nowrap;
   }
 
-        /* HOME (mobile): logo upper third, buttons lower third, limited scroll like landing pages */
+          /* HOME (mobile): logo upper third, buttons lower third, very limited scroll */
   .center-home {
-    padding-top: 16vh;             /* keep logo comfortably in upper third */
-    padding-bottom: 4vh;           /* less bottom padding to reduce scroll */
-    min-height: 100vh;             /* still fill the viewport */
+    padding-top: 16vh;   /* keep logo comfortably in upper third */
+    padding-bottom: 2vh; /* minimal bottom padding to reduce scroll */
+    min-height: 96vh;    /* slightly less than full viewport to avoid blank area */
     justify-content: flex-start;
   }
 
-    /* LANDING PAGES BASE (artists & past) */
+      /* LANDING PAGES BASE (artists & past) */
   .center-subpage {
     padding-top: 12vh;
-    padding-bottom: 10vh;
-    min-height: 100vh;
+    padding-bottom: 8vh; /* a bit tighter at the bottom */
+    min-height: 96vh;    /* slightly less than full viewport to reduce empty scroll */
     justify-content: flex-start;
   }
 
-  /* UPCOMING: slightly tighter to avoid too much scroll */
+    /* UPCOMING: slightly tighter to avoid too much scroll */
   .center-upcoming {
     padding-top: 10vh;
-    padding-bottom: 4vh;
-    min-height: 100vh;
+    padding-bottom: 2vh;
+    min-height: 96vh;
     justify-content: flex-start;
   }
 
-  /* ABOUT: slightly tighter as well */
+    /* ABOUT: slightly tighter as well */
   .center-about {
     padding-top: 10vh;
-    padding-bottom: 4vh;
-    min-height: 100vh;
+    padding-bottom: 2vh;
+    min-height: 96vh;
     justify-content: flex-start;
   }
 
