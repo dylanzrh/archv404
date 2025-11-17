@@ -1084,6 +1084,7 @@ input:-webkit-autofill:active {
 }
 .fade-visible {
   opacity: 1;
+  pointer-events: auto; /* ensure buttons can be clicked immediately */
 }
 
 @media (max-width: 640px) {
@@ -1106,7 +1107,10 @@ input:-webkit-autofill:active {
   /* HOME: logo upper third, buttons lower third, no excessive scroll */
   .center-home {
     padding-top: 22vh;
-    padding-bottom: 15vh; /* reduced to prevent long scroll area */
+    padding-bottom: 22vh; /* push buttons even lower without extra scroll */
+    min-height: 100vh;
+    justify-content: flex-start;
+  } /* reduced to prevent long scroll area */
     min-height: 100vh;
     justify-content: flex-start;
   }
