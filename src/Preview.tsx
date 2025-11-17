@@ -854,60 +854,10 @@ html, body {
   .center-subpage,
   .center-about,
   .center-upcoming {
-    padding-top: 12vh;    /* moves layout slightly up */
-    padding-bottom: 12vh; /* keeps space for chandelier + footer */
+    padding-top: 7vh;      /* move layout further up */
+    padding-bottom: 15vh;  /* enough space for chandelier + footer */
     min-height: calc(100vh - 120px); /* account for fixed footer */
-    justify-content: flex-start;      /* avoids over-centering / dropping too low */
-  }
-
-  .nav {
-    margin-top: 16px;
-    gap: 16px;
-  }
-  .navbtn {
-    min-width: 140px;
-    border-color: rgba(255, 255, 255, 0.28);
-  }
-  .panel {
-    margin-top: 16px; /* still slightly reduced vs before */
-  }
-  .flyer-row {
-    grid-template-columns: repeat(2, 1fr);
-    max-width: 460px;
-  }
-  .flyer-cell img {
-    width: 100%;
-    height: auto;
-  }
-  .about {
-    max-width: 28ch;
-  }
-}
-
-  .logo-main {
-    font-size: clamp(36px, 16vw, 72px);
-    white-space: nowrap;
-  }
-
-  /* Center everything more nicely on phone, incl. landing pages */
-  .center {
-    padding-top: 8vh;
-    padding-bottom: 10vh;
-    min-height: calc(100vh - 120px); /* account for fixed footer */
-    justify-content: center;
-  }
-  .center-subpage {
-    justify-content: center;
-    min-height: calc(100vh - 120px);
-    padding-top: 6vh;
-    padding-bottom: 10vh;
-  }
-  .center-about {
-    padding-top: 8vh;
-  }
-  .center-upcoming {
-    padding-top: 8vh;
-    padding-bottom: 8vh;
+    justify-content: flex-start;
   }
 
   .nav {
