@@ -316,7 +316,7 @@ export default function Preview() {
       {/* Newsletter signup – inline section, no popup */}
       <div className="newsletter">
         <p className="newsletter-label">FOR THOSE WHO KNOW.</p>
-        
+
         <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
           <input
             type="email"
@@ -503,7 +503,12 @@ export default function Preview() {
           } ${page === 'about' ? 'center-about' : ''}`}
         >
           {/* Logo uses its own keyframe animation, restarted via key on every page transition */}
-          <h1 key={logoAnimKey} className="logo-main logo-animate">
+          <h1
+            key={logoAnimKey}
+            className="logo-main logo-animate"
+            onClick={() => handleNavigate('home')}
+            style={{ cursor: 'pointer' }}
+          >
             {LOGO_TEXT}
           </h1>
 
@@ -552,17 +557,21 @@ export default function Preview() {
                     .map((artist, index) => {
                       const isHighlight = HIGHLIGHT_ARTISTS.has(artist);
                       return (
-                        <p
-                          key={artist}
-                          className={`artist-name ${
-                            artistVisible[index] ? 'artist-name-visible' : ''
-                          } ${isHighlight ? 'artist-name-highlight' : ''}`}
-                          ref={(el) => {
-                            artistRefs.current[index] = el;
-                          }}
-                        >
-                          {artist}
-                        </p>
+                        <div key={artist} className="artist-block">
+                          <p
+                            className={`artist-name ${
+                              artistVisible[index] ? 'artist-name-visible' : ''
+                            } ${isHighlight ? 'artist-name-highlight' : ''}`}
+                            ref={(el) => {
+                              artistRefs.current[index] = el;
+                            }}
+                          >
+                            {artist}
+                          </p>
+                          {artist === 'BOYSDONTCRY' && (
+                            <p className="artist-resident">RESIDENT</p>
+                          )}
+                        </div>
                       );
                     })}
                 </div>
@@ -694,7 +703,7 @@ html, body {
 .navbtn {
   position: relative;
   z-index: 9999; /* ensure buttons sit above EVERYTHING */
-  pointer-events: auto !important; /* first‑tap ALWAYS works */
+  pointer-events: auto !important; /* first-tap ALWAYS works */
   min-height: 48px;
   min-width: 160px;
   padding: 12px 18px;
@@ -763,17 +772,9 @@ html, body {
 }
 
 .about {
-  max-width: 38ch; /* slightly wider for ultra‑even justification */
+  max-width: 38ch; /* slightly wider for ultra-even justification */
   margin: 0 auto;
   text-transform: uppercase;
-}
-.about-line {
-  line-height: 1.45;
-  font-size: 15px;
-  opacity: 0;
-  text-align: justify;
-  transform: translateY(6px);
-  animation: about-line-in 0.6s ease forwards;
 }
 .about-block {
   margin: 0 0 24px;
@@ -793,12 +794,6 @@ html, body {
 
 .upcoming {
   text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  line-height: 1.45;
-  font-size: 16px;
-  opacity: 0.95;
-  margin-top: 10px;
   text-transform: uppercase;
   letter-spacing: 0.2em;
   line-height: 1.45;
@@ -899,10 +894,6 @@ input:-webkit-autofill:active {
   box-shadow: 0 0 20px 6px rgba(255, 180, 90, 0.20);
 }
 
-.newsletter-input::placeholder {
-  color: rgba(255, 255, 255, 0.45);
-}
-
 .newsletter-btn {
   padding: 10px 18px;
   border-radius: 8px;
@@ -914,17 +905,6 @@ input:-webkit-autofill:active {
   font-size: 11px;
   cursor: pointer;
   transition: all 0.2s ease;
-}
-
-.newsletter-btn:hover:not(:disabled) {
-  border-color: rgba(255, 255, 255, 0.32);
-  box-shadow: 0 0 20px 6px rgba(255, 180, 90, 0.26);
-  transform: translateY(-1px);
-}
-
-.newsletter-btn:disabled {
-  opacity: 0.6;
-  cursor: default;
 }
 
 .newsletter-btn:hover:not(:disabled) {
@@ -990,6 +970,11 @@ input:-webkit-autofill:active {
   margin-bottom: 24px;
   text-transform: uppercase;
 }
+.artist-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .artist-name {
   margin: 8px 0;
   font-size: 16px;
@@ -1006,6 +991,15 @@ input:-webkit-autofill:active {
 }
 .artist-name-highlight {
   color: #fff;
+}
+.artist-resident {
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.22em;
+  font-size: 10px;
+  margin-top: -10px; /* closer to BOYSDONTCRY */
+  text-transform: uppercase;
+  line-height: 1;
 }
 
 .icons {
@@ -1118,7 +1112,7 @@ input:-webkit-autofill:active {
     white-space: nowrap;
   }
 
-          /* HOME (mobile): logo upper third, buttons lower third, very limited scroll */
+  /* HOME (mobile): logo upper third, buttons lower third, very limited scroll */
   .center-home {
     padding-top: 16vh;   /* keep logo comfortably in upper third */
     padding-bottom: 2vh; /* minimal bottom padding to reduce scroll */
@@ -1126,7 +1120,7 @@ input:-webkit-autofill:active {
     justify-content: flex-start;
   }
 
-      /* LANDING PAGES BASE (artists & past) */
+  /* LANDING PAGES BASE (artists & past) */
   .center-subpage {
     padding-top: 12vh;
     padding-bottom: 8vh; /* a bit tighter at the bottom */
@@ -1134,7 +1128,7 @@ input:-webkit-autofill:active {
     justify-content: flex-start;
   }
 
-    /* UPCOMING: slightly tighter to avoid too much scroll */
+  /* UPCOMING: slightly tighter to avoid too much scroll */
   .center-upcoming {
     padding-top: 10vh;
     padding-bottom: 2vh;
@@ -1142,7 +1136,7 @@ input:-webkit-autofill:active {
     justify-content: flex-start;
   }
 
-    /* ABOUT: slightly tighter as well */
+  /* ABOUT: slightly tighter as well */
   .center-about {
     padding-top: 10vh;
     padding-bottom: 2vh;
