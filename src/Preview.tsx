@@ -4,7 +4,8 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 // Constants / Config
 // ---------------------------------
 const LOGO_TEXT = 'ARCHIVE 404';
-const FONT_STACK = '"Antique Legacy Medium", -apple-system, system-ui, sans-serif';
+const FONT_STACK =
+  '"Antique Legacy", "Antique Legacy Medium", -apple-system, system-ui, sans-serif';
 const INSTAGRAM_URL = 'https://instagram.com/archv404';
 const MAILTO_URL = 'mailto:info@archv404.com';
 const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
@@ -69,11 +70,8 @@ type Page = 'home' | 'upcoming' | 'past' | 'artists' | 'about';
 export default function Preview() {
   const [page, setPage] = useState<Page>('home');
 
-  // isEntering drives tag, nav, panel, footer
   const [isEntering, setIsEntering] = useState(true);
-  // Separate key for logo so we can replay keyframe animation on every page switch
   const [logoAnimKey, setLogoAnimKey] = useState(0);
-  // Background zoom factor for scroll effect
   const [bgZoom, setBgZoom] = useState(1);
   const scrollYRef = useRef(0);
   const rafRef = useRef<number | null>(null);
@@ -105,7 +103,6 @@ export default function Preview() {
     []
   );
 
-  // Helper: play the intro animation (tag/nav/panel/footer from bottom)
   const playIntro = () => {
     setIsEntering(true);
     requestAnimationFrame(() => {
@@ -115,12 +112,11 @@ export default function Preview() {
     });
   };
 
-  // Initial mount: run intro once
   useEffect(() => {
     playIntro();
   }, []);
 
-  // Background zoom on scroll (subtle, smooth + eased)
+  // Background zoom on scroll
   useEffect(() => {
     const maxZoom = 1.08;
     const maxScroll = 600;
@@ -167,7 +163,7 @@ export default function Preview() {
     };
   }, []);
 
-  // Reveal past flyers row-by-row on scroll
+  // Reveal past flyers row-by-row
   useEffect(() => {
     if (page !== 'past') return;
     if (!rowRefs.current.length) return;
@@ -206,7 +202,7 @@ export default function Preview() {
     };
   }, [page]);
 
-  // Reveal artists line-by-line on scroll
+  // Reveal artists line-by-line
   useEffect(() => {
     if (page !== 'artists') return;
     if (!artistRefs.current.length) return;
@@ -298,7 +294,6 @@ export default function Preview() {
       <div className="upcoming">
         <p style={{ animationDelay: '0ms' }}>DEC 27 ST. MORITZ</p>
 
-        {/* ST. MORITZ RESERVATION BUTTON */}
         <div className="upcoming-actions">
           <a
             href="https://www.mrsamigo.com/samigo-fuel"
@@ -318,7 +313,6 @@ export default function Preview() {
         </p>
       </div>
 
-      {/* Newsletter signup – inline section, no popup */}
       <div className="newsletter">
         <p className="newsletter-label">FOR THOSE WHO KNOW.</p>
 
@@ -479,7 +473,6 @@ export default function Preview() {
     </div>
   );
 
-  // Animation classes – unified for initial load + all transitions (except logo, which uses keyframes)
   const tagClass = isEntering ? 'tag-hidden' : 'tag-visible';
 
   const navClass =
@@ -495,7 +488,6 @@ export default function Preview() {
   return (
     <>
       <div className="root" style={{ fontFamily: FONT_STACK }}>
-        {/* Fixed background image layer – content scrolls on top */}
         <div
           className="bg-layer"
           aria-hidden="true"
@@ -507,7 +499,6 @@ export default function Preview() {
             page === 'upcoming' ? 'center-upcoming' : ''
           } ${page === 'about' ? 'center-about' : ''}`}
         >
-          {/* Logo uses its own keyframe animation, restarted via key on every page transition */}
           <h1
             key={logoAnimKey}
             className="logo-main logo-animate"
@@ -599,6 +590,15 @@ export default function Preview() {
 
         <style>{`
 @font-face {
+  font-family: "Antique Legacy";
+  src: url("/fonts/antique-legacy-medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Alias name in case the file is named as "Antique Legacy Medium" internally */
+@font-face {
   font-family: "Antique Legacy Medium";
   src: url("/fonts/antique-legacy-medium.woff2") format("woff2");
   font-weight: 500;
@@ -613,7 +613,7 @@ html, body {
   margin: 0;
   padding: 0;
   background: #000;
-  font-family: "Antique Legacy Medium", -apple-system, system-ui, sans-serif;
+  font-family: "Antique Legacy", "Antique Legacy Medium", -apple-system, system-ui, sans-serif;
 }
 .root {
   position: relative;
@@ -627,7 +627,7 @@ html, body {
   padding-bottom: 0;
 }
 
-/* Fixed background image that stays in place while content scrolls */
+/* Fixed background image */
 .bg-layer {
   position: fixed;
   inset: 0;
@@ -673,8 +673,8 @@ html, body {
 
 .logo-main {
   margin: 0 auto;
-  font-family: "Antique Legacy Medium", -apple-system, system-ui, sans-serif;
-  font-weight: 700; /* synthetic bold based on Antique Legacy Medium */
+  font-family: "Antique Legacy", "Antique Legacy Medium", -apple-system, system-ui, sans-serif;
+  font-weight: 700; /* visually stronger logo while still using Antique Legacy */
   letter-spacing: -0.065em;
   text-transform: uppercase;
   line-height: 0.9;
@@ -713,18 +713,17 @@ html, body {
   gap: 24px;
 }
 
-/* Ultra-light liquid glass buttons */
+/* Ultra-light liquid glass buttons – used for nav, newsletter, reservations, home */
 
-.navbtn {
+.navbtn,
+.newsletter-btn,
+.homebtn {
   position: relative;
-  z-index: 9999;
-  pointer-events: auto !important;
-  min-height: 48px;
-  min-width: 160px;
-  padding: 12px 18px;
-  border-radius: 12px;
+  pointer-events: auto;
+  padding: 10px 18px;
+  border-radius: 10px;
 
-  background: rgba(255, 255, 255, 0.018);
+  background: rgba(255, 255, 255, 0.015);
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(3px);
 
@@ -736,64 +735,22 @@ html, body {
   letter-spacing: 0.12em;
   font-size: 11px;
   cursor: pointer;
-  opacity: 0;
-  transform: translateY(22px);
   transition:
     opacity 0.6s ease,
-    transform 0.6s ease,
+    transform 0.2s ease,
     background 0.2s ease,
-    color 0.2s ease,
     border-color 0.2s ease,
     box-shadow 0.25s ease;
 }
 
-.newsletter-btn {
-  padding: 10px 18px;
-  border-radius: 10px;
-
-  background: rgba(255, 255, 255, 0.018);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
-
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  outline: 1px solid rgba(255, 255, 255, 0.02);
-
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 11px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-
-/* Reservations link = newsletter-btn + bold text */
-.upcoming-res-link {
-  text-decoration: none;
-  font-weight: 700;
-}
-
-/* HOME button */
-.homebtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 36px;
-  padding: 8px 14px;
-  border-radius: 10px;
-
-  background: rgba(255, 255, 255, 0.018);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
-
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  outline: 1px solid rgba(255, 255, 255, 0.02);
-
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 11px;
-  cursor: pointer;
-  transition: all 0.25s ease;
+/* Nav specific layout */
+.navbtn {
+  z-index: 9999;
+  min-height: 48px;
+  min-width: 160px;
+  padding: 12px 18px;
+  opacity: 0;
+  transform: translateY(22px);
 }
 
 /* Buttons rise in when nav is visible */
@@ -802,7 +759,22 @@ html, body {
   transform: translateY(0);
 }
 
-/* Hover – even lighter than before */
+/* Reservations link reuses newsletter-btn style and adds bold text */
+.upcoming-res-link {
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+/* HOME button alignment */
+.homebtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+}
+
+/* Hover – very subtle */
 .navbtn:hover,
 .newsletter-btn:hover:not(:disabled),
 .homebtn:hover {
@@ -1095,7 +1067,7 @@ input:-webkit-autofill:active {
   display: flex;
   justify-content: center;
   margin-top: 54px;
-  margin-bottom: 80px; /* extra space above footer so nothing overlaps */
+  margin-bottom: 80px; /* space above footer on all pages using HOME */
 }
 
 .footer {
