@@ -4,10 +4,12 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 // Constants / Config
 // ---------------------------------
 const LOGO_TEXT = 'ARCHIVE 404';
-const FONT_STACK = '"Antique Legacy Medium", -apple-system, system-ui, sans-serif';
+const FONT_STACK =
+  '"Antique Legacy Medium", -apple-system, system-ui, sans-serif';
 const INSTAGRAM_URL = 'https://instagram.com/archv404';
 const MAILTO_URL = 'mailto:info@archv404.com';
-const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
+const WHATSAPP_URL =
+  'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
 
 // ABOUT text as a single block paragraph
 const ABOUT_TEXT: string =
@@ -80,7 +82,10 @@ export default function Preview() {
   const inputFocusedRef = useRef(false);
 
   const [rowVisible, setRowVisible] = useState<boolean[]>(() =>
-    Array.from({ length: Math.ceil(PAST_FLYERS.length / 2) }, (_, i) => i === 0)
+    Array.from(
+      { length: Math.ceil(PAST_FLYERS.length / 2) },
+      (_, i) => i === 0
+    )
   );
   const [artistVisible, setArtistVisible] = useState<boolean[]>(() =>
     ARTISTS.map(() => false)
@@ -88,8 +93,11 @@ export default function Preview() {
 
   // Newsletter state (UPCOMING page)
   const [newsletterEmail, setNewsletterEmail] = useState('');
-  const [isSubmittingNewsletter, setIsSubmittingNewsletter] = useState(false);
-  const [newsletterMessage, setNewsletterMessage] = useState<string | null>(null);
+  const [isSubmittingNewsletter, setIsSubmittingNewsletter] =
+    useState(false);
+  const [newsletterMessage, setNewsletterMessage] = useState<
+    string | null
+  >(null);
 
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
   const artistRefs = useRef<(HTMLParagraphElement | null)[]>([]);
@@ -122,8 +130,8 @@ export default function Preview() {
 
   // Background zoom on scroll (subtle, smooth + eased)
   useEffect(() => {
-    const maxZoom = 1.08; // slightly less aggressive for a refined look
-    const maxScroll = 600; // more scroll distance for a slower zoom curve
+    const maxZoom = 1.08;
+    const maxScroll = 600;
 
     const calcZoom = (scrollY: number) => {
       const clamped = Math.min(Math.max(scrollY, 0), maxScroll);
@@ -134,10 +142,8 @@ export default function Preview() {
       const target = calcZoom(scrollYRef.current);
 
       setBgZoom((prev) => {
-        // Easing factor – smaller = smoother and more "inertial"
         const eased = prev + (target - prev) * 0.08;
 
-        // If we're extremely close to target, snap and stop the loop
         if (Math.abs(eased - target) < 0.001) {
           rafRef.current = null;
           return target;
@@ -149,18 +155,15 @@ export default function Preview() {
     }
 
     const handleScroll = () => {
-      // When typing in the email field (or any focused input), freeze the zoom effect
       if (inputFocusedRef.current) return;
       const scrollY = window.scrollY || window.pageYOffset || 0;
       scrollYRef.current = scrollY;
 
-      // Only start a new RAF loop if one isn't already running
       if (rafRef.current === null) {
         rafRef.current = window.requestAnimationFrame(tick);
       }
     };
 
-    // Initialize once on mount to match current scroll position
     handleScroll();
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -185,7 +188,8 @@ export default function Preview() {
 
           entries.forEach((entry) => {
             if (!entry.isIntersecting) return;
-            const idxAttr = (entry.target as HTMLElement).dataset.rowIndex;
+            const idxAttr = (entry.target as HTMLElement).dataset
+              .rowIndex;
             const idx = idxAttr ? parseInt(idxAttr, 10) : -1;
             if (idx >= 0 && !next[idx]) {
               next[idx] = true;
@@ -224,7 +228,8 @@ export default function Preview() {
 
           entries.forEach((entry) => {
             if (!entry.isIntersecting) return;
-            const idxAttr = (entry.target as HTMLElement).dataset.artistIndex;
+            const idxAttr = (entry.target as HTMLElement).dataset
+              .artistIndex;
             const idx = idxAttr ? parseInt(idxAttr, 10) : -1;
             if (idx >= 0 && !next[idx]) {
               next[idx] = true;
@@ -271,7 +276,9 @@ export default function Preview() {
       setNewsletterMessage('WELCOME TO THE ARCHIVE FAMILY.');
       setNewsletterEmail('');
     } catch (err) {
-      setNewsletterMessage('SOMETHING WENT WRONG. PLEASE TRY AGAIN.');
+      setNewsletterMessage(
+        'SOMETHING WENT WRONG. PLEASE TRY AGAIN.'
+      );
     } finally {
       setIsSubmittingNewsletter(false);
     }
@@ -280,10 +287,12 @@ export default function Preview() {
   const handleNavigate = (next: Page) => {
     if (next === page) return;
 
-    // Reset scroll-based reveals when entering those pages
     if (next === 'past') {
       setRowVisible(
-        Array.from({ length: Math.ceil(PAST_FLYERS.length / 2) }, (_, i) => i === 0)
+        Array.from(
+          { length: Math.ceil(PAST_FLYERS.length / 2) },
+          (_, i) => i === 0
+        )
       );
     }
     if (next === 'artists') {
@@ -291,10 +300,9 @@ export default function Preview() {
     }
 
     setPage(next);
-    setLogoAnimKey((k) => k + 1); // remount logo to replay its keyframe animation
+    setLogoAnimKey((k) => k + 1);
     playIntro();
 
-    // Always bring the user back to the top of the layout on page change
     if (typeof window !== 'undefined') {
       window.scrollTo({ top: 0, behavior: 'auto' });
     }
@@ -305,7 +313,6 @@ export default function Preview() {
       <div className="upcoming">
         <p style={{ animationDelay: '0ms' }}>DEC 27 ST. MORITZ</p>
 
-        {/* ST. MORITZ RESERVATION BUTTON – same style as JOIN */}
         <div className="upcoming-actions">
           <a
             href="https://www.mrsamigo.com/samigo-fuel"
@@ -325,11 +332,13 @@ export default function Preview() {
         </p>
       </div>
 
-      {/* Newsletter signup – inline section, no popup */}
       <div className="newsletter">
         <p className="newsletter-label">FOR THOSE WHO KNOW.</p>
 
-        <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
+        <form
+          className="newsletter-form"
+          onSubmit={handleNewsletterSubmit}
+        >
           <input
             type="email"
             required
@@ -353,12 +362,17 @@ export default function Preview() {
           </button>
         </form>
         {newsletterMessage && (
-          <p className="newsletter-message">{newsletterMessage}</p>
+          <p className="newsletter-message">
+            {newsletterMessage}
+          </p>
         )}
       </div>
 
       <div className="homebtn-wrapper">
-        <button className="homebtn" onClick={() => handleNavigate('home')}>
+        <button
+          className="homebtn"
+          onClick={() => handleNavigate('home')}
+        >
           HOME
         </button>
       </div>
@@ -377,7 +391,9 @@ export default function Preview() {
           {rows.map((row, rowIndex) => (
             <div
               key={rowIndex}
-              className={`flyer-row ${rowVisible[rowIndex] ? 'flyer-row-visible' : ''}`}
+              className={`flyer-row ${
+                rowVisible[rowIndex] ? 'flyer-row-visible' : ''
+              }`}
               ref={(el) => {
                 rowRefs.current[rowIndex] = el;
               }}
@@ -388,7 +404,9 @@ export default function Preview() {
                 <div className="flyer-cell" key={index}>
                   <img
                     src={src}
-                    alt={`ARCHIVE 404 PAST EVENT ${rowIndex * 2 + index + 1}`}
+                    alt={`ARCHIVE 404 PAST EVENT ${
+                      rowIndex * 2 + index + 1
+                    }`}
                   />
                 </div>
               ))}
@@ -397,7 +415,10 @@ export default function Preview() {
         </div>
 
         <div className="homebtn-wrapper">
-          <button className="homebtn" onClick={() => handleNavigate('home')}>
+          <button
+            className="homebtn"
+            onClick={() => handleNavigate('home')}
+          >
             HOME
           </button>
         </div>
@@ -452,7 +473,14 @@ export default function Preview() {
           stroke="currentColor"
           strokeWidth="1.6"
         >
-          <rect x="4" y="4" width="16" height="16" rx="4.5" ry="4.5" />
+          <rect
+            x="4"
+            y="4"
+            width="16"
+            height="16"
+            rx="4.5"
+            ry="4.5"
+          />
           <circle cx="12" cy="12" r="3.25" />
           <circle cx="17.2" cy="6.8" r="0.9" />
         </svg>
@@ -475,7 +503,14 @@ export default function Preview() {
           stroke="currentColor"
           strokeWidth="1.6"
         >
-          <rect x="3" y="6" width="18" height="12" rx="2" ry="2" />
+          <rect
+            x="3"
+            y="6"
+            width="18"
+            height="12"
+            rx="2"
+            ry="2"
+          />
           <path
             d="M5 8.5 12 13l7-4.5"
             strokeLinecap="round"
@@ -486,7 +521,7 @@ export default function Preview() {
     </div>
   );
 
-  // Animation classes – unified for initial load + all transitions (except logo, which uses keyframes)
+  // Animation classes
   const tagClass = isEntering ? 'tag-hidden' : 'tag-visible';
 
   const navClass =
@@ -496,13 +531,14 @@ export default function Preview() {
         : 'fade-visible'
       : 'fade-hidden';
 
-  const footerFadeClass = isEntering ? 'footer-hidden' : 'footer-visible';
+  const footerFadeClass = isEntering
+    ? 'footer-hidden'
+    : 'footer-visible';
   const panelClass = isEntering ? 'panel-intro' : 'panel-steady';
 
   return (
     <>
       <div className="root" style={{ fontFamily: FONT_STACK }}>
-        {/* Fixed background image layer – content scrolls on top */}
         <div
           className="bg-layer"
           aria-hidden="true"
@@ -510,11 +546,12 @@ export default function Preview() {
         />
 
         <div
-          className={`center ${page === 'home' ? 'center-home' : 'center-subpage'} ${
-            page === 'upcoming' ? 'center-upcoming' : ''
-          } ${page === 'about' ? 'center-about' : ''}`}
+          className={`center ${
+            page === 'home' ? 'center-home' : 'center-subpage'
+          } ${page === 'upcoming' ? 'center-upcoming' : ''} ${
+            page === 'about' ? 'center-about' : ''
+          }`}
         >
-          {/* Logo uses its own keyframe animation, restarted via key on every page transition */}
           <h1
             key={logoAnimKey}
             className="logo-main logo-animate"
@@ -546,7 +583,10 @@ export default function Preview() {
                 <article className="about">
                   <p className="about-block">{ABOUT_TEXT}</p>
                 </article>
-                <div className="homebtn-wrapper" style={{ marginTop: '40px' }}>
+                <div
+                  className="homebtn-wrapper"
+                  style={{ marginTop: '40px' }}
+                >
                   <button
                     className="homebtn"
                     onClick={() => handleNavigate('home')}
@@ -567,13 +607,23 @@ export default function Preview() {
                   {ARTISTS.slice()
                     .sort()
                     .map((artist, index) => {
-                      const isHighlight = HIGHLIGHT_ARTISTS.has(artist);
+                      const isHighlight =
+                        HIGHLIGHT_ARTISTS.has(artist);
                       return (
-                        <div key={artist} className="artist-block">
+                        <div
+                          key={artist}
+                          className="artist-block"
+                        >
                           <p
                             className={`artist-name ${
-                              artistVisible[index] ? 'artist-name-visible' : ''
-                            } ${isHighlight ? 'artist-name-highlight' : ''}`}
+                              artistVisible[index]
+                                ? 'artist-name-visible'
+                                : ''
+                            } ${
+                              isHighlight
+                                ? 'artist-name-highlight'
+                                : ''
+                            }`}
                             ref={(el) => {
                               artistRefs.current[index] = el;
                             }}
@@ -581,7 +631,9 @@ export default function Preview() {
                             {artist}
                           </p>
                           {artist === 'BOYSDONTCRY' && (
-                            <p className="artist-resident">RESIDENT</p>
+                            <p className="artist-resident">
+                              RESIDENT
+                            </p>
                           )}
                         </div>
                       );
@@ -631,10 +683,10 @@ html, body {
   justify-content: flex-start;
   color: #fff;
   overflow: hidden;
-  padding-bottom: 0; /* no extra empty scroll area below content */
+  padding-bottom: 0;
 }
 
-/* Fixed background image that stays in place while content scrolls */
+/* Fixed background image */
 .bg-layer {
   position: fixed;
   inset: 0;
@@ -643,8 +695,8 @@ html, body {
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.34), rgba(0, 0, 0, 0.44)),
     url('https://res.cloudinary.com/dsas5i0fx/image/upload/v1763336289/IMG_5984_wjkvk6.jpg');
-  background-position: center center, center 48%; /* chandelier slightly lower, closer to middle on desktop */
-  background-size: cover, 115%; /* subtle base zoom-in on the photo */
+  background-position: center center, center 48%;
+  background-size: cover, 115%;
   background-repeat: no-repeat, no-repeat;
   transform-origin: center center;
   transition: transform 0.18s ease-out;
@@ -687,7 +739,6 @@ html, body {
   line-height: 0.9;
   font-size: clamp(36px, 12vw, 140px);
 }
-/* Keyframe-driven intro for the logo so it always glides smoothly from the top */
 .logo-animate {
   animation: logo-intro 0.6s ease forwards;
   will-change: transform, opacity;
@@ -695,7 +746,7 @@ html, body {
 
 .tag {
   margin-top: 20px;
-  margin-bottom: 40px; /* slightly less space under logo */
+  margin-bottom: 40px;
   letter-spacing: 0.28em;
   text-transform: uppercase;
   font-size: clamp(12px, 2.4vw, 16px);
@@ -712,8 +763,8 @@ html, body {
 
 .nav {
   position: relative;
-  z-index: 10; /* above panel, below any overlay if added */
-  margin-top: 32px; /* nice distance below logo/tag */
+  z-index: 10;
+  margin-top: 32px;
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
@@ -721,15 +772,17 @@ html, body {
   gap: 24px;
 }
 
+/* Buttons with super-light lens highlight */
 .navbtn {
   position: relative;
-  z-index: 9999; /* ensure buttons sit above EVERYTHING */
-  pointer-events: auto !important; /* first-tap ALWAYS works */
+  z-index: 9999;
+  pointer-events: auto !important;
   min-height: 48px;
   min-width: 160px;
   padding: 12px 18px;
   border-radius: 12px;
-  background: transparent;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.10), transparent 60%);
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.16);
   text-transform: uppercase;
@@ -743,7 +796,48 @@ html, body {
     transform 0.6s ease,
     background 0.2s ease,
     color 0.2s ease,
-    border-color 0.2s ease;
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* Newsletter + RESERVATIONS share same base style */
+.newsletter-btn {
+  padding: 10px 18px;
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.10), transparent 60%);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Reservations link = newsletter-btn + bold text */
+.upcoming-res-link {
+  text-decoration: none;
+  font-weight: 700;
+}
+
+/* HOME button */
+.homebtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.10), transparent 60%);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 /* Buttons rise in from bottom when nav fades in (HOME only) */
@@ -761,9 +855,21 @@ html, body {
   transform: translateY(-1px);
 }
 
+.newsletter-btn:hover:not(:disabled),
+.homebtn:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 18px 4px rgba(255, 180, 90, 0.25);
+  transform: translateY(-1px);
+}
+
+.newsletter-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
 .panel {
   position: relative;
-  z-index: 1; /* safely below nav so it never blocks buttons */
+  z-index: 1;
   margin: 12px auto 0;
   padding: 0;
   max-width: 900px;
@@ -780,7 +886,7 @@ html, body {
 
 .section {
   text-align: left;
-  margin: 18px auto 0; /* slightly reduced top margin */
+  margin: 18px auto 0;
   max-width: 900px;
 }
 .section-past {
@@ -789,25 +895,25 @@ html, body {
 
 .about-section {
   padding-top: 0;
-  padding-bottom: 24px; /* more breathing room so text and HOME button never overlap */
+  padding-bottom: 24px;
 }
 
 .about {
-  max-width: 38ch; /* desktop width, mobile overridden below */
+  max-width: 38ch;
   margin: 0 auto;
   text-transform: uppercase;
 }
 .about-block {
   margin: 0 0 24px;
-  line-height: 1.5;              /* slightly more air for smoother rhythm */
+  line-height: 1.5;
   font-size: 15px;
   opacity: 0.95;
   text-align: justify;
-  text-align-last: justify;      /* last sentence also full width */
+  text-align-last: justify;
   text-justify: inter-word;
-  word-spacing: normal;          /* let browser balance spacing */
-  letter-spacing: 0.02em;        /* subtle tracking for all-caps */
-  hyphens: none;                 /* no dashes */
+  word-spacing: normal;
+  letter-spacing: 0.02em;
+  hyphens: none;
   text-rendering: optimizeLegibility;
   display: block;
   width: 100%;
@@ -827,19 +933,13 @@ html, body {
 }
 
 .upcoming .tba {
-  font-weight: 400; /* TBA stays regular weight */
+  font-weight: 400;
 }
 
 .upcoming-actions {
   margin-top: 14px;
   display: flex;
   justify-content: center;
-}
-
-/* Reservations link – readable & bold */
-.upcoming-res-link {
-  text-decoration: none;
-  font-weight: 700;
 }
 
 .tba {
@@ -856,7 +956,7 @@ html, body {
 }
 
 .newsletter {
-  margin: 40px auto 0; /* more breathing room above email box */
+  margin: 40px auto 0;
   max-width: 420px;
   text-align: center;
 }
@@ -897,14 +997,11 @@ html, body {
   font-size: 11px;
   outline: none;
   transition: all 0.2s ease;
-
-  /* REMOVE ALL AUTOFILL COLORS (browser default yellow/blue) */
   -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
   -webkit-text-fill-color: #fff !important;
   caret-color: #fff !important;
 }
 
-/* Fully neutralize Chrome/Safari autofill for all inputs */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -927,32 +1024,8 @@ input:-webkit-autofill:active {
   box-shadow: 0 0 20px 6px rgba(255, 180, 90, 0.20);
 }
 
-.newsletter-btn {
-  padding: 10px 18px;
-  border-radius: 8px;
-  background: transparent;
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 11px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.newsletter-btn:hover:not(:disabled) {
-  border-color: rgba(255, 255, 255, 0.6);
-  box-shadow: 0 0 18px 4px rgba(255, 180, 90, 0.25);
-  transform: translateY(-1px);
-}
-
-.newsletter-btn:disabled {
-  opacity: 0.6;
-  cursor: default;
-}
-
 .newsletter-message {
-  margin-bottom: 26px; /* spacing before HOME button */
+  margin-bottom: 26px;
   margin-top: 10px;
   font-size: 11px;
   letter-spacing: 0.16em;
@@ -1030,7 +1103,7 @@ input:-webkit-autofill:active {
   color: rgba(255, 255, 255, 0.55);
   letter-spacing: 0.22em;
   font-size: 10px;
-  margin-top: -10px; /* closer to BOYSDONTCRY */
+  margin-top: -10px;
   text-transform: uppercase;
   line-height: 1;
 }
@@ -1068,41 +1141,17 @@ input:-webkit-autofill:active {
 .homebtn-wrapper {
   display: flex;
   justify-content: center;
-  margin-top: 54px; /* more distance from mailbox or content */
-}
-.homebtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 36px;
-  padding: 8px 14px;
-  border-radius: 8px;
-  background: transparent;
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 11px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.homebtn:hover {
-  background: transparent;
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.32);
-  box-shadow: 0 0 20px 6px rgba(255, 180, 90, 0.26);
-  text-shadow: none;
-  transform: translateY(-1px);
+  margin-top: 54px;
 }
 
 .footer {
-  pointer-events: none; /* footer never intercepts taps */
+  pointer-events: none;
   width: 100%;
   padding: 14px 0 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: fixed;   /* always visible without scrolling */
+  position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
@@ -1121,15 +1170,11 @@ input:-webkit-autofill:active {
 .fade-hidden {
   opacity: 0;
 }
-
 .fade-visible {
   opacity: 1;
 }
 
-
-
 @media (max-width: 640px) {
-  /* Mobile background framing */
   .bg-layer {
     background-image:
       linear-gradient(rgba(0, 0, 0, 0.30), rgba(0, 0, 0, 0.40)),
@@ -1145,23 +1190,20 @@ input:-webkit-autofill:active {
     white-space: nowrap;
   }
 
-  /* HOME (mobile): logo upper third, buttons lower third, very limited scroll */
   .center-home {
-    padding-top: 16vh;   /* keep logo comfortably in upper third */
-    padding-bottom: 2vh; /* minimal bottom padding to reduce scroll */
-    min-height: 96vh;    /* slightly less than full viewport to avoid blank area */
+    padding-top: 16vh;
+    padding-bottom: 2vh;
+    min-height: 96vh;
     justify-content: flex-start;
   }
 
-  /* LANDING PAGES BASE (artists & past) */
   .center-subpage {
     padding-top: 12vh;
-    padding-bottom: 8vh; /* a bit tighter at the bottom */
-    min-height: 96vh;    /* slightly less than full viewport to reduce empty scroll */
+    padding-bottom: 8vh;
+    min-height: 96vh;
     justify-content: flex-start;
   }
 
-  /* UPCOMING: slightly tighter to avoid too much scroll */
   .center-upcoming {
     padding-top: 10vh;
     padding-bottom: 2vh;
@@ -1169,7 +1211,6 @@ input:-webkit-autofill:active {
     justify-content: flex-start;
   }
 
-  /* ABOUT: slightly tighter as well */
   .center-about {
     padding-top: 10vh;
     padding-bottom: 2vh;
@@ -1177,7 +1218,7 @@ input:-webkit-autofill:active {
     justify-content: flex-start;
   }
 
-  /* Narrower about text on phone */
+  /* narrower about text on phone */
   .about {
     max-width: 30ch;
   }
@@ -1187,12 +1228,10 @@ input:-webkit-autofill:active {
     gap: 16px;
   }
 
-  /* On HOME specifically, push nav (buttons) one button-height further down */
   .center-home .nav {
-    margin-top: 96px; /* push buttons ~one button-height further down on HOME mobile */
+    margin-top: 96px;
   }
 }
-
 
 @keyframes logo-intro {
   from {
