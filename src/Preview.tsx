@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 // Constants / Config
 // ---------------------------------
 const LOGO_TEXT = 'ARCHIVE 404';
-const FONT_STACK = '"Antique Legacy", -apple-system, system-ui, sans-serif';
+const FONT_STACK = '"Antique Legacy Medium", -apple-system, system-ui, sans-serif';
 const INSTAGRAM_URL = 'https://instagram.com/archv404';
 const MAILTO_URL = 'mailto:info@archv404.com';
 const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
@@ -122,7 +122,7 @@ export default function Preview() {
 
   // Background zoom on scroll (subtle, smooth + eased)
   useEffect(() => {
-    const maxZoom = 1.08; // refined look
+    const maxZoom = 1.08;
     const maxScroll = 600;
 
     const calcZoom = (scrollY: number) => {
@@ -275,7 +275,6 @@ export default function Preview() {
   const handleNavigate = (next: Page) => {
     if (next === page) return;
 
-    // Reset scroll-based reveals when entering those pages
     if (next === 'past') {
       setRowVisible(
         Array.from({ length: Math.ceil(PAST_FLYERS.length / 2) }, (_, i) => i === 0)
@@ -286,7 +285,7 @@ export default function Preview() {
     }
 
     setPage(next);
-    setLogoAnimKey((k) => k + 1); // remount logo to replay its keyframe animation
+    setLogoAnimKey((k) => k + 1);
     playIntro();
 
     if (typeof window !== 'undefined') {
@@ -469,12 +468,12 @@ export default function Preview() {
           stroke="currentColor"
           strokeWidth="1.6"
         >
-            <rect x="3" y="6" width="18" height="12" rx="2" ry="2" />
-            <path
-              d="M5 8.5 12 13l7-4.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+          <rect x="3" y="6" width="18" height="12" rx="2" ry="2" />
+          <path
+            d="M5 8.5 12 13l7-4.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       </a>
     </div>
@@ -600,17 +599,9 @@ export default function Preview() {
 
         <style>{`
 @font-face {
-  font-family: "Antique Legacy";
+  font-family: "Antique Legacy Medium";
   src: url("/fonts/antique-legacy-medium.woff2") format("woff2");
   font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Antique Legacy";
-  src: url("/fonts/antique-legacy-bold.woff2") format("woff2");
-  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
@@ -622,7 +613,7 @@ html, body {
   margin: 0;
   padding: 0;
   background: #000;
-  font-family: "Antique Legacy", -apple-system, system-ui, sans-serif;
+  font-family: "Antique Legacy Medium", -apple-system, system-ui, sans-serif;
 }
 .root {
   position: relative;
@@ -633,7 +624,7 @@ html, body {
   justify-content: flex-start;
   color: #fff;
   overflow: hidden;
-  padding-bottom: 0; /* no extra empty scroll area below content */
+  padding-bottom: 0;
 }
 
 /* Fixed background image that stays in place while content scrolls */
@@ -645,8 +636,8 @@ html, body {
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.34), rgba(0, 0, 0, 0.44)),
     url('https://res.cloudinary.com/dsas5i0fx/image/upload/v1763336289/IMG_5984_wjkvk6.jpg');
-  background-position: center center, center 48%; /* chandelier slightly lower, closer to middle on desktop */
-  background-size: cover, 115%; /* subtle base zoom-in on the photo */
+  background-position: center center, center 48%;
+  background-size: cover, 115%;
   background-repeat: no-repeat, no-repeat;
   transform-origin: center center;
   transition: transform 0.18s ease-out;
@@ -682,14 +673,13 @@ html, body {
 
 .logo-main {
   margin: 0 auto;
-  font-family: "Antique Legacy", -apple-system, system-ui, sans-serif;
-  font-weight: 700;          /* bold for logo */
+  font-family: "Antique Legacy Medium", -apple-system, system-ui, sans-serif;
+  font-weight: 700; /* synthetic bold based on Antique Legacy Medium */
   letter-spacing: -0.065em;
   text-transform: uppercase;
   line-height: 0.9;
   font-size: clamp(36px, 12vw, 140px);
 }
-/* Keyframe-driven intro for the logo so it always glides smoothly from the top */
 .logo-animate {
   animation: logo-intro 0.6s ease forwards;
   will-change: transform, opacity;
@@ -697,7 +687,7 @@ html, body {
 
 .tag {
   margin-top: 20px;
-  margin-bottom: 40px; /* slightly less space under logo */
+  margin-bottom: 40px;
   letter-spacing: 0.28em;
   text-transform: uppercase;
   font-size: clamp(12px, 2.4vw, 16px);
@@ -714,8 +704,8 @@ html, body {
 
 .nav {
   position: relative;
-  z-index: 10; /* above panel, below any overlay if added */
-  margin-top: 32px; /* nice distance below logo/tag */
+  z-index: 10;
+  margin-top: 32px;
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
@@ -723,24 +713,24 @@ html, body {
   gap: 24px;
 }
 
-/* Apple-style liquid glass buttons */
+/* Ultra-light liquid glass buttons */
 
 .navbtn {
   position: relative;
-  z-index: 9999; /* ensure buttons sit above EVERYTHING */
+  z-index: 9999;
   pointer-events: auto !important;
   min-height: 48px;
   min-width: 160px;
   padding: 12px 18px;
   border-radius: 12px;
 
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: rgba(255, 255, 255, 0.018);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
 
   color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  outline: 1px solid rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  outline: 1px solid rgba(255, 255, 255, 0.02);
 
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -757,18 +747,17 @@ html, body {
     box-shadow 0.25s ease;
 }
 
-/* Newsletter + RESERVATIONS share same base style */
 .newsletter-btn {
   padding: 10px 18px;
   border-radius: 10px;
 
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: rgba(255, 255, 255, 0.018);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
 
   color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  outline: 1px solid rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  outline: 1px solid rgba(255, 255, 255, 0.02);
 
   text-transform: uppercase;
   letter-spacing: 0.14em;
@@ -792,13 +781,13 @@ html, body {
   padding: 8px 14px;
   border-radius: 10px;
 
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: rgba(255, 255, 255, 0.018);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
 
   color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  outline: 1px solid rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  outline: 1px solid rgba(255, 255, 255, 0.02);
 
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -807,21 +796,21 @@ html, body {
   transition: all 0.25s ease;
 }
 
-/* Buttons rise in from bottom when nav fades in (HOME only) */
+/* Buttons rise in when nav is visible */
 .nav.fade-visible .navbtn {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* Hover: micro-lift, light glow */
+/* Hover – even lighter than before */
 .navbtn:hover,
 .newsletter-btn:hover:not(:disabled),
 .homebtn:hover {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.14);
   box-shadow:
-    0 4px 12px rgba(255, 255, 255, 0.05),
-    0 0 20px rgba(255, 180, 90, 0.12);
+    0 4px 10px rgba(0, 0, 0, 0.35),
+    0 0 12px rgba(255, 180, 90, 0.08);
   transform: translateY(-1px);
 }
 
@@ -832,7 +821,7 @@ html, body {
 
 .panel {
   position: relative;
-  z-index: 1; /* safely below nav so it never blocks buttons */
+  z-index: 1;
   margin: 12px auto 0;
   padding: 0;
   max-width: 900px;
@@ -849,7 +838,7 @@ html, body {
 
 .section {
   text-align: left;
-  margin: 18px auto 0; /* slightly reduced top margin */
+  margin: 18px auto 0;
   max-width: 900px;
 }
 .section-past {
@@ -858,11 +847,11 @@ html, body {
 
 .about-section {
   padding-top: 0;
-  padding-bottom: 24px; /* more breathing room so text and HOME button never overlap */
+  padding-bottom: 24px;
 }
 
 .about {
-  max-width: 38ch; /* slightly wider for desktop */
+  max-width: 38ch;
   margin: 0 auto;
   text-transform: uppercase;
 }
@@ -896,7 +885,7 @@ html, body {
 }
 
 .upcoming .tba {
-  font-weight: 400; /* TBA stays regular weight */
+  font-weight: 400;
 }
 
 .upcoming-actions {
@@ -919,7 +908,7 @@ html, body {
 }
 
 .newsletter {
-  margin: 40px auto 0; /* more breathing room above email box */
+  margin: 40px auto 0;
   max-width: 420px;
   text-align: center;
 }
@@ -961,13 +950,11 @@ html, body {
   outline: none;
   transition: all 0.2s ease;
 
-  /* REMOVE ALL AUTOFILL COLORS (browser default yellow/blue) */
   -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
   -webkit-text-fill-color: #fff !important;
   caret-color: #fff !important;
 }
 
-/* Fully neutralize Chrome/Safari autofill for all inputs */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -991,7 +978,7 @@ input:-webkit-autofill:active {
 }
 
 .newsletter-message {
-  margin-bottom: 26px; /* spacing before HOME button */
+  margin-bottom: 26px;
   margin-top: 10px;
   font-size: 11px;
   letter-spacing: 0.16em;
@@ -1069,7 +1056,7 @@ input:-webkit-autofill:active {
   color: rgba(255, 255, 255, 0.55);
   letter-spacing: 0.22em;
   font-size: 10px;
-  margin-top: -10px; /* closer to BOYSDONTCRY */
+  margin-top: -10px;
   text-transform: uppercase;
   line-height: 1;
 }
@@ -1107,17 +1094,18 @@ input:-webkit-autofill:active {
 .homebtn-wrapper {
   display: flex;
   justify-content: center;
-  margin-top: 54px; /* more distance from mailbox or content */
+  margin-top: 54px;
+  margin-bottom: 80px; /* extra space above footer so nothing overlaps */
 }
 
 .footer {
-  pointer-events: none; /* footer never intercepts taps */
+  pointer-events: none;
   width: 100%;
   padding: 14px 0 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: fixed;   /* always visible without scrolling */
+  position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
@@ -1136,13 +1124,11 @@ input:-webkit-autofill:active {
 .fade-hidden {
   opacity: 0;
 }
-
 .fade-visible {
   opacity: 1;
 }
 
 @media (max-width: 640px) {
-  /* Mobile background framing */
   .bg-layer {
     background-image:
       linear-gradient(rgba(0, 0, 0, 0.30), rgba(0, 0, 0, 0.40)),
@@ -1158,23 +1144,20 @@ input:-webkit-autofill:active {
     white-space: nowrap;
   }
 
-  /* HOME (mobile): logo upper third, buttons lower third, very limited scroll */
   .center-home {
-    padding-top: 16vh;   /* keep logo comfortably in upper third */
-    padding-bottom: 2vh; /* minimal bottom padding to reduce scroll */
-    min-height: 96vh;    /* slightly less than full viewport to avoid blank area */
+    padding-top: 16vh;
+    padding-bottom: 2vh;
+    min-height: 96vh;
     justify-content: flex-start;
   }
 
-  /* LANDING PAGES BASE (artists & past) */
   .center-subpage {
     padding-top: 12vh;
-    padding-bottom: 8vh; /* a bit tighter at the bottom */
-    min-height: 96vh;    /* slightly less than full viewport to reduce empty scroll */
+    padding-bottom: 8vh;
+    min-height: 96vh;
     justify-content: flex-start;
   }
 
-  /* UPCOMING: slightly tighter to avoid too much scroll */
   .center-upcoming {
     padding-top: 10vh;
     padding-bottom: 2vh;
@@ -1182,7 +1165,6 @@ input:-webkit-autofill:active {
     justify-content: flex-start;
   }
 
-  /* ABOUT: slightly tighter as well, and narrower text */
   .center-about {
     padding-top: 10vh;
     padding-bottom: 2vh;
@@ -1199,12 +1181,10 @@ input:-webkit-autofill:active {
     gap: 16px;
   }
 
-  /* On HOME specifically, push nav (buttons) one button-height further down */
   .center-home .nav {
-    margin-top: 96px; /* push buttons ~one button-height further down on HOME mobile */
+    margin-top: 96px;
   }
 }
-
 
 @keyframes logo-intro {
   from {
