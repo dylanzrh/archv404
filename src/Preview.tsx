@@ -680,11 +680,11 @@ html, body {
 
 .logo-main {
   margin: 0 auto;
-  font-family: inherit;
+  font-family: "Antique Legacy Medium", -apple-system, system-ui, sans-serif;
   font-weight: 500;
-  letter-spacing: -0.082em;
+  letter-spacing: -0.06em;
   text-transform: uppercase;
-  line-height: 0.86;
+  line-height: 0.9;
   font-size: clamp(36px, 12vw, 140px);
 }
 /* Keyframe-driven intro for the logo so it always glides smoothly from the top */
@@ -721,28 +721,17 @@ html, body {
   gap: 24px;
 }
 
-/* Liquid glass effect base */
-.navbtn,
-.newsletter-btn,
-.homebtn {
-  position: relative;
-  z-index: 9999;
-  pointer-events: auto !important;
-  border-radius: 12px;
-  background:
-    radial-gradient(140% 220% at 0% 0%, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.02));
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  color: #fff;
-  -webkit-backdrop-filter: blur(18px);
-  backdrop-filter: blur(18px);
-  box-shadow: 0 0 26px rgba(0, 0, 0, 0.55);
-}
-
-/* NAV BUTTONS */
 .navbtn {
+  position: relative;
+  z-index: 9999; /* ensure buttons sit above EVERYTHING */
+  pointer-events: auto !important; /* first-tap ALWAYS works */
   min-height: 48px;
   min-width: 160px;
   padding: 12px 18px;
+  border-radius: 12px;
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-size: 11px;
@@ -754,8 +743,7 @@ html, body {
     transform 0.6s ease,
     background 0.2s ease,
     color 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    border-color 0.2s ease;
 }
 
 /* Buttons rise in from bottom when nav fades in (HOME only) */
@@ -765,11 +753,11 @@ html, body {
 }
 
 .navbtn:hover {
+  background: transparent;
   color: #fff;
-  border-color: rgba(255, 255, 255, 0.38);
-  box-shadow:
-    0 0 24px rgba(0, 0, 0, 0.6),
-    0 0 18px 4px rgba(255, 180, 90, 0.25);
+  border-color: rgba(255, 255, 255, 0.32);
+  box-shadow: 0 0 20px 6px rgba(255, 180, 90, 0.26);
+  text-shadow: none;
   transform: translateY(-1px);
 }
 
@@ -939,10 +927,12 @@ input:-webkit-autofill:active {
   box-shadow: 0 0 20px 6px rgba(255, 180, 90, 0.20);
 }
 
-/* Glass button for newsletter + reservations */
 .newsletter-btn {
   padding: 10px 18px;
-  border-radius: 12px;
+  border-radius: 8px;
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
   text-transform: uppercase;
   letter-spacing: 0.14em;
   font-size: 11px;
@@ -952,9 +942,7 @@ input:-webkit-autofill:active {
 
 .newsletter-btn:hover:not(:disabled) {
   border-color: rgba(255, 255, 255, 0.6);
-  box-shadow:
-    0 0 24px rgba(0, 0, 0, 0.6),
-    0 0 18px 4px rgba(255, 180, 90, 0.25);
+  box-shadow: 0 0 18px 4px rgba(255, 180, 90, 0.25);
   transform: translateY(-1px);
 }
 
@@ -1088,20 +1076,21 @@ input:-webkit-autofill:active {
   justify-content: center;
   min-height: 36px;
   padding: 8px 14px;
-  border-radius: 12px;
+  border-radius: 8px;
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-size: 11px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
-
 .homebtn:hover {
+  background: transparent;
   color: #fff;
   border-color: rgba(255, 255, 255, 0.32);
-  box-shadow:
-    0 0 24px rgba(0, 0, 0, 0.6),
-    0 0 20px 6px rgba(255, 180, 90, 0.26);
+  box-shadow: 0 0 20px 6px rgba(255, 180, 90, 0.26);
   text-shadow: none;
   transform: translateY(-1px);
 }
