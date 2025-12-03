@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+
 // ---------------------------------
 // Constants / Config
 // ---------------------------------
 const LOGO_TEXT = 'ARCHIVE 404';
-const FONT_STACK = 'Helvetica Neue, Helvetica, Arial, sans-serif';
+const FONT_STACK = '"Antique Legacy Medium", -apple-system, system-ui, sans-serif';
 const INSTAGRAM_URL = 'https://instagram.com/archv404';
 const MAILTO_URL = 'mailto:info@archv404.com';
 const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
@@ -306,6 +308,19 @@ export default function Preview() {
         <p className="tba" style={{ animationDelay: '40ms' }}>
           TBA
         </p>
+
+        {/* ST. MORITZ RESERVATION BUTTON */}
+        <div className="upcoming-actions">
+          <a
+            href="https://www.mrsamigo.com/samigo-fuel"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="upcoming-res-btn"
+          >
+            RESERVATIONS
+          </a>
+        </div>
+
         <div className="date-divider" aria-hidden="true" />
         <p style={{ animationDelay: '80ms' }}>FEB 27 ZURICH</p>
         <p className="tba" style={{ animationDelay: '120ms' }}>
@@ -593,6 +608,14 @@ export default function Preview() {
         </footer>
 
         <style>{`
+@font-face {
+  font-family: "Antique Legacy Medium";
+  src: url("/fonts/antique-legacy-medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   color-scheme: dark;
 }
@@ -600,6 +623,7 @@ html, body {
   margin: 0;
   padding: 0;
   background: #000;
+  font-family: "Antique Legacy Medium", -apple-system, system-ui, sans-serif;
 }
 .root {
   position: relative;
@@ -659,8 +683,8 @@ html, body {
 
 .logo-main {
   margin: 0 auto;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-weight: 700;
+  font-family: inherit;
+  font-weight: 500;
   letter-spacing: -0.082em;
   text-transform: uppercase;
   line-height: 0.86;
@@ -802,11 +826,39 @@ html, body {
   margin-top: 10px;
 }
 .upcoming p {
-  font-weight: 700; /* dates & locations bold */
+  font-weight: 500;
 }
 
 .upcoming .tba {
   font-weight: 400; /* TBA stays regular weight */
+}
+
+.upcoming-actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: center;
+}
+
+.upcoming-res-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.upcoming-res-btn:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 18px 4px rgba(255, 180, 90, 0.25);
+  transform: translateY(-1px);
 }
 
 .tba {
@@ -963,7 +1015,7 @@ input:-webkit-autofill:active {
   text-align: center;
 }
 .az-label {
-  font-weight: 700; /* A–Z now bold */
+  font-weight: 500;
   color: rgba(255, 255, 255, 0.55);
   letter-spacing: 0.22em;
   font-size: 16px;
@@ -993,7 +1045,7 @@ input:-webkit-autofill:active {
   color: #fff;
 }
 .artist-resident {
-  font-weight: 700;
+  font-weight: 500;
   color: rgba(255, 255, 255, 0.55);
   letter-spacing: 0.22em;
   font-size: 10px;
