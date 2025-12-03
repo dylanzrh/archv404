@@ -1,7 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-
 // ---------------------------------
 // Constants / Config
 // ---------------------------------
@@ -45,6 +43,7 @@ const ARTISTS: string[] = [
   'KASSETTE',
   'LOU COMBO',
   'PAUL ALMQVIST',
+  'RUBEN SCORZA',
   'SAM MADI',
   'SEBASTIAN KONRAD',
   'TIM ENGELHARDT',
@@ -305,23 +304,21 @@ export default function Preview() {
     <section className="section">
       <div className="upcoming">
         <p style={{ animationDelay: '0ms' }}>DEC 27 ST. MORITZ</p>
-        <p className="tba" style={{ animationDelay: '40ms' }}>
-          TBA
-        </p>
 
-        {/* ST. MORITZ RESERVATION BUTTON */}
+        {/* ST. MORITZ RESERVATION BUTTON – same style as JOIN */}
         <div className="upcoming-actions">
           <a
             href="https://www.mrsamigo.com/samigo-fuel"
             target="_blank"
             rel="noopener noreferrer"
-            className="upcoming-res-btn"
+            className="newsletter-btn upcoming-res-link"
           >
             RESERVATIONS
           </a>
         </div>
 
         <div className="date-divider" aria-hidden="true" />
+
         <p style={{ animationDelay: '80ms' }}>FEB 27 ZURICH</p>
         <p className="tba" style={{ animationDelay: '120ms' }}>
           TBA
@@ -839,26 +836,8 @@ html, body {
   justify-content: center;
 }
 
-.upcoming-res-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 18px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.32);
-  background: rgba(0, 0, 0, 0.3);
-  color: #fff;
+.upcoming-res-link {
   text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  font-size: 11px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.upcoming-res-btn:hover {
-  border-color: rgba(255, 255, 255, 0.6);
-  box-shadow: 0 0 18px 4px rgba(255, 180, 90, 0.25);
-  transform: translateY(-1px);
 }
 
 .tba {
