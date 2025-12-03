@@ -721,17 +721,28 @@ html, body {
   gap: 24px;
 }
 
-.navbtn {
+/* Liquid glass effect base */
+.navbtn,
+.newsletter-btn,
+.homebtn {
   position: relative;
-  z-index: 9999; /* ensure buttons sit above EVERYTHING */
-  pointer-events: auto !important; /* first-tap ALWAYS works */
+  z-index: 9999;
+  pointer-events: auto !important;
+  border-radius: 12px;
+  background:
+    radial-gradient(140% 220% at 0% 0%, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #fff;
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 0 26px rgba(0, 0, 0, 0.55);
+}
+
+/* NAV BUTTONS */
+.navbtn {
   min-height: 48px;
   min-width: 160px;
   padding: 12px 18px;
-  border-radius: 12px;
-  background: transparent;
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.16);
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-size: 11px;
@@ -743,7 +754,8 @@ html, body {
     transform 0.6s ease,
     background 0.2s ease,
     color 0.2s ease,
-    border-color 0.2s ease;
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 /* Buttons rise in from bottom when nav fades in (HOME only) */
@@ -753,11 +765,11 @@ html, body {
 }
 
 .navbtn:hover {
-  background: transparent;
   color: #fff;
-  border-color: rgba(255, 255, 255, 0.32);
-  box-shadow: 0 0 20px 6px rgba(255, 180, 90, 0.26);
-  text-shadow: none;
+  border-color: rgba(255, 255, 255, 0.38);
+  box-shadow:
+    0 0 24px rgba(0, 0, 0, 0.6),
+    0 0 18px 4px rgba(255, 180, 90, 0.25);
   transform: translateY(-1px);
 }
 
@@ -793,7 +805,7 @@ html, body {
 }
 
 .about {
-  max-width: 38ch; /* slightly wider for ultra-even justification */
+  max-width: 38ch; /* desktop width, mobile overridden below */
   margin: 0 auto;
   text-transform: uppercase;
 }
@@ -836,8 +848,10 @@ html, body {
   justify-content: center;
 }
 
+/* Reservations link – readable & bold */
 .upcoming-res-link {
   text-decoration: none;
+  font-weight: 700;
 }
 
 .tba {
@@ -925,12 +939,10 @@ input:-webkit-autofill:active {
   box-shadow: 0 0 20px 6px rgba(255, 180, 90, 0.20);
 }
 
+/* Glass button for newsletter + reservations */
 .newsletter-btn {
   padding: 10px 18px;
-  border-radius: 8px;
-  background: transparent;
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
   text-transform: uppercase;
   letter-spacing: 0.14em;
   font-size: 11px;
@@ -940,7 +952,9 @@ input:-webkit-autofill:active {
 
 .newsletter-btn:hover:not(:disabled) {
   border-color: rgba(255, 255, 255, 0.6);
-  box-shadow: 0 0 18px 4px rgba(255, 180, 90, 0.25);
+  box-shadow:
+    0 0 24px rgba(0, 0, 0, 0.6),
+    0 0 18px 4px rgba(255, 180, 90, 0.25);
   transform: translateY(-1px);
 }
 
@@ -1074,21 +1088,20 @@ input:-webkit-autofill:active {
   justify-content: center;
   min-height: 36px;
   padding: 8px 14px;
-  border-radius: 8px;
-  background: transparent;
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-size: 11px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
+
 .homebtn:hover {
-  background: transparent;
   color: #fff;
   border-color: rgba(255, 255, 255, 0.32);
-  box-shadow: 0 0 20px 6px rgba(255, 180, 90, 0.26);
+  box-shadow:
+    0 0 24px rgba(0, 0, 0, 0.6),
+    0 0 20px 6px rgba(255, 180, 90, 0.26);
   text-shadow: none;
   transform: translateY(-1px);
 }
@@ -1173,6 +1186,11 @@ input:-webkit-autofill:active {
     padding-bottom: 2vh;
     min-height: 96vh;
     justify-content: flex-start;
+  }
+
+  /* Narrower about text on phone */
+  .about {
+    max-width: 30ch;
   }
 
   .nav {
