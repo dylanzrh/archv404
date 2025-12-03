@@ -4,8 +4,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 // Constants / Config
 // ---------------------------------
 const LOGO_TEXT = 'ARCHIVE 404';
-const FONT_STACK =
-  '"Antique Legacy", "Antique Legacy Medium", -apple-system, system-ui, sans-serif';
+const FONT_STACK = '"Antique Legacy Medium", -apple-system, system-ui, sans-serif';
 const INSTAGRAM_URL = 'https://instagram.com/archv404';
 const MAILTO_URL = 'mailto:info@archv404.com';
 const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
@@ -590,17 +589,11 @@ export default function Preview() {
 
         <style>{`
 @font-face {
-  font-family: "Antique Legacy";
-  src: url("/fonts/antique-legacy-medium.woff2") format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Alias name in case the file is named as "Antique Legacy Medium" internally */
-@font-face {
   font-family: "Antique Legacy Medium";
-  src: url("/fonts/antique-legacy-medium.woff2") format("woff2");
+  src:
+    url("/fonts/antique-legacy-medium.woff2") format("woff2"),
+    url("/fonts/antique-legacy-medium.woff") format("woff"),
+    url("/fonts/antique-legacy-medium.ttf") format("truetype");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -613,7 +606,7 @@ html, body {
   margin: 0;
   padding: 0;
   background: #000;
-  font-family: "Antique Legacy", "Antique Legacy Medium", -apple-system, system-ui, sans-serif;
+  font-family: "Antique Legacy Medium", -apple-system, system-ui, sans-serif;
 }
 .root {
   position: relative;
@@ -673,8 +666,8 @@ html, body {
 
 .logo-main {
   margin: 0 auto;
-  font-family: "Antique Legacy", "Antique Legacy Medium", -apple-system, system-ui, sans-serif;
-  font-weight: 700; /* visually stronger logo while still using Antique Legacy */
+  font-family: "Antique Legacy Medium", -apple-system, system-ui, sans-serif;
+  font-weight: 500;
   letter-spacing: -0.065em;
   text-transform: uppercase;
   line-height: 0.9;
@@ -713,7 +706,7 @@ html, body {
   gap: 24px;
 }
 
-/* Ultra-light liquid glass buttons – used for nav, newsletter, reservations, home */
+/* Weaker liquid glass buttons – ALL buttons including RESERVATIONS */
 
 .navbtn,
 .newsletter-btn,
@@ -723,13 +716,14 @@ html, body {
   padding: 10px 18px;
   border-radius: 10px;
 
-  background: rgba(255, 255, 255, 0.015);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
+  /* much weaker glass effect */
+  background: rgba(255, 255, 255, 0.008);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
 
   color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  outline: 1px solid rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  outline: 1px solid rgba(255, 255, 255, 0.015);
 
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -759,11 +753,13 @@ html, body {
   transform: translateY(0);
 }
 
-/* Reservations link reuses newsletter-btn style and adds bold text */
+/* Reservations link reuses button style + bold */
 .upcoming-res-link {
   text-decoration: none;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* HOME button alignment */
@@ -774,15 +770,15 @@ html, body {
   min-height: 36px;
 }
 
-/* Hover – very subtle */
+/* Hover – even more subtle now */
 .navbtn:hover,
 .newsletter-btn:hover:not(:disabled),
 .homebtn:hover {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.018);
+  border-color: rgba(255, 255, 255, 0.10);
   box-shadow:
-    0 4px 10px rgba(0, 0, 0, 0.35),
-    0 0 12px rgba(255, 180, 90, 0.08);
+    0 3px 8px rgba(0, 0, 0, 0.3),
+    0 0 10px rgba(255, 180, 90, 0.06);
   transform: translateY(-1px);
 }
 
@@ -1067,7 +1063,7 @@ input:-webkit-autofill:active {
   display: flex;
   justify-content: center;
   margin-top: 54px;
-  margin-bottom: 80px; /* space above footer on all pages using HOME */
+  margin-bottom: 80px; /* space to footer */
 }
 
 .footer {
