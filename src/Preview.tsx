@@ -750,6 +750,16 @@ html, body {
   font-weight: 600;
   letter-spacing: 0.14em;
   text-decoration: none;
+
+  /* Apply full glass effect like navbtn */
+  background: rgba(255, 255, 255, 0.008);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  outline: 1px solid rgba(255, 255, 255, 0.015);
+  transition: opacity 0.6s ease, transform 0.2s ease,
+              background 0.2s ease, border-color 0.2s ease,
+              box-shadow 0.25s ease;
 }
 
 /* HOME button alignment */
@@ -810,7 +820,8 @@ html, body {
 }
 
 .about {
-  max-width: 38ch;
+  .about {
+  max-width: 90vw !important; /* full width on mobile */
   margin: 0 auto;
   text-transform: uppercase;
 }
