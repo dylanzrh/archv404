@@ -820,7 +820,7 @@ html, body {
 }
 
 .about {
-  max-width: 45ch;
+  max-width: 50ch;
   margin: 0 auto;
   text-transform: uppercase;
 }
