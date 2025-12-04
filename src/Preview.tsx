@@ -820,8 +820,7 @@ html, body {
 }
 
 .about {
-  .about {
-  max-width: 90vw !important; /* full width on mobile */
+  max-width: 90vw;
   margin: 0 auto;
   text-transform: uppercase;
 }
