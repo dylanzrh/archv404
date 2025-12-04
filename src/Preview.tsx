@@ -1142,7 +1142,7 @@ input:-webkit-autofill:active {
   }
 
   .about {
-    max-width: 30ch; /* narrower on phone */
+    max-width: 34ch; /* narrower on phone */
   }
 
   .nav {
