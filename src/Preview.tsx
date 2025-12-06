@@ -89,11 +89,7 @@ export default function Preview() {
   const [newsletterMessage, setNewsletterMessage] = useState<string | null>(null);
 
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const artistRefs = useRef<(HTMLParagraphElement | null)[]>([];
-
-  // For St. Moritz title width
-  const stMoritzTitleRef = useRef<HTMLParagraphElement | null>(null);
-  const [stMoritzWidth, setStMoritzWidth] = useState<number | null>(null);
+  const artistRefs = useRef<(HTMLParagraphElement | null)[]>([]);
 
   const nav = useMemo(
     () =>
@@ -244,21 +240,6 @@ export default function Preview() {
     };
   }, [page]);
 
-  // Measure St. Moritz title width so flyer and button can match it
-  useEffect(() => {
-    const measure = () => {
-      if (stMoritzTitleRef.current) {
-        setStMoritzWidth(stMoritzTitleRef.current.offsetWidth);
-      }
-    };
-
-    measure();
-    window.addEventListener('resize', measure);
-    return () => {
-      window.removeEventListener('resize', measure);
-    };
-  }, []);
-
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newsletterEmail.trim()) return;
@@ -312,23 +293,11 @@ export default function Preview() {
       <div className="upcoming">
         {/* ST. MORITZ BLOCK */}
         <div className="upcoming-item">
-          <p
-            ref={stMoritzTitleRef}
-            className="upcoming-title"
-            style={{ animationDelay: '0ms' }}
-          >
+          <p className="upcoming-title" style={{ animationDelay: '0ms' }}>
             DEC 27 ST. MORITZ
           </p>
 
-          {/* Button constrained to the same width as the title */}
-          <div
-            className="upcoming-actions"
-            style={{
-              width: stMoritzWidth ?? undefined,
-              marginLeft: 'auto',
-              marginRight: 'auto',
-            }}
-          >
+          <div className="upcoming-actions">
             <button
               type="button"
               className="newsletter-btn upcoming-res-btn"
@@ -346,15 +315,7 @@ export default function Preview() {
             </button>
           </div>
 
-          {/* Flyer below button, same width as the title */}
-          <div
-            className="upcoming-flyer-wrapper"
-            style={{
-              width: stMoritzWidth ?? undefined,
-              marginLeft: 'auto',
-              marginRight: 'auto',
-            }}
-          >
+          <div className="upcoming-flyer-wrapper">
             <img
               src="https://res.cloudinary.com/dsas5i0fx/image/upload/v1765023902/AR4_Instagram-Post_251203_l5i1md.png"
               alt="ARCHIVE 404 · St. Moritz · 27 December"
@@ -912,26 +873,36 @@ html, body {
   font-weight: 400;
 }
 
+/* The whole St. Moritz block as a vertical stack */
 .upcoming-item {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
+/* Title defines the visual measure; 15ch ≈ width of "DEC 27 ST. MORITZ" */
 .upcoming-title {
-  display: inline-block;
+  max-width: 15ch;
 }
 
-/* Button row under title; width gets set inline to match title width */
+/* Button row and flyer share the same max-width, centered */
+.upcoming-actions,
+.upcoming-flyer-wrapper {
+  width: 100%;
+  max-width: 15ch;
+}
+
 .upcoming-actions {
   margin-top: 14px;
   display: flex;
   justify-content: center;
 }
 
-/* Flyer under button; also gets same width inline */
 .upcoming-flyer-wrapper {
   margin-top: 10px;
 }
 
+/* Flyer fills that narrow column, so same visual width as title text */
 .upcoming-flyer {
   display: block;
   width: 100%;
