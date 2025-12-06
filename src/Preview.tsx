@@ -291,26 +291,36 @@ export default function Preview() {
   const renderUpcoming = () => (
     <section className="section">
       <div className="upcoming">
-        <p style={{ animationDelay: '0ms' }}>DEC 27 ST. MORITZ</p>
+        {/* ST. MORITZ TITLE + FLYER + RESERVATIONS BLOCK */}
+        <div className="upcoming-item">
+          <p style={{ animationDelay: '0ms' }}>DEC 27 ST. MORITZ</p>
 
-        <div className="upcoming-actions">
-          {/* RESERVATIONS: built exactly like JOIN/HOME (newsletter-btn styles)
-              and opens the Samigo link in a new tab */}
-          <button
-            type="button"
-            className="newsletter-btn upcoming-res-btn"
-            onClick={() => {
-              if (typeof window !== 'undefined') {
-                window.open(
-                  'https://www.mrsamigo.com/samigo-fuel',
-                  '_blank',
-                  'noopener,noreferrer'
-                );
-              }
-            }}
-          >
-            RESERVATIONS
-          </button>
+          <div className="upcoming-flyer-wrapper">
+            <img
+              src="https://res.cloudinary.com/dsas5i0fx/image/upload/v1765023902/AR4_Instagram-Post_251203_l5i1md.png"
+              alt="ARCHIVE 404 · St. Moritz · 27 December"
+              className="upcoming-flyer"
+            />
+          </div>
+
+          <div className="upcoming-actions">
+            {/* RESERVATIONS: same glass style as JOIN/HOME */}
+            <button
+              type="button"
+              className="newsletter-btn upcoming-res-btn"
+              onClick={() => {
+                if (typeof window !== 'undefined') {
+                  window.open(
+                    'https://www.mrsamigo.com/samigo-fuel',
+                    '_blank',
+                    'noopener,noreferrer'
+                  );
+                }
+              }}
+            >
+              RESERVATIONS
+            </button>
+          </div>
         </div>
 
         <div className="date-divider" aria-hidden="true" />
@@ -840,6 +850,8 @@ html, body {
   width: 100%;
 }
 
+/* UPCOMING */
+
 .upcoming {
   text-align: center;
   text-transform: uppercase;
@@ -849,12 +861,30 @@ html, body {
   opacity: 0.95;
   margin-top: 10px;
 }
+
 .upcoming p {
   font-weight: 700;
 }
 
 .upcoming .tba {
   font-weight: 400;
+}
+
+/* Container that defines width from the title text */
+.upcoming-item {
+  display: inline-block;
+  text-align: center;
+}
+
+/* Flyer matches width of the title via width:100% of .upcoming-item */
+.upcoming-flyer-wrapper {
+  margin-top: 10px;
+}
+
+.upcoming-flyer {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .upcoming-actions {
@@ -875,6 +905,8 @@ html, body {
   margin: 12px auto 10px;
   background: rgba(255, 255, 255, 0.35);
 }
+
+/* NEWSLETTER */
 
 .newsletter {
   margin: 40px auto 0;
@@ -955,6 +987,8 @@ input:-webkit-autofill:active {
   opacity: 0.8;
 }
 
+/* PAST */
+
 .flyer-grid {
   display: flex;
   flex-direction: column;
@@ -984,6 +1018,8 @@ input:-webkit-autofill:active {
   height: auto;
   object-fit: contain;
 }
+
+/* ARTISTS */
 
 .artists-list {
   max-width: 76ch;
@@ -1029,6 +1065,8 @@ input:-webkit-autofill:active {
   text-transform: uppercase;
   line-height: 1;
 }
+
+/* FOOTER / ICONS */
 
 .icons {
   display: flex;
