@@ -298,9 +298,9 @@ export default function Preview() {
             href="https://www.mrsamigo.com/samigo-fuel"
             target="_blank"
             rel="noopener noreferrer"
-            className="upcoming-res-link glass-btn"
+            className="upcoming-res-link"
           >
-            RESERVATIONS
+            <span className="upcoming-res-inner">RESERVATIONS</span>
           </a>
         </div>
 
@@ -339,7 +339,7 @@ export default function Preview() {
           />
           <button
             type="submit"
-            className="newsletter-btn glass-btn"
+            className="newsletter-btn"
             disabled={isSubmittingNewsletter}
           >
             {isSubmittingNewsletter ? 'SENDING…' : 'JOIN'}
@@ -351,7 +351,7 @@ export default function Preview() {
       </div>
 
       <div className="homebtn-wrapper">
-        <button className="homebtn glass-btn" onClick={() => handleNavigate('home')}>
+        <button className="homebtn" onClick={() => handleNavigate('home')}>
           HOME
         </button>
       </div>
@@ -390,7 +390,7 @@ export default function Preview() {
         </div>
 
         <div className="homebtn-wrapper">
-          <button className="homebtn glass-btn" onClick={() => handleNavigate('home')}>
+          <button className="homebtn" onClick={() => handleNavigate('home')}>
             HOME
           </button>
         </div>
@@ -523,7 +523,7 @@ export default function Preview() {
                 <button
                   key={label}
                   onClick={() => handleNavigate(key as Page)}
-                  className="navbtn glass-btn"
+                  className="navbtn"
                 >
                   {label}
                 </button>
@@ -539,7 +539,7 @@ export default function Preview() {
                 </article>
                 <div className="homebtn-wrapper" style={{ marginTop: '40px' }}>
                   <button
-                    className="homebtn glass-btn"
+                    className="homebtn"
                     onClick={() => handleNavigate('home')}
                   >
                     HOME
@@ -580,7 +580,7 @@ export default function Preview() {
                 </div>
                 <div className="homebtn-wrapper">
                   <button
-                    className="homebtn glass-btn"
+                    className="homebtn"
                     onClick={() => handleNavigate('home')}
                   >
                     HOME
@@ -703,8 +703,11 @@ html, body {
   gap: 24px;
 }
 
-/* Shared subtle liquid glass style */
-.glass-btn {
+/* Subtle liquid glass buttons – shared */
+.navbtn,
+.newsletter-btn,
+.homebtn,
+.upcoming-res-inner {
   position: relative;
   pointer-events: auto;
   padding: 10px 18px;
@@ -746,14 +749,21 @@ html, body {
   transform: translateY(0);
 }
 
-/* RESERVATIONS: same glass effect, slightly bolder text */
+/* Link wrapper around RESERVATIONS glass button */
 .upcoming-res-link {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Inner span that actually has the glass effect */
+.upcoming-res-inner {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
   letter-spacing: 0.14em;
-  text-decoration: none;
 }
 
 /* HOME button alignment */
@@ -765,7 +775,10 @@ html, body {
 }
 
 /* Hover for glass buttons */
-.glass-btn:hover:not(:disabled) {
+.navbtn:hover,
+.newsletter-btn:hover:not(:disabled),
+.homebtn:hover,
+.upcoming-res-inner:hover {
   background: rgba(255, 255, 255, 0.018);
   border-color: rgba(255, 255, 255, 0.10);
   box-shadow:
