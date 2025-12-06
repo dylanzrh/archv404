@@ -294,9 +294,11 @@ export default function Preview() {
         <p style={{ animationDelay: '0ms' }}>DEC 27 ST. MORITZ</p>
 
         <div className="upcoming-actions">
+          {/* RESERVATIONS: built exactly like JOIN/HOME (newsletter-btn styles)
+              and opens the Samigo link in a new tab */}
           <button
             type="button"
-            className="upcoming-res-btn"
+            className="newsletter-btn upcoming-res-btn"
             onClick={() => {
               if (typeof window !== 'undefined') {
                 window.open(
@@ -710,11 +712,10 @@ html, body {
   gap: 24px;
 }
 
-/* Subtle liquid glass buttons – shared */
+/* Subtle liquid glass buttons – SHARED */
 .navbtn,
 .newsletter-btn,
-.homebtn,
-.upcoming-res-btn {
+.homebtn {
   position: relative;
   pointer-events: auto;
   padding: 10px 18px;
@@ -740,6 +741,12 @@ html, body {
     box-shadow 0.25s ease;
 }
 
+/* Extra styling for RESERVATIONS, reusing newsletter-btn glass effect */
+.upcoming-res-btn {
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
 /* Nav specific layout */
 .navbtn {
   z-index: 9999;
@@ -756,15 +763,6 @@ html, body {
   transform: translateY(0);
 }
 
-/* RESERVATIONS: same glass effect, slightly bolder text */
-.upcoming-res-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-}
-
 /* HOME button alignment */
 .homebtn {
   display: inline-flex;
@@ -776,8 +774,7 @@ html, body {
 /* Hover for glass buttons */
 .navbtn:hover,
 .newsletter-btn:hover:not(:disabled),
-.homebtn:hover,
-.upcoming-res-btn:hover {
+.homebtn:hover {
   background: rgba(255, 255, 255, 0.018);
   border-color: rgba(255, 255, 255, 0.10);
   box-shadow:
