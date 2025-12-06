@@ -89,7 +89,11 @@ export default function Preview() {
   const [newsletterMessage, setNewsletterMessage] = useState<string | null>(null);
 
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const artistRefs = useRef<(HTMLParagraphElement | null)[]>([]);
+  const artistRefs = useRef<(HTMLParagraphElement | null)[]>([];
+
+  // For St. Moritz title width
+  const stMoritzTitleRef = useRef<HTMLParagraphElement | null>(null);
+  const [stMoritzWidth, setStMoritzWidth] = useState<number | null>(null);
 
   const nav = useMemo(
     () =>
@@ -240,6 +244,21 @@ export default function Preview() {
     };
   }, [page]);
 
+  // Measure St. Moritz title width so flyer and button can match it
+  useEffect(() => {
+    const measure = () => {
+      if (stMoritzTitleRef.current) {
+        setStMoritzWidth(stMoritzTitleRef.current.offsetWidth);
+      }
+    };
+
+    measure();
+    window.addEventListener('resize', measure);
+    return () => {
+      window.removeEventListener('resize', measure);
+    };
+  }, []);
+
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newsletterEmail.trim()) return;
@@ -291,20 +310,25 @@ export default function Preview() {
   const renderUpcoming = () => (
     <section className="section">
       <div className="upcoming">
-        {/* ST. MORITZ TITLE + FLYER + RESERVATIONS BLOCK */}
+        {/* ST. MORITZ BLOCK */}
         <div className="upcoming-item">
-          <p style={{ animationDelay: '0ms' }}>DEC 27 ST. MORITZ</p>
+          <p
+            ref={stMoritzTitleRef}
+            className="upcoming-title"
+            style={{ animationDelay: '0ms' }}
+          >
+            DEC 27 ST. MORITZ
+          </p>
 
-          <div className="upcoming-flyer-wrapper">
-            <img
-              src="https://res.cloudinary.com/dsas5i0fx/image/upload/v1765023902/AR4_Instagram-Post_251203_l5i1md.png"
-              alt="ARCHIVE 404 · St. Moritz · 27 December"
-              className="upcoming-flyer"
-            />
-          </div>
-
-          <div className="upcoming-actions">
-            {/* RESERVATIONS: same glass style as JOIN/HOME */}
+          {/* Button constrained to the same width as the title */}
+          <div
+            className="upcoming-actions"
+            style={{
+              width: stMoritzWidth ?? undefined,
+              marginLeft: 'auto',
+              marginRight: 'auto',
+            }}
+          >
             <button
               type="button"
               className="newsletter-btn upcoming-res-btn"
@@ -320,6 +344,22 @@ export default function Preview() {
             >
               RESERVATIONS
             </button>
+          </div>
+
+          {/* Flyer below button, same width as the title */}
+          <div
+            className="upcoming-flyer-wrapper"
+            style={{
+              width: stMoritzWidth ?? undefined,
+              marginLeft: 'auto',
+              marginRight: 'auto',
+            }}
+          >
+            <img
+              src="https://res.cloudinary.com/dsas5i0fx/image/upload/v1765023902/AR4_Instagram-Post_251203_l5i1md.png"
+              alt="ARCHIVE 404 · St. Moritz · 27 December"
+              className="upcoming-flyer"
+            />
           </div>
         </div>
 
@@ -751,7 +791,7 @@ html, body {
     box-shadow 0.25s ease;
 }
 
-/* Extra styling for RESERVATIONS, reusing newsletter-btn glass effect */
+/* Extra styling for RESERVATIONS (inherits glass from .newsletter-btn) */
 .upcoming-res-btn {
   font-weight: 600;
   letter-spacing: 0.14em;
@@ -797,6 +837,8 @@ html, body {
   opacity: 0.6;
   cursor: default;
 }
+
+/* PANEL / SECTIONS */
 
 .panel {
   position: relative;
@@ -870,13 +912,22 @@ html, body {
   font-weight: 400;
 }
 
-/* Container that defines width from the title text */
 .upcoming-item {
-  display: inline-block;
   text-align: center;
 }
 
-/* Flyer matches width of the title via width:100% of .upcoming-item */
+.upcoming-title {
+  display: inline-block;
+}
+
+/* Button row under title; width gets set inline to match title width */
+.upcoming-actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Flyer under button; also gets same width inline */
 .upcoming-flyer-wrapper {
   margin-top: 10px;
 }
@@ -885,12 +936,6 @@ html, body {
   display: block;
   width: 100%;
   height: auto;
-}
-
-.upcoming-actions {
-  margin-top: 14px;
-  display: flex;
-  justify-content: center;
 }
 
 .tba {
