@@ -294,14 +294,21 @@ export default function Preview() {
         <p style={{ animationDelay: '0ms' }}>DEC 27 ST. MORITZ</p>
 
         <div className="upcoming-actions">
-          <a
-            href="https://www.mrsamigo.com/samigo-fuel"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="upcoming-res-link"
+          <button
+            type="button"
+            className="upcoming-res-btn"
+            onClick={() => {
+              if (typeof window !== 'undefined') {
+                window.open(
+                  'https://www.mrsamigo.com/samigo-fuel',
+                  '_blank',
+                  'noopener,noreferrer'
+                );
+              }
+            }}
           >
-            <span className="upcoming-res-inner">RESERVATIONS</span>
-          </a>
+            RESERVATIONS
+          </button>
         </div>
 
         <div className="date-divider" aria-hidden="true" />
@@ -707,7 +714,7 @@ html, body {
 .navbtn,
 .newsletter-btn,
 .homebtn,
-.upcoming-res-inner {
+.upcoming-res-btn {
   position: relative;
   pointer-events: auto;
   padding: 10px 18px;
@@ -749,16 +756,8 @@ html, body {
   transform: translateY(0);
 }
 
-/* Link wrapper around RESERVATIONS glass button */
-.upcoming-res-link {
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Inner span that actually has the glass effect */
-.upcoming-res-inner {
+/* RESERVATIONS: same glass effect, slightly bolder text */
+.upcoming-res-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -778,7 +777,7 @@ html, body {
 .navbtn:hover,
 .newsletter-btn:hover:not(:disabled),
 .homebtn:hover,
-.upcoming-res-inner:hover {
+.upcoming-res-btn:hover {
   background: rgba(255, 255, 255, 0.018);
   border-color: rgba(255, 255, 255, 0.10);
   box-shadow:
