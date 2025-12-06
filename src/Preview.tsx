@@ -56,15 +56,7 @@ const HIGHLIGHT_ARTISTS = new Set<string>([
   'TIM ENGELHARDT',
 ]);
 
-// ---------------------------------
-// Types
-// ---------------------------------
-
 type Page = 'home' | 'upcoming' | 'past' | 'artists' | 'about';
-
-// ---------------------------------
-// Main component
-// ---------------------------------
 
 export default function Preview() {
   const [page, setPage] = useState<Page>('home');
@@ -83,7 +75,6 @@ export default function Preview() {
     ARTISTS.map(() => false)
   );
 
-  // Newsletter state (UPCOMING page)
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [isSubmittingNewsletter, setIsSubmittingNewsletter] = useState(false);
   const [newsletterMessage, setNewsletterMessage] = useState<string | null>(null);
@@ -115,7 +106,6 @@ export default function Preview() {
     playIntro();
   }, []);
 
-  // Background zoom on scroll
   useEffect(() => {
     const maxZoom = 1.08;
     const maxScroll = 600;
@@ -162,7 +152,6 @@ export default function Preview() {
     };
   }, []);
 
-  // Reveal past flyers row-by-row
   useEffect(() => {
     if (page !== 'past') return;
     if (!rowRefs.current.length) return;
@@ -196,12 +185,9 @@ export default function Preview() {
       }
     });
 
-    return () => {
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, [page]);
 
-  // Reveal artists line-by-line
   useEffect(() => {
     if (page !== 'artists') return;
     if (!artistRefs.current.length) return;
@@ -235,9 +221,7 @@ export default function Preview() {
       }
     });
 
-    return () => {
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, [page]);
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
@@ -254,13 +238,11 @@ export default function Preview() {
         body: JSON.stringify({ email: newsletterEmail.trim() }),
       });
 
-      if (!res.ok) {
-        throw new Error('Request failed');
-      }
+      if (!res.ok) throw new Error('Request failed');
 
       setNewsletterMessage('WELCOME TO THE ARCHIVE FAMILY.');
       setNewsletterEmail('');
-    } catch (err) {
+    } catch {
       setNewsletterMessage('SOMETHING WENT WRONG. PLEASE TRY AGAIN.');
     } finally {
       setIsSubmittingNewsletter(false);
@@ -315,6 +297,7 @@ export default function Preview() {
             </button>
           </div>
 
+          {/* Flyer below RESERVATIONS, fixed width 25ch */}
           <div className="upcoming-flyer-wrapper">
             <img
               src="https://res.cloudinary.com/dsas5i0fx/image/upload/v1765023902/AR4_Instagram-Post_251203_l5i1md.png"
@@ -514,7 +497,6 @@ export default function Preview() {
   return (
     <>
       <div className="root" style={{ fontFamily: FONT_STACK }}>
-        {/* Fixed background image layer */}
         <div
           className="bg-layer"
           aria-hidden="true"
@@ -723,7 +705,7 @@ html, body {
   gap: 24px;
 }
 
-/* Subtle liquid glass buttons – SHARED */
+/* Shared glass buttons */
 .navbtn,
 .newsletter-btn,
 .homebtn {
@@ -747,18 +729,17 @@ html, body {
   transition:
     opacity 0.6s ease,
     transform 0.2s ease,
-    background 0.2s ease,
+    background 0.2s.ease,
     border-color 0.2s ease,
     box-shadow 0.25s ease;
 }
 
-/* Extra styling for RESERVATIONS (inherits glass from .newsletter-btn) */
+/* RESERVATIONS extra tweaks */
 .upcoming-res-btn {
   font-weight: 600;
   letter-spacing: 0.14em;
 }
 
-/* Nav specific layout */
 .navbtn {
   z-index: 9999;
   min-height: 48px;
@@ -768,13 +749,11 @@ html, body {
   transform: translateY(22px);
 }
 
-/* Buttons rise in when nav is visible */
 .nav.fade-visible .navbtn {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* HOME button alignment */
 .homebtn {
   display: inline-flex;
   align-items: center;
@@ -782,7 +761,6 @@ html, body {
   min-height: 36px;
 }
 
-/* Hover for glass buttons */
 .navbtn:hover,
 .newsletter-btn:hover:not(:disabled),
 .homebtn:hover {
@@ -799,8 +777,6 @@ html, body {
   cursor: default;
 }
 
-/* PANEL / SECTIONS */
-
 .panel {
   position: relative;
   z-index: 1;
@@ -815,7 +791,7 @@ html, body {
 .panel-steady {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.6s.ease, transform 0.6s.ease;
 }
 
 .section {
@@ -845,12 +821,7 @@ html, body {
   text-align: justify;
   text-align-last: justify;
   text-justify: inter-word;
-  word-spacing: normal;
   letter-spacing: 0.02em;
-  hyphens: none;
-  text-rendering: optimizeLegibility;
-  display: block;
-  width: 100%;
 }
 
 /* UPCOMING */
@@ -869,44 +840,42 @@ html, body {
   font-weight: 700;
 }
 
-.upcoming .tba {
-  font-weight: 400;
-}
-
-/* The whole St. Moritz block as a vertical stack */
+/* Vertical stack for St. Moritz block */
 .upcoming-item {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* Title defines the visual measure; 15ch ≈ width of "DEC 27 ST. MORITZ" */
+/* Title back to natural width (no max-width) */
 .upcoming-title {
-  max-width: 15ch;
+  /* no width constraints */
 }
 
-/* Button row and flyer share the same max-width, centered */
-.upcoming-actions,
-.upcoming-flyer-wrapper {
-  width: 100%;
-  max-width: 15ch;
-}
-
+/* Button row is just centered */
 .upcoming-actions {
   margin-top: 14px;
   display: flex;
   justify-content: center;
 }
 
+/* Flyer fixed visual width 25ch and centered, under RESERVATIONS */
 .upcoming-flyer-wrapper {
   margin-top: 10px;
+  width: 100%;
+  max-width: 25ch;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* Flyer fills that narrow column, so same visual width as title text */
 .upcoming-flyer {
   display: block;
   width: 100%;
   height: auto;
+}
+
+.upcoming .tba {
+  font-weight: 400;
 }
 
 .tba {
@@ -915,6 +884,7 @@ html, body {
   opacity: 0.8;
   margin-top: 2px;
 }
+
 .date-divider {
   width: 64px;
   height: 1px;
@@ -922,7 +892,7 @@ html, body {
   background: rgba(255, 255, 255, 0.35);
 }
 
-/* NEWSLETTER */
+/* Newsletter */
 
 .newsletter {
   margin: 40px auto 0;
@@ -938,14 +908,6 @@ html, body {
   margin-bottom: 6px;
 }
 
-.newsletter-sub {
-  font-size: 13px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  opacity: 0.75;
-  margin-bottom: 16px;
-}
-
 .newsletter-form {
   display: flex;
   gap: 12px;
@@ -956,7 +918,6 @@ html, body {
 
 .newsletter-input {
   flex: 1;
-  min-width: 0;
   padding: 10px 14px;
   border-radius: 8px;
   background: transparent;
@@ -966,7 +927,6 @@ html, body {
   font-size: 11px;
   outline: none;
   transition: all 0.2s ease;
-
   -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
   -webkit-text-fill-color: #fff !important;
   caret-color: #fff !important;
@@ -979,9 +939,7 @@ input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
   box-shadow: 0 0 0px 1000px transparent inset !important;
   background: transparent !important;
-  background-color: transparent !important;
   -webkit-text-fill-color: #fff !important;
-  color: #fff !important;
 }
 
 .newsletter-input::placeholder {
@@ -1032,7 +990,6 @@ input:-webkit-autofill:active {
   display: block;
   width: 100%;
   height: auto;
-  object-fit: contain;
 }
 
 /* ARTISTS */
@@ -1079,7 +1036,6 @@ input:-webkit-autofill:active {
   font-size: 10px;
   margin-top: -10px;
   text-transform: uppercase;
-  line-height: 1;
 }
 
 /* FOOTER / ICONS */
@@ -1102,23 +1058,17 @@ input:-webkit-autofill:active {
 .iconlink:hover {
   opacity: 1;
 }
-.iconlink:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
-  border-radius: 6px;
-}
 .dot {
   display: inline-block;
   margin: 0 0.6rem;
   opacity: 0.75;
-  line-height: 1;
 }
 
 .homebtn-wrapper {
   display: flex;
   justify-content: center;
   margin-top: 54px;
-  margin-bottom: 80px; /* space to footer on long lists like artists */
+  margin-bottom: 80px;
 }
 
 .footer {
@@ -1141,7 +1091,7 @@ input:-webkit-autofill:active {
 .footer-visible {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.6s ease, transform 0.6s.ease;
 }
 
 .fade-hidden {
@@ -1158,8 +1108,6 @@ input:-webkit-autofill:active {
       url('https://res.cloudinary.com/dsas5i0fx/image/upload/v1763336289/IMG_5984_wjkvk6.jpg');
     background-position: center center, center 55%;
     background-size: cover, 118%;
-    background-repeat: no-repeat, no-repeat;
-    transform-origin: center center;
   }
 
   .logo-main {
@@ -1196,7 +1144,7 @@ input:-webkit-autofill:active {
   }
 
   .about {
-    max-width: 34ch; /* narrower on phone */
+    max-width: 34ch;
   }
 
   .nav {
@@ -1213,28 +1161,6 @@ input:-webkit-autofill:active {
   from {
     opacity: 0;
     transform: translateY(-32px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes about-line-in {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes line-in {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
   }
   to {
     opacity: 1;
