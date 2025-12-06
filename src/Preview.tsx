@@ -298,7 +298,7 @@ export default function Preview() {
             href="https://www.mrsamigo.com/samigo-fuel"
             target="_blank"
             rel="noopener noreferrer"
-            className="upcoming-res-link"
+            className="upcoming-res-link glass-btn"
           >
             RESERVATIONS
           </a>
@@ -306,8 +306,15 @@ export default function Preview() {
 
         <div className="date-divider" aria-hidden="true" />
 
-        <p style={{ animationDelay: '80ms' }}>FEB 27 ZURICH</p>
+        <p style={{ animationDelay: '80ms' }}>JAN 23 ZURICH</p>
         <p className="tba" style={{ animationDelay: '120ms' }}>
+          TBA
+        </p>
+
+        <div className="date-divider" aria-hidden="true" />
+
+        <p style={{ animationDelay: '160ms' }}>FEB 27 ZURICH</p>
+        <p className="tba" style={{ animationDelay: '200ms' }}>
           TBA
         </p>
       </div>
@@ -332,7 +339,7 @@ export default function Preview() {
           />
           <button
             type="submit"
-            className="newsletter-btn"
+            className="newsletter-btn glass-btn"
             disabled={isSubmittingNewsletter}
           >
             {isSubmittingNewsletter ? 'SENDING…' : 'JOIN'}
@@ -344,7 +351,7 @@ export default function Preview() {
       </div>
 
       <div className="homebtn-wrapper">
-        <button className="homebtn" onClick={() => handleNavigate('home')}>
+        <button className="homebtn glass-btn" onClick={() => handleNavigate('home')}>
           HOME
         </button>
       </div>
@@ -383,7 +390,7 @@ export default function Preview() {
         </div>
 
         <div className="homebtn-wrapper">
-          <button className="homebtn" onClick={() => handleNavigate('home')}>
+          <button className="homebtn glass-btn" onClick={() => handleNavigate('home')}>
             HOME
           </button>
         </div>
@@ -516,7 +523,7 @@ export default function Preview() {
                 <button
                   key={label}
                   onClick={() => handleNavigate(key as Page)}
-                  className="navbtn"
+                  className="navbtn glass-btn"
                 >
                   {label}
                 </button>
@@ -532,7 +539,7 @@ export default function Preview() {
                 </article>
                 <div className="homebtn-wrapper" style={{ marginTop: '40px' }}>
                   <button
-                    className="homebtn"
+                    className="homebtn glass-btn"
                     onClick={() => handleNavigate('home')}
                   >
                     HOME
@@ -573,7 +580,7 @@ export default function Preview() {
                 </div>
                 <div className="homebtn-wrapper">
                   <button
-                    className="homebtn"
+                    className="homebtn glass-btn"
                     onClick={() => handleNavigate('home')}
                   >
                     HOME
@@ -696,11 +703,8 @@ html, body {
   gap: 24px;
 }
 
-/* Subtle liquid glass buttons – shared */
-.navbtn,
-.newsletter-btn,
-.homebtn,
-.upcoming-res-link {
+/* Shared subtle liquid glass style */
+.glass-btn {
   position: relative;
   pointer-events: auto;
   padding: 10px 18px;
@@ -750,16 +754,6 @@ html, body {
   font-weight: 600;
   letter-spacing: 0.14em;
   text-decoration: none;
-
-  /* Apply full glass effect like navbtn */
-  background: rgba(255, 255, 255, 0.008);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  outline: 1px solid rgba(255, 255, 255, 0.015);
-  transition: opacity 0.6s ease, transform 0.2s ease,
-              background 0.2s ease, border-color 0.2s ease,
-              box-shadow 0.25s ease;
 }
 
 /* HOME button alignment */
@@ -771,10 +765,7 @@ html, body {
 }
 
 /* Hover for glass buttons */
-.navbtn:hover,
-.newsletter-btn:hover:not(:disabled),
-.homebtn:hover,
-.upcoming-res-link:hover {
+.glass-btn:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.018);
   border-color: rgba(255, 255, 255, 0.10);
   box-shadow:
