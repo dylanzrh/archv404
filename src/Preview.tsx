@@ -517,7 +517,7 @@ export default function Preview() {
             {LOGO_TEXT}
           </h1>
 
-          <p className={`tag ${tagClass}`}>MUSIC · ART · FASHION</p>
+          <p className={`tag ${tagClass}`}>THE ART OF SOUND</p>
 
           {page === 'home' && (
             <nav aria-label="Primary" className={`nav ${navClass}`}>
