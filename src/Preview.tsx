@@ -320,8 +320,9 @@ export default function Preview() {
               src="https://res.cloudinary.com/dsas5i0fx/image/upload/v1765023902/AR4_Instagram-Post_251203_l5i1md.png"
               alt="ARCHIVE 404 · St. Moritz · 27 December"
               className="upcoming-flyer"
-              decoding="async"
               loading="eager"
+              decoding="sync"
+              fetchPriority="high"
             />
           </div>
         </div>
