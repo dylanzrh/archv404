@@ -106,7 +106,7 @@ export default function Preview() {
     playIntro();
   }, []);
 
-  // Preload upcoming flyer for smoother first load
+  // Preload upcoming flyer so it’s ready when user taps UPCOMING
   useEffect(() => {
     const img = new Image();
     img.src =
@@ -256,7 +256,7 @@ export default function Preview() {
     }
   };
 
-  // Mobile-safe scroll reset (no design change, only behavior)
+  // Mobile-safe scroll reset for each page (no layout change)
   const resetScrollToTop = () => {
     if (typeof window === 'undefined') return;
 
@@ -283,7 +283,6 @@ export default function Preview() {
     setLogoAnimKey((k) => k + 1);
     playIntro();
 
-    // Always restore original view on every page (desktop + mobile)
     resetScrollToTop();
   };
 
@@ -321,7 +320,7 @@ export default function Preview() {
               alt="ARCHIVE 404 · St. Moritz · 27 December"
               className="upcoming-flyer"
               loading="eager"
-              decoding="sync"
+              decoding="async"
               fetchPriority="high"
             />
           </div>
