@@ -106,7 +106,7 @@ export default function Preview() {
     playIntro();
   }, []);
 
-  // Preload the upcoming flyer so it appears faster when you click UPCOMING
+  // Preload upcoming flyer for smoother first load
   useEffect(() => {
     const img = new Image();
     img.src =
@@ -321,6 +321,7 @@ export default function Preview() {
               alt="ARCHIVE 404 · St. Moritz · 27 December"
               className="upcoming-flyer"
               decoding="async"
+              loading="eager"
             />
           </div>
         </div>
@@ -404,6 +405,7 @@ export default function Preview() {
                     src={src}
                     alt={`ARCHIVE 404 PAST EVENT ${rowIndex * 2 + index + 1}`}
                     decoding="async"
+                    loading="lazy"
                   />
                 </div>
               ))}
@@ -702,7 +704,7 @@ html, body {
   letter-spacing: 0.28em;
   text-transform: uppercase;
   font-size: clamp(12px, 2.4vw, 16px);
-  transition: opacity 0.6s.ease, transform 0.6s.ease;
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 .tag-hidden {
   opacity: 0;
@@ -746,10 +748,10 @@ html, body {
   font-size: 11px;
   cursor: pointer;
   transition:
-    opacity 0.6s.ease,
+    opacity 0.6s ease,
     transform 0.2s ease,
     background 0.2s ease,
-    border-color 0.2s.ease,
+    border-color 0.2s ease,
     box-shadow 0.25s ease;
 }
 
@@ -810,7 +812,7 @@ html, body {
 .panel-steady {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.6s.ease, transform 0.6s.ease;
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
 .section {
@@ -1011,7 +1013,7 @@ input:-webkit-autofill:active {
   margin: 0 auto;
   opacity: 0;
   transform: translateY(10px);
-  transition: opacity 0.6s.ease, transform 0.6s.ease;
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 .flyer-row-visible {
   opacity: 1;
@@ -1051,7 +1053,7 @@ input:-webkit-autofill:active {
   opacity: 0;
   line-height: 1.45;
   transform: translateY(6px);
-  transition: opacity 0.4s.ease, transform 0.4s.ease;
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 .artist-name-visible {
   opacity: 0.92;
@@ -1122,7 +1124,7 @@ input:-webkit-autofill:active {
 .footer-visible {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.6s.ease, transform 0.6s.ease;
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
 .fade-hidden {
