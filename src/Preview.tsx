@@ -9,6 +9,10 @@ const INSTAGRAM_URL = 'https://instagram.com/archv404';
 const MAILTO_URL = 'mailto:info@archv404.com';
 const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
 
+// Optimised upcoming flyer (same image, Cloudinary smart format + quality + width)
+const UPCOMING_FLYER_URL =
+  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1765023902/AR4_Instagram-Post_251203_l5i1md.png';
+
 // ABOUT text as a single block paragraph
 const ABOUT_TEXT: string =
   'ARCHIVE 404 IS A ZURICH-BASED EVENT LABEL CRAFTING CAREFULLY DESIGNED EXPERIENCES WHERE MUSIC, LIGHT AND SPACE CREATE IMMERSIVE MOMENTS. ITS NAME REINTERPRETS A DIGITAL ERROR AS AN INVITATION TO RECONNECT THROUGH PEOPLE AND SOUND. BY BRINGING TOGETHER RESPECTED INTERNATIONAL ARTISTS AND SOME OF THE MOST PROMISING LOCAL TALENTS, ARCHIVE 404 CREATES A DISTINCT ENERGY THAT FEELS CONTEMPORARY YET TIMELESS.';
@@ -109,8 +113,7 @@ export default function Preview() {
   // Preload upcoming flyer so it’s ready when user taps UPCOMING
   useEffect(() => {
     const img = new Image();
-    img.src =
-      'https://res.cloudinary.com/dsas5i0fx/image/upload/v1765023902/AR4_Instagram-Post_251203_l5i1md.png';
+    img.src = UPCOMING_FLYER_URL;
   }, []);
 
   useEffect(() => {
@@ -316,7 +319,7 @@ export default function Preview() {
           {/* Flyer below RESERVATIONS, fixed width 25ch */}
           <div className="upcoming-flyer-wrapper">
             <img
-              src="https://res.cloudinary.com/dsas5i0fx/image/upload/v1765023902/AR4_Instagram-Post_251203_l5i1md.png"
+              src={UPCOMING_FLYER_URL}
               alt="ARCHIVE 404 · St. Moritz · 27 December"
               className="upcoming-flyer"
               loading="eager"
@@ -665,7 +668,7 @@ html, body {
   justify-content: center;
   min-height: 80vh;
   opacity: 1;
-  transition: opacity 0.32s ease;
+  transition: opacity 0.32s.ease;
   position: relative;
   z-index: 1;
 }
@@ -750,7 +753,7 @@ html, body {
   transition:
     opacity 0.6s ease,
     transform 0.2s ease,
-    background 0.2s ease,
+    background 0.2s.ease,
     border-color 0.2s ease,
     box-shadow 0.25s ease;
 }
@@ -902,6 +905,8 @@ html, body {
   display: block;
   width: 100%;
   height: auto;
+  /* Reserve space so text doesn't jump while image loads (Instagram 4:5 ratio) */
+  aspect-ratio: 4 / 5;
 }
 
 /* TBA styling + same breathing as under other blocks */
@@ -1053,7 +1058,7 @@ input:-webkit-autofill:active {
   opacity: 0;
   line-height: 1.45;
   transform: translateY(6px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition: opacity 0.4s ease, transform 0.4s.ease;
 }
 .artist-name-visible {
   opacity: 0.92;
