@@ -288,10 +288,7 @@ export default function Preview() {
     setPage(next);
     setLogoAnimKey((k) => k + 1);
     playIntro();
-
-    if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    // IMPORTANT: no scrollTo here -> keeps scroll position when returning to home
   };
 
   const renderUpcoming = () => (
@@ -674,7 +671,7 @@ html, body {
   justify-content: center;
   min-height: 80vh;
   opacity: 1;
-  transition: opacity 0.32s ease;
+  transition: opacity 0.32s.ease;
   position: relative;
   z-index: 1;
 }
@@ -714,7 +711,7 @@ html, body {
   letter-spacing: 0.28em;
   text-transform: uppercase;
   font-size: clamp(12px, 2.4vw, 16px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.6s ease, transform 0.6s.ease;
 }
 .tag-hidden {
   opacity: 0;
@@ -761,7 +758,7 @@ html, body {
     opacity 0.6s ease,
     transform 0.2s ease,
     background 0.2s ease,
-    border-color 0.2s ease,
+    border-color 0.2s.ease,
     box-shadow 0.25s ease;
 }
 
