@@ -124,6 +124,7 @@ export default function Preview() {
     });
   }, []);
 
+  // Smooth parallax zoom for background
   useEffect(() => {
     const maxZoom = 1.08;
     const maxScroll = 600;
@@ -173,6 +174,7 @@ export default function Preview() {
     };
   }, []);
 
+  // Lazy reveal for past flyers
   useEffect(() => {
     if (page !== 'past') return;
     if (!rowRefs.current.length) return;
@@ -209,6 +211,7 @@ export default function Preview() {
     return () => observer.disconnect();
   }, [page]);
 
+  // Lazy reveal for artist list
   useEffect(() => {
     if (page !== 'artists') return;
     if (!artistRefs.current.length) return;
@@ -711,7 +714,7 @@ html, body {
   letter-spacing: 0.28em;
   text-transform: uppercase;
   font-size: clamp(12px, 2.4vw, 16px);
-  transition: opacity 0.6s.ease, transform 0.6s.ease;
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 .tag-hidden {
   opacity: 0;
@@ -755,11 +758,11 @@ html, body {
   font-size: 11px;
   cursor: pointer;
   transition:
-    opacity 0.6s.ease,
-    transform 0.2s.ease,
-    background 0.2s.ease,
-    border-color 0.2s.ease,
-    box-shadow 0.25s.ease;
+    opacity 0.6s ease,
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.25s ease;
 }
 
 /* RESERVATIONS extra tweaks */
@@ -820,7 +823,7 @@ html, body {
 .panel-steady {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.6s.ease, transform 0.6s.ease;
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
 .section {
@@ -967,7 +970,7 @@ html, body {
   letter-spacing: 0.12em;
   font-size: 11px;
   outline: none;
-  transition: all 0.2s.ease;
+  transition: all 0.2s ease;
   -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
   -webkit-text-fill-color: #fff !important;
   caret-color: #fff !important;
@@ -1021,7 +1024,7 @@ input:-webkit-autofill:active {
   margin: 0 auto;
   opacity: 0;
   transform: translateY(10px);
-  transition: opacity 0.6s.ease, transform 0.6s.ease;
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 .flyer-row-visible {
   opacity: 1;
@@ -1061,7 +1064,7 @@ input:-webkit-autofill:active {
   opacity: 0;
   line-height: 1.45;
   transform: translateY(6px);
-  transition: opacity 0.4s.ease, transform 0.4s.ease;
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 .artist-name-visible {
   opacity: 0.92;
@@ -1132,7 +1135,7 @@ input:-webkit-autofill:active {
 .footer-visible {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.6s.ease, transform 0.6s.ease;
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
 .fade-hidden {
