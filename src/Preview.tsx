@@ -9,18 +9,25 @@ const INSTAGRAM_URL = 'https://instagram.com/archv404';
 const MAILTO_URL = 'mailto:info@archv404.com';
 const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
 
+// Optimized background + upcoming flyer (Cloudinary transforms)
+const BG_IMAGE_SRC =
+  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_2400/v1763336289/IMG_5984_wjkvk6.jpg';
+
+const UPCOMING_FLYER_SRC =
+  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_1600/v1765023902/AR4_Instagram-Post_251203_l5i1md.png';
+
 // ABOUT text as a single block paragraph
 const ABOUT_TEXT: string =
   'ARCHIVE 404 IS A ZURICH-BASED EVENT LABEL CRAFTING CAREFULLY DESIGNED EXPERIENCES WHERE MUSIC, LIGHT AND SPACE CREATE IMMERSIVE MOMENTS. ITS NAME REINTERPRETS A DIGITAL ERROR AS AN INVITATION TO RECONNECT THROUGH PEOPLE AND SOUND. BY BRINGING TOGETHER RESPECTED INTERNATIONAL ARTISTS AND SOME OF THE MOST PROMISING LOCAL TALENTS, ARCHIVE 404 CREATES A DISTINCT ENERGY THAT FEELS CONTEMPORARY YET TIMELESS.';
 
 const PAST_FLYERS: string[] = [
-  'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060268/archive404_251025_post_yus7xj.jpg',
-  'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060242/archive03102025_post_eptqbf.jpg',
-  'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060222/ARCHIVE404_06082025_Palm3_wjeh8o.jpg',
-  'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060209/ARCHIVE404_06082025_Soluna_zv1cfx.jpg',
-  'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060195/ARCHIVE404_04072025_POST_ptktcy.jpg',
-  'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060161/ARCHIVE404_02052025_POST01_ly44jq.jpg',
-  'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060124/ARCHIVE404_280225_POST03_LOGO_nqcgah.jpg',
+  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_1400/v1763060268/archive404_251025_post_yus7xj.jpg',
+  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_1400/v1763060242/archive03102025_post_eptqbf.jpg',
+  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_1400/v1763060222/ARCHIVE404_06082025_Palm3_wjeh8o.jpg',
+  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_1400/v1763060209/ARCHIVE404_06082025_Soluna_zv1cfx.jpg',
+  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_1400/v1763060195/ARCHIVE404_04072025_POST_ptktcy.jpg',
+  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_1400/v1763060161/ARCHIVE404_02052025_POST01_ly44jq.jpg',
+  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_1400/v1763060124/ARCHIVE404_280225_POST03_LOGO_nqcgah.jpg',
 ];
 
 const ARTISTS: string[] = [
@@ -106,6 +113,17 @@ export default function Preview() {
     playIntro();
   }, []);
 
+  // Preload upcoming flyer + a couple of past flyers for smoother transitions
+  useEffect(() => {
+    const img = new Image();
+    img.src = UPCOMING_FLYER_SRC;
+
+    PAST_FLYERS.slice(0, 4).forEach((src) => {
+      const i = new Image();
+      i.src = src;
+    });
+  }, []);
+
   useEffect(() => {
     const maxZoom = 1.08;
     const maxScroll = 600;
@@ -122,6 +140,9 @@ export default function Preview() {
         const eased = prev + (target - prev) * 0.08;
 
         if (Math.abs(eased - target) < 0.001) {
+          if (rafRef.current !== null) {
+            cancelAnimationFrame(rafRef.current);
+          }
           rafRef.current = null;
           return target;
         }
@@ -266,7 +287,7 @@ export default function Preview() {
     playIntro();
 
     if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'auto' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -300,9 +321,11 @@ export default function Preview() {
           {/* Flyer below RESERVATIONS, fixed width 25ch */}
           <div className="upcoming-flyer-wrapper">
             <img
-              src="https://res.cloudinary.com/dsas5i0fx/image/upload/v1765023902/AR4_Instagram-Post_251203_l5i1md.png"
+              src={UPCOMING_FLYER_SRC}
               alt="ARCHIVE 404 · St. Moritz · 27 December"
               className="upcoming-flyer"
+              loading="eager"
+              decoding="async"
             />
           </div>
         </div>
@@ -385,6 +408,8 @@ export default function Preview() {
                   <img
                     src={src}
                     alt={`ARCHIVE 404 PAST EVENT ${rowIndex * 2 + index + 1}`}
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
               ))}
@@ -606,6 +631,7 @@ html, body {
   padding: 0;
   background: #000;
   font-family: ${FONT_STACK};
+  scroll-behavior: smooth;
 }
 .root {
   position: relative;
@@ -627,12 +653,13 @@ html, body {
   pointer-events: none;
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.34), rgba(0, 0, 0, 0.44)),
-    url('https://res.cloudinary.com/dsas5i0fx/image/upload/v1763336289/IMG_5984_wjkvk6.jpg');
+    url('${BG_IMAGE_SRC}');
   background-position: center center, center 48%;
   background-size: cover, 115%;
   background-repeat: no-repeat, no-repeat;
   transform-origin: center center;
   transition: transform 0.18s ease-out;
+  will-change: transform;
 }
 
 .center {
@@ -671,6 +698,7 @@ html, body {
   text-transform: uppercase;
   line-height: 0.86;
   font-size: clamp(36px, 12vw, 140px);
+  will-change: transform, opacity;
 }
 .logo-animate {
   animation: logo-intro 0.6s ease forwards;
@@ -683,7 +711,7 @@ html, body {
   letter-spacing: 0.28em;
   text-transform: uppercase;
   font-size: clamp(12px, 2.4vw, 16px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.6s.ease, transform 0.6s.ease;
 }
 .tag-hidden {
   opacity: 0;
@@ -727,11 +755,11 @@ html, body {
   font-size: 11px;
   cursor: pointer;
   transition:
-    opacity 0.6s ease,
-    transform 0.2s ease,
-    background 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.25s ease;
+    opacity 0.6s.ease,
+    transform 0.2s.ease,
+    background 0.2s.ease,
+    border-color 0.2s.ease,
+    box-shadow 0.25s.ease;
 }
 
 /* RESERVATIONS extra tweaks */
@@ -783,6 +811,7 @@ html, body {
   margin: 12px auto 0;
   padding: 0;
   max-width: 900px;
+  will-change: transform, opacity;
 }
 .panel-intro {
   opacity: 0;
@@ -791,7 +820,7 @@ html, body {
 .panel-steady {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.6s.ease, transform 0.6s.ease;
 }
 
 .section {
@@ -938,7 +967,7 @@ html, body {
   letter-spacing: 0.12em;
   font-size: 11px;
   outline: none;
-  transition: all 0.2s ease;
+  transition: all 0.2s.ease;
   -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
   -webkit-text-fill-color: #fff !important;
   caret-color: #fff !important;
@@ -949,7 +978,7 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
-  box-shadow: 0 0 0px 1000px.transparent inset !important;
+  box-shadow: 0 0 0px 1000px transparent inset !important;
   background: transparent !important;
   -webkit-text-fill-color: #fff !important;
 }
@@ -1032,7 +1061,7 @@ input:-webkit-autofill:active {
   opacity: 0;
   line-height: 1.45;
   transform: translateY(6px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition: opacity 0.4s.ease, transform 0.4s.ease;
 }
 .artist-name-visible {
   opacity: 0.92;
@@ -1103,7 +1132,7 @@ input:-webkit-autofill:active {
 .footer-visible {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.6s.ease, transform 0.6s.ease;
 }
 
 .fade-hidden {
@@ -1117,7 +1146,7 @@ input:-webkit-autofill:active {
   .bg-layer {
     background-image:
       linear-gradient(rgba(0, 0, 0, 0.30), rgba(0, 0, 0, 0.40)),
-      url('https://res.cloudinary.com/dsas5i0fx/image/upload/v1763336289/IMG_5984_wjkvk6.jpg');
+      url('${BG_IMAGE_SRC}');
     background-position: center center, center 55%;
     background-size: cover, 118%;
   }
