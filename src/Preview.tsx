@@ -78,6 +78,10 @@ export default function Preview() {
   const scrollYRef = useRef(0);
   const inputFocusedRef = useRef(false);
 
+  // De-dupe touch activation vs click (Safari can be flaky after animations)
+  const lastTouchActivateTsRef = useRef<number>(0);
+  const TOUCH_DEDUPE_MS = 800;
+
   const [rowVisible, setRowVisible] = useState<boolean[]>(() =>
     Array.from({ length: Math.ceil(PAST_FLYERS.length / 2) }, (_, i) => i === 0)
   );
@@ -102,6 +106,37 @@ export default function Preview() {
       ] as const,
     []
   );
+
+  // --- Instant activation helper (touch) + click fallback (desktop) ---
+  const onTouchActivate = (
+    e: React.PointerEvent | React.MouseEvent,
+    action: () => void
+  ) => {
+    // PointerEvent path (best on iOS/modern)
+    if ('pointerType' in e) {
+      const pe = e as React.PointerEvent;
+      if (pe.pointerType === 'touch') {
+        pe.preventDefault();
+        pe.stopPropagation();
+        lastTouchActivateTsRef.current = Date.now();
+        // remove “stuck focus” behavior on iOS
+        (pe.currentTarget as HTMLElement).blur?.();
+        action();
+        return;
+      }
+    }
+    // Mouse/trackpad: do nothing here; let onClick handle it.
+  };
+
+  const onClickActivate = (e: React.MouseEvent, action: () => void) => {
+    // If we just handled via touch, ignore the synthetic click
+    if (Date.now() - lastTouchActivateTsRef.current < TOUCH_DEDUPE_MS) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    action();
+  };
 
   const playIntro = () => {
     setIsEntering(true);
@@ -305,6 +340,7 @@ export default function Preview() {
   const renderUpcoming = () => (
     <section className="section">
       <div className="upcoming">
+        {/* ST. MORITZ BLOCK */}
         <div className="upcoming-item">
           <p className="upcoming-title" style={{ animationDelay: '0ms' }}>
             DEC 27 ST. MORITZ
@@ -314,20 +350,34 @@ export default function Preview() {
             <button
               type="button"
               className="newsletter-btn upcoming-res-btn"
-              onClick={() => {
-                if (typeof window !== 'undefined') {
-                  window.open(
-                    'https://www.mrsamigo.com/samigo-fuel',
-                    '_blank',
-                    'noopener,noreferrer'
-                  );
-                }
-              }}
+              onPointerUp={(e) =>
+                onTouchActivate(e, () => {
+                  if (typeof window !== 'undefined') {
+                    window.open(
+                      'https://www.mrsamigo.com/samigo-fuel',
+                      '_blank',
+                      'noopener,noreferrer'
+                    );
+                  }
+                })
+              }
+              onClick={(e) =>
+                onClickActivate(e, () => {
+                  if (typeof window !== 'undefined') {
+                    window.open(
+                      'https://www.mrsamigo.com/samigo-fuel',
+                      '_blank',
+                      'noopener,noreferrer'
+                    );
+                  }
+                })
+              }
             >
               RESERVATIONS
             </button>
           </div>
 
+          {/* Flyer below RESERVATIONS, fixed width 25ch */}
           <div className="upcoming-flyer-wrapper">
             <img
               src={UPCOMING_FLYER_URL}
@@ -377,15 +427,32 @@ export default function Preview() {
             type="submit"
             className="newsletter-btn"
             disabled={isSubmittingNewsletter}
+            onPointerUp={(e) =>
+              onTouchActivate(e, () => {
+                // let form submit handler run via native submit; touch path just ensures activation
+                (e.currentTarget as HTMLButtonElement).form?.requestSubmit?.();
+              })
+            }
+            onClick={(e) =>
+              onClickActivate(e, () => {
+                // normal submit
+              })
+            }
           >
             {isSubmittingNewsletter ? 'SENDING…' : 'JOIN'}
           </button>
         </form>
-        {newsletterMessage && <p className="newsletter-message">{newsletterMessage}</p>}
+        {newsletterMessage && (
+          <p className="newsletter-message">{newsletterMessage}</p>
+        )}
       </div>
 
       <div className="homebtn-wrapper">
-        <button className="homebtn" onClick={() => handleNavigate('home')}>
+        <button
+          className="homebtn"
+          onPointerUp={(e) => onTouchActivate(e, () => handleNavigate('home'))}
+          onClick={(e) => onClickActivate(e, () => handleNavigate('home'))}
+        >
           HOME
         </button>
       </div>
@@ -426,7 +493,11 @@ export default function Preview() {
         </div>
 
         <div className="homebtn-wrapper">
-          <button className="homebtn" onClick={() => handleNavigate('home')}>
+          <button
+            className="homebtn"
+            onPointerUp={(e) => onTouchActivate(e, () => handleNavigate('home'))}
+            onClick={(e) => onClickActivate(e, () => handleNavigate('home'))}
+          >
             HOME
           </button>
         </div>
@@ -443,7 +514,15 @@ export default function Preview() {
         aria-label="Join WhatsApp Community"
         className="iconlink"
       >
-        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          aria-hidden
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+        >
           <path
             d="M12 2.75C7.17 2.75 3.25 6.67 3.25 11.5c0 1.86.53 3.57 1.52 5.03L4 21l4.62-.78A8.6 8.6 0 0 0 12 20.25c4.83 0 8.75-3.92 8.75-8.75S16.83 2.75 12 2.75Z"
             strokeLinecap="round"
@@ -457,18 +536,51 @@ export default function Preview() {
         </svg>
       </a>
       <span className="dot">·</span>
-      <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" aria-label="Open Instagram" className="iconlink">
-        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
+      <a
+        href={INSTAGRAM_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Open Instagram"
+        className="iconlink"
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          aria-hidden
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+        >
           <rect x="4" y="4" width="16" height="16" rx="4.5" ry="4.5" />
           <circle cx="12" cy="12" r="3.25" />
           <circle cx="17.2" cy="6.8" r="0.9" />
         </svg>
       </a>
       <span className="dot">·</span>
-      <a href={MAILTO_URL} target="_blank" rel="noopener noreferrer" aria-label="Email Archive 404" className="iconlink" style={{ lineHeight: 0 }}>
-        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
+      <a
+        href={MAILTO_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Email Archive 404"
+        className="iconlink"
+        style={{ lineHeight: 0 }}
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          aria-hidden
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+        >
           <rect x="3" y="6" width="18" height="12" rx="2" ry="2" />
-          <path d="M5 8.5 12 13l7-4.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path
+            d="M5 8.5 12 13l7-4.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       </a>
     </div>
@@ -476,6 +588,7 @@ export default function Preview() {
 
   const tagClass = isEntering ? 'tag-hidden' : 'tag-visible';
 
+  // NAV: fade logic (HOME only), but keep it mounted. Off-home it's removed from flow.
   const navClass =
     page === 'home'
       ? isEntering
@@ -491,7 +604,11 @@ export default function Preview() {
   return (
     <>
       <div className="root" style={{ fontFamily: FONT_STACK }}>
-        <div className="bg-layer" aria-hidden="true" style={{ transform: `scale(${bgZoom})` }} />
+        <div
+          className="bg-layer"
+          aria-hidden="true"
+          style={{ transform: `scale(${bgZoom})` }}
+        />
 
         <div
           className={`center ${page === 'home' ? 'center-home' : 'center-subpage'} ${
@@ -501,7 +618,8 @@ export default function Preview() {
           <h1
             key={logoAnimKey}
             className="logo-main logo-animate"
-            onClick={() => handleNavigate('home')}
+            onPointerUp={(e) => onTouchActivate(e, () => handleNavigate('home'))}
+            onClick={(e) => onClickActivate(e, () => handleNavigate('home'))}
             style={{ cursor: 'pointer' }}
           >
             {LOGO_TEXT}
@@ -517,10 +635,13 @@ export default function Preview() {
             {nav.map(([label, key]) => (
               <button
                 key={label}
-                onClick={() => handleNavigate(key as Page)}
                 className="navbtn"
                 tabIndex={page === 'home' ? 0 : -1}
                 aria-hidden={page !== 'home'}
+                onPointerUp={(e) =>
+                  onTouchActivate(e, () => handleNavigate(key as Page))
+                }
+                onClick={(e) => onClickActivate(e, () => handleNavigate(key as Page))}
               >
                 {label}
               </button>
@@ -534,7 +655,11 @@ export default function Preview() {
                   <p className="about-block">{ABOUT_TEXT}</p>
                 </article>
                 <div className="homebtn-wrapper" style={{ marginTop: '40px' }}>
-                  <button className="homebtn" onClick={() => handleNavigate('home')}>
+                  <button
+                    className="homebtn"
+                    onPointerUp={(e) => onTouchActivate(e, () => handleNavigate('home'))}
+                    onClick={(e) => onClickActivate(e, () => handleNavigate('home'))}
+                  >
                     HOME
                   </button>
                 </div>
@@ -555,22 +680,28 @@ export default function Preview() {
                       return (
                         <div key={artist} className="artist-block">
                           <p
-                            className={`artist-name ${artistVisible[index] ? 'artist-name-visible' : ''} ${
-                              isHighlight ? 'artist-name-highlight' : ''
-                            }`}
+                            className={`artist-name ${
+                              artistVisible[index] ? 'artist-name-visible' : ''
+                            } ${isHighlight ? 'artist-name-highlight' : ''}`}
                             ref={(el) => {
                               artistRefs.current[index] = el;
                             }}
                           >
                             {artist}
                           </p>
-                          {artist === 'BOYSDONTCRY' && <p className="artist-resident">RESIDENT</p>}
+                          {artist === 'BOYSDONTCRY' && (
+                            <p className="artist-resident">RESIDENT</p>
+                          )}
                         </div>
                       );
                     })}
                 </div>
                 <div className="homebtn-wrapper">
-                  <button className="homebtn" onClick={() => handleNavigate('home')}>
+                  <button
+                    className="homebtn"
+                    onPointerUp={(e) => onTouchActivate(e, () => handleNavigate('home'))}
+                    onClick={(e) => onClickActivate(e, () => handleNavigate('home'))}
+                  >
                     HOME
                   </button>
                 </div>
@@ -681,7 +812,7 @@ html, body {
 }
 
 /* Off-home: nav takes ZERO space (matches original conditional render),
-   but stays mounted for smooth return to HOME */
+   but stays mounted for smooth return to HOME and fixes first-tap */
 .nav-offhome {
   position: absolute !important;
   left: 0 !important;
@@ -727,7 +858,6 @@ html, body {
   user-select: none;
 }
 
-/* RESERVATIONS extra tweaks */
 .upcoming-res-btn {
   font-weight: 600;
   letter-spacing: 0.14em;
@@ -754,7 +884,7 @@ html, body {
   min-height: 36px;
 }
 
-/* IMPORTANT: Hover styles only for real hover devices (prevents “double tap to click” on iOS) */
+/* Hover styles only on real hover devices */
 @media (hover: hover) and (pointer: fine) {
   .navbtn:hover,
   .newsletter-btn:hover:not(:disabled),
@@ -766,7 +896,6 @@ html, body {
       0 0 10px rgba(255, 180, 90, 0.06);
     transform: translateY(-1px);
   }
-
   .iconlink:hover { opacity: 1; }
 }
 
