@@ -522,6 +522,7 @@ export default function Preview() {
 
   const tagClass = isEntering ? 'tag-hidden' : 'tag-visible';
 
+  // Keep nav mounted always; just fade it (prevents “pop” when returning home)
   const navClass =
     page === 'home'
       ? isEntering
@@ -557,19 +558,24 @@ export default function Preview() {
 
           <p className={`tag ${tagClass}`}>THE ART OF SOUND</p>
 
-          {page === 'home' && (
-            <nav aria-label="Primary" className={`nav ${navClass}`}>
-              {nav.map(([label, key]) => (
-                <button
-                  key={label}
-                  onClick={() => handleNavigate(key as Page)}
-                  className="navbtn"
-                >
-                  {label}
-                </button>
-              ))}
-            </nav>
-          )}
+          {/* NAV stays mounted for smoother return to HOME (no layout/design change) */}
+          <nav
+            aria-label="Primary"
+            className={`nav ${navClass}`}
+            style={{ pointerEvents: page === 'home' ? 'auto' : 'none' }}
+          >
+            {nav.map(([label, key]) => (
+              <button
+                key={label}
+                onClick={() => handleNavigate(key as Page)}
+                className="navbtn"
+                tabIndex={page === 'home' ? 0 : -1}
+                aria-hidden={page !== 'home'}
+              >
+                {label}
+              </button>
+            ))}
+          </nav>
 
           <main className={`panel ${panelClass}`}>
             {page === 'about' && (
@@ -662,11 +668,7 @@ html, body {
   background-size: cover, 115%;
   background-repeat: no-repeat, no-repeat;
   transform-origin: center center;
-
-  /* IMPORTANT: remove CSS transition; RAF handles smoothing */
   transition: none;
-
-  /* helps smoothness */
   will-change: transform;
   transform: translateZ(0);
 }
@@ -751,8 +753,10 @@ html, body {
   letter-spacing: 0.12em;
   font-size: 11px;
   cursor: pointer;
+
+  /* FIXED: was "0.6s.ease" which is invalid */
   transition:
-    opacity 0.6s.ease,
+    opacity 0.6s ease,
     transform 0.2s ease,
     background 0.2s ease,
     border-color 0.2s ease,
@@ -866,7 +870,6 @@ html, body {
 }
 .upcoming-title { margin-bottom: 18px; }
 
-/* more breathing room before button */
 .upcoming-actions {
   margin-top: 10px;
   margin-bottom: 24px;
