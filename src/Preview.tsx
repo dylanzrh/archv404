@@ -298,7 +298,6 @@ export default function Preview() {
     setLogoAnimKey((k) => k + 1);
     playIntro();
 
-    // reset scroll + zoom (prevents any perceived “snap”)
     setBgZoom(BASE_ZOOM);
     resetScrollToTop();
   };
@@ -306,7 +305,6 @@ export default function Preview() {
   const renderUpcoming = () => (
     <section className="section">
       <div className="upcoming">
-        {/* ST. MORITZ BLOCK */}
         <div className="upcoming-item">
           <p className="upcoming-title" style={{ animationDelay: '0ms' }}>
             DEC 27 ST. MORITZ
@@ -330,7 +328,6 @@ export default function Preview() {
             </button>
           </div>
 
-          {/* Flyer below RESERVATIONS, fixed width 25ch */}
           <div className="upcoming-flyer-wrapper">
             <img
               src={UPCOMING_FLYER_URL}
@@ -384,9 +381,7 @@ export default function Preview() {
             {isSubmittingNewsletter ? 'SENDING…' : 'JOIN'}
           </button>
         </form>
-        {newsletterMessage && (
-          <p className="newsletter-message">{newsletterMessage}</p>
-        )}
+        {newsletterMessage && <p className="newsletter-message">{newsletterMessage}</p>}
       </div>
 
       <div className="homebtn-wrapper">
@@ -399,9 +394,7 @@ export default function Preview() {
 
   const renderPast = () => {
     const rows: string[][] = [];
-    for (let i = 0; i < PAST_FLYERS.length; i += 2) {
-      rows.push(PAST_FLYERS.slice(i, i + 2));
-    }
+    for (let i = 0; i < PAST_FLYERS.length; i += 2) rows.push(PAST_FLYERS.slice(i, i + 2));
 
     return (
       <section className="section section-past">
@@ -448,15 +441,7 @@ export default function Preview() {
         aria-label="Join WhatsApp Community"
         className="iconlink"
       >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          aria-hidden
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.6"
-        >
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
           <path
             d="M12 2.75C7.17 2.75 3.25 6.67 3.25 11.5c0 1.86.53 3.57 1.52 5.03L4 21l4.62-.78A8.6 8.6 0 0 0 12 20.25c4.83 0 8.75-3.92 8.75-8.75S16.83 2.75 12 2.75Z"
             strokeLinecap="round"
@@ -470,51 +455,18 @@ export default function Preview() {
         </svg>
       </a>
       <span className="dot">·</span>
-      <a
-        href={INSTAGRAM_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Open Instagram"
-        className="iconlink"
-      >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          aria-hidden
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.6"
-        >
+      <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" aria-label="Open Instagram" className="iconlink">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
           <rect x="4" y="4" width="16" height="16" rx="4.5" ry="4.5" />
           <circle cx="12" cy="12" r="3.25" />
           <circle cx="17.2" cy="6.8" r="0.9" />
         </svg>
       </a>
       <span className="dot">·</span>
-      <a
-        href={MAILTO_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Email Archive 404"
-        className="iconlink"
-        style={{ lineHeight: 0 }}
-      >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          aria-hidden
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.6"
-        >
+      <a href={MAILTO_URL} target="_blank" rel="noopener noreferrer" aria-label="Email Archive 404" className="iconlink" style={{ lineHeight: 0 }}>
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
           <rect x="3" y="6" width="18" height="12" rx="2" ry="2" />
-          <path
-            d="M5 8.5 12 13l7-4.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          <path d="M5 8.5 12 13l7-4.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </a>
     </div>
@@ -522,7 +474,7 @@ export default function Preview() {
 
   const tagClass = isEntering ? 'tag-hidden' : 'tag-visible';
 
-  // Keep nav mounted always; just fade it (prevents “pop” when returning home)
+  // NAV: fade logic (HOME only), but we keep it mounted + collapse it on other pages (no layout shift)
   const navClass =
     page === 'home'
       ? isEntering
@@ -530,17 +482,15 @@ export default function Preview() {
         : 'fade-visible'
       : 'fade-hidden';
 
+  const navCollapseClass = page === 'home' ? '' : 'nav-collapsed';
+
   const footerFadeClass = isEntering ? 'footer-hidden' : 'footer-visible';
   const panelClass = isEntering ? 'panel-intro' : 'panel-steady';
 
   return (
     <>
       <div className="root" style={{ fontFamily: FONT_STACK }}>
-        <div
-          className="bg-layer"
-          aria-hidden="true"
-          style={{ transform: `scale(${bgZoom})` }}
-        />
+        <div className="bg-layer" aria-hidden="true" style={{ transform: `scale(${bgZoom})` }} />
 
         <div
           className={`center ${page === 'home' ? 'center-home' : 'center-subpage'} ${
@@ -558,10 +508,10 @@ export default function Preview() {
 
           <p className={`tag ${tagClass}`}>THE ART OF SOUND</p>
 
-          {/* NAV stays mounted for smoother return to HOME (no layout/design change) */}
+          {/* NAV kept mounted for smooth return to HOME, but collapsed off-home to avoid layout change */}
           <nav
             aria-label="Primary"
-            className={`nav ${navClass}`}
+            className={`nav ${navClass} ${navCollapseClass}`}
             style={{ pointerEvents: page === 'home' ? 'auto' : 'none' }}
           >
             {nav.map(([label, key]) => (
@@ -605,18 +555,16 @@ export default function Preview() {
                       return (
                         <div key={artist} className="artist-block">
                           <p
-                            className={`artist-name ${
-                              artistVisible[index] ? 'artist-name-visible' : ''
-                            } ${isHighlight ? 'artist-name-highlight' : ''}`}
+                            className={`artist-name ${artistVisible[index] ? 'artist-name-visible' : ''} ${
+                              isHighlight ? 'artist-name-highlight' : ''
+                            }`}
                             ref={(el) => {
                               artistRefs.current[index] = el;
                             }}
                           >
                             {artist}
                           </p>
-                          {artist === 'BOYSDONTCRY' && (
-                            <p className="artist-resident">RESIDENT</p>
-                          )}
+                          {artist === 'BOYSDONTCRY' && <p className="artist-resident">RESIDENT</p>}
                         </div>
                       );
                     })}
@@ -732,6 +680,13 @@ html, body {
   gap: 24px;
 }
 
+/* Critical: when not on HOME, collapse nav so it takes ZERO space (matches original layout) */
+.nav-collapsed {
+  margin-top: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+}
+
 /* Shared glass buttons */
 .navbtn,
 .newsletter-btn,
@@ -754,7 +709,7 @@ html, body {
   font-size: 11px;
   cursor: pointer;
 
-  /* FIXED: was "0.6s.ease" which is invalid */
+  /* fixed typo */
   transition:
     opacity 0.6s ease,
     transform 0.2s ease,
@@ -768,7 +723,6 @@ html, body {
   user-select: none;
 }
 
-/* RESERVATIONS extra tweaks */
 .upcoming-res-btn {
   font-weight: 600;
   letter-spacing: 0.14em;
