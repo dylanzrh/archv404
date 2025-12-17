@@ -305,7 +305,6 @@ export default function Preview() {
   const renderUpcoming = () => (
     <section className="section">
       <div className="upcoming">
-        {/* ST. MORITZ BLOCK */}
         <div className="upcoming-item">
           <p className="upcoming-title" style={{ animationDelay: '0ms' }}>
             DEC 27 ST. MORITZ
@@ -329,7 +328,6 @@ export default function Preview() {
             </button>
           </div>
 
-          {/* Flyer below RESERVATIONS, fixed width 25ch */}
           <div className="upcoming-flyer-wrapper">
             <img
               src={UPCOMING_FLYER_URL}
@@ -383,9 +381,7 @@ export default function Preview() {
             {isSubmittingNewsletter ? 'SENDING…' : 'JOIN'}
           </button>
         </form>
-        {newsletterMessage && (
-          <p className="newsletter-message">{newsletterMessage}</p>
-        )}
+        {newsletterMessage && <p className="newsletter-message">{newsletterMessage}</p>}
       </div>
 
       <div className="homebtn-wrapper">
@@ -447,15 +443,7 @@ export default function Preview() {
         aria-label="Join WhatsApp Community"
         className="iconlink"
       >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          aria-hidden
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.6"
-        >
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
           <path
             d="M12 2.75C7.17 2.75 3.25 6.67 3.25 11.5c0 1.86.53 3.57 1.52 5.03L4 21l4.62-.78A8.6 8.6 0 0 0 12 20.25c4.83 0 8.75-3.92 8.75-8.75S16.83 2.75 12 2.75Z"
             strokeLinecap="round"
@@ -469,51 +457,18 @@ export default function Preview() {
         </svg>
       </a>
       <span className="dot">·</span>
-      <a
-        href={INSTAGRAM_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Open Instagram"
-        className="iconlink"
-      >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          aria-hidden
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.6"
-        >
+      <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" aria-label="Open Instagram" className="iconlink">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
           <rect x="4" y="4" width="16" height="16" rx="4.5" ry="4.5" />
           <circle cx="12" cy="12" r="3.25" />
           <circle cx="17.2" cy="6.8" r="0.9" />
         </svg>
       </a>
       <span className="dot">·</span>
-      <a
-        href={MAILTO_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Email Archive 404"
-        className="iconlink"
-        style={{ lineHeight: 0 }}
-      >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          aria-hidden
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.6"
-        >
+      <a href={MAILTO_URL} target="_blank" rel="noopener noreferrer" aria-label="Email Archive 404" className="iconlink" style={{ lineHeight: 0 }}>
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
           <rect x="3" y="6" width="18" height="12" rx="2" ry="2" />
-          <path
-            d="M5 8.5 12 13l7-4.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          <path d="M5 8.5 12 13l7-4.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </a>
     </div>
@@ -521,7 +476,6 @@ export default function Preview() {
 
   const tagClass = isEntering ? 'tag-hidden' : 'tag-visible';
 
-  // NAV: fade logic (HOME only), but keep it mounted. Off-home it's removed from flow (no layout change, fixes first-tap)
   const navClass =
     page === 'home'
       ? isEntering
@@ -537,11 +491,7 @@ export default function Preview() {
   return (
     <>
       <div className="root" style={{ fontFamily: FONT_STACK }}>
-        <div
-          className="bg-layer"
-          aria-hidden="true"
-          style={{ transform: `scale(${bgZoom})` }}
-        />
+        <div className="bg-layer" aria-hidden="true" style={{ transform: `scale(${bgZoom})` }} />
 
         <div
           className={`center ${page === 'home' ? 'center-home' : 'center-subpage'} ${
@@ -559,7 +509,6 @@ export default function Preview() {
 
           <p className={`tag ${tagClass}`}>THE ART OF SOUND</p>
 
-          {/* NAV kept mounted for smooth return to HOME; off-home removed from flow to match original layout */}
           <nav
             aria-label="Primary"
             className={`nav ${navClass} ${navOffHomeClass}`}
@@ -585,10 +534,7 @@ export default function Preview() {
                   <p className="about-block">{ABOUT_TEXT}</p>
                 </article>
                 <div className="homebtn-wrapper" style={{ marginTop: '40px' }}>
-                  <button
-                    className="homebtn"
-                    onClick={() => handleNavigate('home')}
-                  >
+                  <button className="homebtn" onClick={() => handleNavigate('home')}>
                     HOME
                   </button>
                 </div>
@@ -609,27 +555,22 @@ export default function Preview() {
                       return (
                         <div key={artist} className="artist-block">
                           <p
-                            className={`artist-name ${
-                              artistVisible[index] ? 'artist-name-visible' : ''
-                            } ${isHighlight ? 'artist-name-highlight' : ''}`}
+                            className={`artist-name ${artistVisible[index] ? 'artist-name-visible' : ''} ${
+                              isHighlight ? 'artist-name-highlight' : ''
+                            }`}
                             ref={(el) => {
                               artistRefs.current[index] = el;
                             }}
                           >
                             {artist}
                           </p>
-                          {artist === 'BOYSDONTCRY' && (
-                            <p className="artist-resident">RESIDENT</p>
-                          )}
+                          {artist === 'BOYSDONTCRY' && <p className="artist-resident">RESIDENT</p>}
                         </div>
                       );
                     })}
                 </div>
                 <div className="homebtn-wrapper">
-                  <button
-                    className="homebtn"
-                    onClick={() => handleNavigate('home')}
-                  >
+                  <button className="homebtn" onClick={() => handleNavigate('home')}>
                     HOME
                   </button>
                 </div>
@@ -675,11 +616,7 @@ html, body {
   background-size: cover, 115%;
   background-repeat: no-repeat, no-repeat;
   transform-origin: center center;
-
-  /* IMPORTANT: remove CSS transition; RAF handles smoothing */
   transition: none;
-
-  /* helps smoothness */
   will-change: transform;
   transform: translateZ(0);
 }
@@ -743,8 +680,8 @@ html, body {
   gap: 24px;
 }
 
-/* Off-home: nav must take ZERO space (same as original conditional render),
-   but stay mounted to avoid “pop” when returning home and to fix first-tap */
+/* Off-home: nav takes ZERO space (matches original conditional render),
+   but stays mounted for smooth return to HOME */
 .nav-offhome {
   position: absolute !important;
   left: 0 !important;
@@ -753,5 +690,413 @@ html, body {
   margin: 0 !important;
   padding: 0 !important;
   height: 0 !important;
-  overflow: hidden
+  overflow: hidden !important;
+}
 
+/* Shared glass buttons */
+.navbtn,
+.newsletter-btn,
+.homebtn {
+  position: relative;
+  pointer-events: auto;
+  padding: 10px 18px;
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.008);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  outline: 1px solid rgba(255, 255, 255, 0.015);
+
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 11px;
+  cursor: pointer;
+  transition:
+    opacity 0.6s ease,
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.25s ease;
+
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.12);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* RESERVATIONS extra tweaks */
+.upcoming-res-btn {
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+.navbtn {
+  z-index: 9999;
+  min-height: 48px;
+  min-width: 160px;
+  padding: 12px 18px;
+  opacity: 0;
+  transform: translateY(22px);
+}
+
+.nav.fade-visible .navbtn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.homebtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+}
+
+/* IMPORTANT: Hover styles only for real hover devices (prevents “double tap to click” on iOS) */
+@media (hover: hover) and (pointer: fine) {
+  .navbtn:hover,
+  .newsletter-btn:hover:not(:disabled),
+  .homebtn:hover {
+    background: rgba(255, 255, 255, 0.018);
+    border-color: rgba(255, 255, 255, 0.10);
+    box-shadow:
+      0 3px 8px rgba(0, 0, 0, 0.3),
+      0 0 10px rgba(255, 180, 90, 0.06);
+    transform: translateY(-1px);
+  }
+
+  .iconlink:hover { opacity: 1; }
+}
+
+.newsletter-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.panel {
+  position: relative;
+  z-index: 1;
+  margin: 12px auto 0;
+  padding: 0;
+  max-width: 900px;
+}
+.panel-intro { opacity: 0; transform: translateY(32px); }
+.panel-steady {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.section {
+  text-align: left;
+  margin: 18px auto 0;
+  max-width: 900px;
+}
+.section-past { padding: 24px 20px 40px; }
+
+.about-section { padding-top: 0; padding-bottom: 24px; }
+
+.about {
+  max-width: 38ch;
+  margin: 0 auto;
+  text-transform: uppercase;
+}
+.about-block {
+  margin: 0 0 24px;
+  line-height: 1.5;
+  font-size: 15px;
+  opacity: 0.95;
+  text-align: justify;
+  text-align-last: justify;
+  text-justify: inter-word;
+  letter-spacing: 0.02em;
+}
+
+/* UPCOMING */
+.upcoming {
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  line-height: 1.45;
+  font-size: 16px;
+  opacity: 0.95;
+  margin-top: 10px;
+}
+.upcoming p { margin: 0; font-weight: 700; }
+.upcoming > p:not(.tba) { margin-bottom: 18px; }
+
+.upcoming-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.upcoming-title { margin-bottom: 18px; }
+
+.upcoming-actions {
+  margin-top: 10px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.upcoming-flyer-wrapper {
+  margin-top: 12px;
+  margin-bottom: 24px;
+  width: 100%;
+  max-width: 25ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.upcoming-flyer {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+}
+
+.upcoming .tba { font-weight: 400; }
+
+.tba {
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  opacity: 0.8;
+  margin-top: 0;
+  margin-bottom: 24px;
+}
+
+.date-divider {
+  width: 64px;
+  height: 1px;
+  margin: 24px auto;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* Newsletter */
+.newsletter {
+  margin: 40px auto 0;
+  max-width: 420px;
+  text-align: center;
+}
+
+.newsletter-label {
+  font-size: 13px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+
+.newsletter-form {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.newsletter-input {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  letter-spacing: 0.12em;
+  font-size: 11px;
+  outline: none;
+  transition: all 0.2s ease;
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  -webkit-text-fill-color: #fff !important;
+  caret-color: #fff !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  box-shadow: 0 0 0px.transparent inset !important;
+  background: transparent !important;
+  -webkit-text-fill-color: #fff !important;
+}
+
+.newsletter-input::placeholder { color: rgba(255, 255, 255, 0.45); }
+
+.newsletter-input:hover,
+.newsletter-input:focus {
+  border-color: rgba(255, 255, 255, 0.32);
+  box-shadow: 0 0 20px 6px rgba(255, 180, 90, 0.20);
+}
+
+.newsletter-message {
+  margin-bottom: 26px;
+  margin-top: 10px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+/* PAST */
+.flyer-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 20px;
+  margin-top: 0;
+  padding: 0;
+}
+.flyer-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.flyer-row-visible { opacity: 1; transform: translateY(0); }
+.flyer-cell img { display: block; width: 100%; height: auto; }
+
+/* ARTISTS */
+.artists-list {
+  max-width: 76ch;
+  margin: 8px auto 0;
+  text-align: center;
+}
+.az-label {
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.22em;
+  font-size: 16px;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+}
+.artist-block { display: flex; flex-direction: column; align-items: center; }
+.artist-name {
+  margin: 8px 0;
+  font-size: 16px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0;
+  line-height: 1.45;
+  transform: translateY(6px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.artist-name-visible { opacity: 0.92; transform: translateY(0); }
+.artist-name-highlight { color: #fff; }
+.artist-resident {
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.22em;
+  font-size: 10px;
+  margin-top: -10px;
+  text-transform: uppercase;
+}
+
+/* FOOTER / ICONS */
+.icons { display: flex; align-items: center; justify-content: center; }
+.iconlink {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  color: #fff;
+  opacity: 0.96;
+  text-decoration: none;
+}
+.dot { display: inline-block; margin: 0 0.6rem; opacity: 0.75; }
+
+.homebtn-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 54px;
+  margin-bottom: 80px;
+}
+
+.footer {
+  pointer-events: none;
+  width: 100%;
+  padding: 14px 0 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+}
+.footer-hidden { opacity: 0; transform: translateY(32px); }
+.footer-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-hidden { opacity: 0; }
+.fade-visible { opacity: 1; }
+
+@media (max-width: 640px) {
+  .bg-layer {
+    background-image:
+      linear-gradient(rgba(0, 0, 0, 0.30), rgba(0, 0, 0, 0.40)),
+      url('https://res.cloudinary.com/dsas5i0fx/image/upload/v1763336289/IMG_5984_wjkvk6.jpg');
+    background-position: center center, center 55%;
+    background-size: cover, 118%;
+  }
+
+  .logo-main {
+    font-size: clamp(36px, 16vw, 72px);
+    white-space: nowrap;
+  }
+
+  .center-home {
+    padding-top: 16vh;
+    padding-bottom: 2vh;
+    min-height: 96vh;
+    justify-content: flex-start;
+  }
+
+  .center-subpage {
+    padding-top: 12vh;
+    padding-bottom: 8vh;
+    min-height: 96vh;
+    justify-content: flex-start;
+  }
+
+  .center-upcoming {
+    padding-top: 10vh;
+    padding-bottom: 2vh;
+    min-height: 96vh;
+    justify-content: flex-start;
+  }
+
+  .center-about {
+    padding-top: 10vh;
+    padding-bottom: 2vh;
+    min-height: 96vh;
+    justify-content: flex-start;
+  }
+
+  .about { max-width: 34ch; }
+
+  .nav { margin-top: 32px; gap: 16px; }
+  .center-home .nav { margin-top: 96px; }
+}
+
+@keyframes logo-intro {
+  from { opacity: 0; transform: translateY(-32px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+        `}</style>
+      </div>
+    </>
+  );
+}
