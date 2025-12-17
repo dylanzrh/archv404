@@ -67,9 +67,11 @@ export default function Preview() {
 
   const [isEntering, setIsEntering] = useState(true);
   const [logoAnimKey, setLogoAnimKey] = useState(0);
+
+  // Background zoom (smooth)
   const [bgZoom, setBgZoom] = useState(1);
+
   const scrollYRef = useRef(0);
-  const rafRef = useRef<number | null>(null);
   const inputFocusedRef = useRef(false);
 
   const [rowVisible, setRowVisible] = useState<boolean[]>(() =>
@@ -110,12 +112,13 @@ export default function Preview() {
     playIntro();
   }, []);
 
-  // Preload upcoming flyer so it’s ready when user taps UPCOMING
+  // Preload upcoming flyer
   useEffect(() => {
     const img = new Image();
     img.src = UPCOMING_FLYER_URL;
   }, []);
 
+  // Smooth background zoom on scroll (single smoothing system: RAF)
   useEffect(() => {
     const maxZoom = 1.08;
     const maxScroll = 600;
@@ -125,40 +128,47 @@ export default function Preview() {
       return 1 + (clamped / maxScroll) * (maxZoom - 1);
     };
 
-    function tick() {
-      const target = calcZoom(scrollYRef.current);
+    const currentZoomRef = { current: 1 };
+    const targetZoomRef = { current: 1 };
+    let rafId: number | null = null;
 
-      setBgZoom((prev) => {
-        const eased = prev + (target - prev) * 0.08;
+    const animate = () => {
+      rafId = null;
 
-        if (Math.abs(eased - target) < 0.001) {
-          rafRef.current = null;
-          return target;
-        }
+      const current = currentZoomRef.current;
+      const target = targetZoomRef.current;
 
-        rafRef.current = window.requestAnimationFrame(tick);
-        return eased;
-      });
-    }
+      // tweak factor (0.06–0.12) for feel
+      const next = current + (target - current) * 0.09;
 
-    const handleScroll = () => {
-      if (inputFocusedRef.current) return;
-      const scrollY = window.scrollY || window.pageYOffset || 0;
-      scrollYRef.current = scrollY;
+      currentZoomRef.current = next;
+      setBgZoom(next);
 
-      if (rafRef.current === null) {
-        rafRef.current = window.requestAnimationFrame(tick);
+      if (Math.abs(target - next) > 0.0005) {
+        rafId = window.requestAnimationFrame(animate);
       }
     };
 
-    handleScroll();
+    const requestAnimate = () => {
+      if (rafId === null) rafId = window.requestAnimationFrame(animate);
+    };
 
+    const handleScroll = () => {
+      if (inputFocusedRef.current) return;
+
+      const y = window.scrollY || window.pageYOffset || 0;
+      scrollYRef.current = y;
+
+      targetZoomRef.current = calcZoom(y);
+      requestAnimate();
+    };
+
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      if (rafRef.current !== null) {
-        cancelAnimationFrame(rafRef.current);
-      }
+      if (rafId !== null) cancelAnimationFrame(rafId);
     };
   }, []);
 
@@ -286,6 +296,8 @@ export default function Preview() {
     setLogoAnimKey((k) => k + 1);
     playIntro();
 
+    // reset scroll + zoom to avoid any “snap” on navigation
+    setBgZoom(1);
     resetScrollToTop();
   };
 
@@ -622,9 +634,7 @@ export default function Preview() {
         </footer>
 
         <style>{`
-:root {
-  color-scheme: dark;
-}
+:root { color-scheme: dark; }
 html, body {
   margin: 0;
   padding: 0;
@@ -656,7 +666,13 @@ html, body {
   background-size: cover, 115%;
   background-repeat: no-repeat, no-repeat;
   transform-origin: center center;
-  transition: transform 0.18s ease-out;
+
+  /* IMPORTANT: remove CSS transition; RAF handles smoothing */
+  transition: none;
+
+  /* helps smoothness */
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .center {
@@ -679,13 +695,8 @@ html, body {
   padding-bottom: 6vh;
   min-height: auto;
 }
-.center-about {
-  padding-top: 8vh;
-}
-.center-upcoming {
-  padding-top: 14vh;
-  padding-bottom: 4vh;
-}
+.center-about { padding-top: 8vh; }
+.center-upcoming { padding-top: 14vh; padding-bottom: 4vh; }
 
 .logo-main {
   margin: 0 auto;
@@ -709,14 +720,8 @@ html, body {
   font-size: clamp(12px, 2.4vw, 16px);
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
-.tag-hidden {
-  opacity: 0;
-  transform: translateY(32px);
-}
-.tag-visible {
-  opacity: 0.95;
-  transform: translateY(0);
-}
+.tag-hidden { opacity: 0; transform: translateY(32px); }
+.tag-visible { opacity: 0.95; transform: translateY(0); }
 
 .nav {
   position: relative;
@@ -757,7 +762,6 @@ html, body {
     border-color 0.2s ease,
     box-shadow 0.25s ease;
 
-  /* Make taps feel instant and precise on mobile */
   touch-action: manipulation;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0.12);
   -webkit-user-select: none;
@@ -814,10 +818,7 @@ html, body {
   padding: 0;
   max-width: 900px;
 }
-.panel-intro {
-  opacity: 0;
-  transform: translateY(32px);
-}
+.panel-intro { opacity: 0; transform: translateY(32px); }
 .panel-steady {
   opacity: 1;
   transform: translateY(0);
@@ -829,14 +830,9 @@ html, body {
   margin: 18px auto 0;
   max-width: 900px;
 }
-.section-past {
-  padding: 24px 20px 40px;
-}
+.section-past { padding: 24px 20px 40px; }
 
-.about-section {
-  padding-top: 0;
-  padding-bottom: 24px;
-}
+.about-section { padding-top: 0; padding-bottom: 24px; }
 
 .about {
   max-width: 38ch;
@@ -855,7 +851,6 @@ html, body {
 }
 
 /* UPCOMING */
-
 .upcoming {
   text-align: center;
   text-transform: uppercase;
@@ -865,31 +860,16 @@ html, body {
   opacity: 0.95;
   margin-top: 10px;
 }
+.upcoming p { margin: 0; font-weight: 700; }
+.upcoming > p:not(.tba) { margin-bottom: 18px; }
 
-/* All upcoming text lines reset margin for clean rhythm */
-.upcoming p {
-  margin: 0;
-  font-weight: 700;
-}
-
-/* Direct child date lines (JAN / FEB) get the same spacing as DEC->button */
-.upcoming > p:not(.tba) {
-  margin-bottom: 18px;
-}
-
-/* Vertical stack for St. Moritz block */
 .upcoming-item {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+.upcoming-title { margin-bottom: 18px; }
 
-/* DEC 27 title uses same date spacing */
-.upcoming-title {
-  margin-bottom: 18px;
-}
-
-/* Button row centered, with same vertical gap as dates to next line */
 .upcoming-actions {
   margin-top: 0;
   margin-bottom: 24px;
@@ -897,7 +877,6 @@ html, body {
   justify-content: center;
 }
 
-/* Flyer fixed visual width 25ch and centered, under RESERVATIONS */
 .upcoming-flyer-wrapper {
   margin-top: 12px;
   margin-bottom: 24px;
@@ -911,14 +890,10 @@ html, body {
   display: block;
   width: 100%;
   height: auto;
-  /* Reserve space so text doesn't jump while image loads (Instagram 4:5 ratio) */
   aspect-ratio: 4 / 5;
 }
 
-/* TBA styling + same breathing as under other blocks */
-.upcoming .tba {
-  font-weight: 400;
-}
+.upcoming .tba { font-weight: 400; }
 
 .tba {
   font-size: 14px;
@@ -928,7 +903,6 @@ html, body {
   margin-bottom: 24px;
 }
 
-/* Divider spacing between event blocks */
 .date-divider {
   width: 64px;
   height: 1px;
@@ -937,7 +911,6 @@ html, body {
 }
 
 /* Newsletter */
-
 .newsletter {
   margin: 40px auto 0;
   max-width: 420px;
@@ -986,9 +959,7 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: #fff !important;
 }
 
-.newsletter-input::placeholder {
-  color: rgba(255, 255, 255, 0.45);
-}
+.newsletter-input::placeholder { color: rgba(255, 255, 255, 0.45); }
 
 .newsletter-input:hover,
 .newsletter-input:focus {
@@ -1006,7 +977,6 @@ input:-webkit-autofill:active {
 }
 
 /* PAST */
-
 .flyer-grid {
   display: flex;
   flex-direction: column;
@@ -1026,18 +996,10 @@ input:-webkit-autofill:active {
   transform: translateY(10px);
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
-.flyer-row-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-.flyer-cell img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
+.flyer-row-visible { opacity: 1; transform: translateY(0); }
+.flyer-cell img { display: block; width: 100%; height: auto; }
 
 /* ARTISTS */
-
 .artists-list {
   max-width: 76ch;
   margin: 8px auto 0;
@@ -1066,13 +1028,8 @@ input:-webkit-autofill:active {
   transform: translateY(6px);
   transition: opacity 0.4s ease, transform 0.4s ease;
 }
-.artist-name-visible {
-  opacity: 0.92;
-  transform: translateY(0);
-}
-.artist-name-highlight {
-  color: #fff;
-}
+.artist-name-visible { opacity: 0.92; transform: translateY(0); }
+.artist-name-highlight { color: #fff; }
 .artist-resident {
   font-weight: 700;
   color: rgba(255, 255, 255, 0.55);
@@ -1083,12 +1040,7 @@ input:-webkit-autofill:active {
 }
 
 /* FOOTER / ICONS */
-
-.icons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+.icons { display: flex; align-items: center; justify-content: center; }
 .iconlink {
   pointer-events: auto;
   display: inline-flex;
@@ -1099,14 +1051,8 @@ input:-webkit-autofill:active {
   opacity: 0.96;
   text-decoration: none;
 }
-.iconlink:hover {
-  opacity: 1;
-}
-.dot {
-  display: inline-block;
-  margin: 0 0.6rem;
-  opacity: 0.75;
-}
+.iconlink:hover { opacity: 1; }
+.dot { display: inline-block; margin: 0 0.6rem; opacity: 0.75; }
 
 .homebtn-wrapper {
   display: flex;
@@ -1128,22 +1074,15 @@ input:-webkit-autofill:active {
   bottom: 0;
   z-index: 5;
 }
-.footer-hidden {
-  opacity: 0;
-  transform: translateY(32px);
-}
+.footer-hidden { opacity: 0; transform: translateY(32px); }
 .footer-visible {
   opacity: 1;
   transform: translateY(0);
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
-.fade-hidden {
-  opacity: 0;
-}
-.fade-visible {
-  opacity: 1;
-}
+.fade-hidden { opacity: 0; }
+.fade-visible { opacity: 1; }
 
 @media (max-width: 640px) {
   .bg-layer {
@@ -1187,29 +1126,15 @@ input:-webkit-autofill:active {
     justify-content: flex-start;
   }
 
-  .about {
-    max-width: 34ch;
-  }
+  .about { max-width: 34ch; }
 
-  .nav {
-    margin-top: 32px;
-    gap: 16px;
-  }
-
-  .center-home .nav {
-    margin-top: 96px;
-  }
+  .nav { margin-top: 32px; gap: 16px; }
+  .center-home .nav { margin-top: 96px; }
 }
 
 @keyframes logo-intro {
-  from {
-    opacity: 0;
-    transform: translateY(-32px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-32px); }
+  to { opacity: 1; transform: translateY(0); }
 }
         `}</style>
       </div>
