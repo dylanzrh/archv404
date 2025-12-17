@@ -9,6 +9,10 @@ const INSTAGRAM_URL = 'https://instagram.com/archv404';
 const MAILTO_URL = 'mailto:info@archv404.com';
 const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
 
+// Background zoom tuning
+const BASE_ZOOM = 1.02;
+const MAX_ZOOM = 1.1;
+
 // Optimised upcoming flyer (same image, Cloudinary smart format + quality + width)
 const UPCOMING_FLYER_URL =
   'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1765023902/AR4_Instagram-Post_251203_l5i1md.png';
@@ -69,7 +73,7 @@ export default function Preview() {
   const [logoAnimKey, setLogoAnimKey] = useState(0);
 
   // Background zoom (smooth)
-  const [bgZoom, setBgZoom] = useState(1);
+  const [bgZoom, setBgZoom] = useState(BASE_ZOOM);
 
   const scrollYRef = useRef(0);
   const inputFocusedRef = useRef(false);
@@ -120,16 +124,15 @@ export default function Preview() {
 
   // Smooth background zoom on scroll (single smoothing system: RAF)
   useEffect(() => {
-    const maxZoom = 1.08;
     const maxScroll = 600;
 
     const calcZoom = (scrollY: number) => {
       const clamped = Math.min(Math.max(scrollY, 0), maxScroll);
-      return 1 + (clamped / maxScroll) * (maxZoom - 1);
+      return BASE_ZOOM + (clamped / maxScroll) * (MAX_ZOOM - BASE_ZOOM);
     };
 
-    const currentZoomRef = { current: 1 };
-    const targetZoomRef = { current: 1 };
+    const currentZoomRef = { current: BASE_ZOOM };
+    const targetZoomRef = { current: BASE_ZOOM };
     let rafId: number | null = null;
 
     const animate = () => {
@@ -138,7 +141,6 @@ export default function Preview() {
       const current = currentZoomRef.current;
       const target = targetZoomRef.current;
 
-      // tweak factor (0.06–0.12) for feel
       const next = current + (target - current) * 0.09;
 
       currentZoomRef.current = next;
@@ -296,8 +298,8 @@ export default function Preview() {
     setLogoAnimKey((k) => k + 1);
     playIntro();
 
-    // reset scroll + zoom to avoid any “snap” on navigation
-    setBgZoom(1);
+    // reset scroll + zoom (prevents any perceived “snap”)
+    setBgZoom(BASE_ZOOM);
     resetScrollToTop();
   };
 
@@ -576,10 +578,7 @@ export default function Preview() {
                   <p className="about-block">{ABOUT_TEXT}</p>
                 </article>
                 <div className="homebtn-wrapper" style={{ marginTop: '40px' }}>
-                  <button
-                    className="homebtn"
-                    onClick={() => handleNavigate('home')}
-                  >
+                  <button className="homebtn" onClick={() => handleNavigate('home')}>
                     HOME
                   </button>
                 </div>
@@ -617,10 +616,7 @@ export default function Preview() {
                     })}
                 </div>
                 <div className="homebtn-wrapper">
-                  <button
-                    className="homebtn"
-                    onClick={() => handleNavigate('home')}
-                  >
+                  <button className="homebtn" onClick={() => handleNavigate('home')}>
                     HOME
                   </button>
                 </div>
@@ -870,8 +866,9 @@ html, body {
 }
 .upcoming-title { margin-bottom: 18px; }
 
+/* more breathing room before button */
 .upcoming-actions {
-  margin-top: 0;
+  margin-top: 10px;
   margin-bottom: 24px;
   display: flex;
   justify-content: center;
