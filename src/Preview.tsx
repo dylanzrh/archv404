@@ -13,8 +13,8 @@ const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
 const BASE_ZOOM = 1.02;
 const MAX_ZOOM = 1.1;
 
-// Optimised upcoming flyer (same image, Cloudinary smart format + quality + width)
-const UPCOMING_FLYER_URL =
+// St. Moritz flyer (was UPCOMING, now moved to PAST)
+const ST_MORITZ_FLYER_URL =
   'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1765023902/AR4_Instagram-Post_251203_l5i1md.png';
 
 // ABOUT text as a single block paragraph
@@ -22,6 +22,8 @@ const ABOUT_TEXT: string =
   'ARCHIVE 404 IS A ZURICH-BASED EVENT LABEL CRAFTING CAREFULLY DESIGNED EXPERIENCES WHERE MUSIC, LIGHT AND SPACE CREATE IMMERSIVE MOMENTS. ITS NAME REINTERPRETS A DIGITAL ERROR AS AN INVITATION TO RECONNECT THROUGH PEOPLE AND SOUND. BY BRINGING TOGETHER RESPECTED INTERNATIONAL ARTISTS AND SOME OF THE MOST PROMISING LOCAL TALENTS, ARCHIVE 404 CREATES A DISTINCT ENERGY THAT FEELS CONTEMPORARY YET TIMELESS.';
 
 const PAST_FLYERS: string[] = [
+  // Added: St. Moritz flyer moved from UPCOMING to PAST (top-left)
+  ST_MORITZ_FLYER_URL,
   'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060268/archive404_251025_post_yus7xj.jpg',
   'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060242/archive03102025_post_eptqbf.jpg',
   'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060222/ARCHIVE404_06082025_Palm3_wjeh8o.jpg',
@@ -151,10 +153,10 @@ export default function Preview() {
     playIntro();
   }, []);
 
-  // Preload upcoming flyer
+  // Preload St. Moritz flyer (now in past too, but harmless)
   useEffect(() => {
     const img = new Image();
-    img.src = UPCOMING_FLYER_URL;
+    img.src = ST_MORITZ_FLYER_URL;
   }, []);
 
   // Smooth background zoom on scroll (single smoothing system: RAF)
@@ -340,67 +342,17 @@ export default function Preview() {
   const renderUpcoming = () => (
     <section className="section">
       <div className="upcoming">
-        {/* ST. MORITZ BLOCK */}
-        <div className="upcoming-item">
-          <p className="upcoming-title" style={{ animationDelay: '0ms' }}>
-            DEC 27 ST. MORITZ
-          </p>
+        {/* Removed ST. MORITZ from UPCOMING */}
 
-          <div className="upcoming-actions">
-            <button
-              type="button"
-              className="newsletter-btn upcoming-res-btn"
-              onPointerUp={(e) =>
-                onTouchActivate(e, () => {
-                  if (typeof window !== 'undefined') {
-                    window.open(
-                      'https://www.mrsamigo.com/samigo-fuel',
-                      '_blank',
-                      'noopener,noreferrer'
-                    );
-                  }
-                })
-              }
-              onClick={(e) =>
-                onClickActivate(e, () => {
-                  if (typeof window !== 'undefined') {
-                    window.open(
-                      'https://www.mrsamigo.com/samigo-fuel',
-                      '_blank',
-                      'noopener,noreferrer'
-                    );
-                  }
-                })
-              }
-            >
-              RESERVATIONS
-            </button>
-          </div>
-
-          {/* Flyer below RESERVATIONS, fixed width 25ch */}
-          <div className="upcoming-flyer-wrapper">
-            <img
-              src={UPCOMING_FLYER_URL}
-              alt="ARCHIVE 404 · St. Moritz · 27 December"
-              className="upcoming-flyer"
-              loading="eager"
-              decoding="async"
-              fetchPriority="high"
-            />
-          </div>
-        </div>
-
-        <div className="date-divider" aria-hidden="true" />
-
-        <p style={{ animationDelay: '80ms' }}>JAN 23 ZURICH</p>
-        <p className="tba" style={{ animationDelay: '120ms' }}>
+        <p style={{ animationDelay: '0ms' }}>JAN 23 ZURICH</p>
+        <p className="tba" style={{ animationDelay: '40ms' }}>
           TBA
         </p>
 
         <div className="date-divider" aria-hidden="true" />
 
-        <p style={{ animationDelay: '160ms' }}>FEB 27 ZURICH</p>
-        <p className="tba" style={{ animationDelay: '200ms' }}>
+        <p style={{ animationDelay: '80ms' }}>FEB 27 ZURICH</p>
+        <p className="tba" style={{ animationDelay: '120ms' }}>
           TBA
         </p>
       </div>
@@ -955,36 +907,6 @@ html, body {
 }
 .upcoming p { margin: 0; font-weight: 700; }
 .upcoming > p:not(.tba) { margin-bottom: 18px; }
-
-.upcoming-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.upcoming-title { margin-bottom: 18px; }
-
-.upcoming-actions {
-  margin-top: 10px;
-  margin-bottom: 24px;
-  display: flex;
-  justify-content: center;
-}
-
-.upcoming-flyer-wrapper {
-  margin-top: 12px;
-  margin-bottom: 24px;
-  width: 100%;
-  max-width: 25ch;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.upcoming-flyer {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 5;
-}
 
 .upcoming .tba { font-weight: 400; }
 
