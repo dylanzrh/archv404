@@ -344,7 +344,7 @@ export default function Preview() {
       <div className="upcoming">
         {/* Removed ST. MORITZ from UPCOMING */}
 
-        <p style={{ animationDelay: '0ms' }}>JAN 23 ZURICH</p>
+        <p style={{ animationDelay: '0ms' }}>JAN 30 ZURICH</p>
         <p className="tba" style={{ animationDelay: '40ms' }}>
           TBA
         </p>
