@@ -146,6 +146,11 @@ export default function Preview() {
     action();
   };
 
+  const openTickets = () => {
+    if (typeof window === 'undefined') return;
+    window.open(JAN30_TICKETS_URL, '_blank', 'noopener,noreferrer');
+  };
+
   const playIntro = () => {
     setIsEntering(true);
     requestAnimationFrame(() => {
@@ -352,37 +357,37 @@ export default function Preview() {
       <div className="upcoming">
         <p style={{ animationDelay: '0ms' }}>JAN 30 ZURICH</p>
 
-        {/* Tickets button (smaller + above flyer) */}
+        {/* Tickets button (same height as JOIN, bold, above flyer) */}
         <div className="tickets-wrapper tickets-wrapper-top">
           <a
             className="homebtn ticketbtn"
             href={JAN30_TICKETS_URL}
             target="_blank"
             rel="noopener noreferrer"
-            onPointerUp={(e) =>
-              onTouchActivate(e, () => {
-                window.open(JAN30_TICKETS_URL, '_blank', 'noopener,noreferrer');
-              })
-            }
-            onClick={(e) =>
-              onClickActivate(e, () => {
-                // normal anchor behavior
-              })
-            }
+            onPointerUp={(e) => onTouchActivate(e, openTickets)}
+            onClick={(e) => onClickActivate(e, () => {})}
           >
             TICKETS
           </a>
         </div>
 
-        {/* Flyer (same visual style as PAST flyers: no rounding) */}
-        <div className="upcoming-flyer">
+        {/* Flyer (clickable -> tickets) */}
+        <a
+          className="upcoming-flyer upcoming-flyer-link"
+          href={JAN30_TICKETS_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Open tickets"
+          onPointerUp={(e) => onTouchActivate(e, openTickets)}
+          onClick={(e) => onClickActivate(e, () => {})}
+        >
           <img
             src={ZURICH_JAN30_FLYER_URL}
             alt="ARCHIVE 404 — JAN 30 ZURICH"
             decoding="async"
             loading="lazy"
           />
-        </div>
+        </a>
 
         <div className="date-divider" aria-hidden="true" />
 
@@ -419,11 +424,7 @@ export default function Preview() {
                 (e.currentTarget as HTMLButtonElement).form?.requestSubmit?.();
               })
             }
-            onClick={(e) =>
-              onClickActivate(e, () => {
-                // normal submit
-              })
-            }
+            onClick={(e) => onClickActivate(e, () => {})}
           >
             {isSubmittingNewsletter ? 'SENDING…' : 'JOIN'}
           </button>
@@ -956,23 +957,35 @@ html, body {
   height: auto;
 }
 
-/* Tickets button (smaller + above flyer) */
+/* Clickable flyer */
+.upcoming-flyer-link {
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.12);
+}
+.upcoming-flyer-link:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.28);
+  outline-offset: 6px;
+}
+
+/* Tickets button: same HEIGHT as JOIN + bold */
 .tickets-wrapper {
   display: flex;
   justify-content: center;
-  margin: 10px 0 8px;
+  margin: 10px 0 10px;
+}
+.ticketbtn {
+  min-height: 36px;              /* match .homebtn and aligns w/ JOIN visually */
+  padding: 10px 16px;            /* closer to JOIN button sizing */
+  min-width: 132px;              /* slightly smaller than before but still premium */
+  font-weight: 700;              /* bold for visibility */
+  letter-spacing: 0.16em;        /* a bit more “label-like” */
+  font-size: 11px;               /* keep consistent */
 }
 .tickets-wrapper-top {
   margin-top: 12px;
-  margin-bottom: 10px;
-}
-.ticketbtn {
-  min-width: 118px;
-  min-height: 32px;
-  padding: 8px 14px;
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  border-radius: 9px;
+  margin-bottom: 12px;
 }
 
 /* Newsletter */
@@ -1194,12 +1207,8 @@ input:-webkit-autofill:active {
   /* smaller flyer on phone */
   .upcoming-flyer { max-width: 240px; }
 
-  /* slightly tighter ticket button on phone */
-  .ticketbtn {
-    min-width: 108px;
-    padding: 7px 12px;
-    font-size: 10px;
-  }
+  /* keep tickets same height as JOIN even on phone; just slightly narrower */
+  .ticketbtn { min-width: 124px; }
 }
 
 @keyframes logo-intro {
