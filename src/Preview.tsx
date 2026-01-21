@@ -17,8 +17,12 @@ const MAX_ZOOM = 1.1;
 const ST_MORITZ_FLYER_URL =
   'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1765023902/AR4_Instagram-Post_251203_l5i1md.png';
 
+// NEW: Jan 30 Zurich flyer for UPCOMING
+const ZURICH_JAN30_FLYER_URL =
+  'https://res.cloudinary.com/dsas5i0fx/image/upload/v1769005674/AR402_Instagram-Post_SH_260121-08_qxhube.png';
+
 // ABOUT text as a single block paragraph
-const ABOUT_TEXT: string =
+const ABOUT_TEXT =
   'ARCHIVE 404 IS A ZURICH-BASED EVENT LABEL CRAFTING CAREFULLY DESIGNED EXPERIENCES WHERE MUSIC, LIGHT AND SPACE CREATE IMMERSIVE MOMENTS. ITS NAME REINTERPRETS A DIGITAL ERROR AS AN INVITATION TO RECONNECT THROUGH PEOPLE AND SOUND. BY BRINGING TOGETHER RESPECTED INTERNATIONAL ARTISTS AND SOME OF THE MOST PROMISING LOCAL TALENTS, ARCHIVE 404 CREATES A DISTINCT ENERGY THAT FEELS CONTEMPORARY YET TIMELESS.';
 
 const PAST_FLYERS: string[] = [
@@ -84,11 +88,14 @@ export default function Preview() {
   const lastTouchActivateTsRef = useRef<number>(0);
   const TOUCH_DEDUPE_MS = 800;
 
+  // ✅ BUGFIX: lock sorted artists once, and index everything off this list
+  const SORTED_ARTISTS = useMemo(() => [...ARTISTS].sort(), []);
+
   const [rowVisible, setRowVisible] = useState<boolean[]>(() =>
     Array.from({ length: Math.ceil(PAST_FLYERS.length / 2) }, (_, i) => i === 0)
   );
   const [artistVisible, setArtistVisible] = useState<boolean[]>(() =>
-    ARTISTS.map(() => false)
+    SORTED_ARTISTS.map(() => false)
   );
 
   const [newsletterEmail, setNewsletterEmail] = useState('');
@@ -153,10 +160,12 @@ export default function Preview() {
     playIntro();
   }, []);
 
-  // Preload St. Moritz flyer (now in past too, but harmless)
+  // Preload flyers
   useEffect(() => {
-    const img = new Image();
-    img.src = ST_MORITZ_FLYER_URL;
+    const img1 = new Image();
+    img1.src = ST_MORITZ_FLYER_URL;
+    const img2 = new Image();
+    img2.src = ZURICH_JAN30_FLYER_URL;
   }, []);
 
   // Smooth background zoom on scroll (single smoothing system: RAF)
@@ -328,7 +337,8 @@ export default function Preview() {
       );
     }
     if (next === 'artists') {
-      setArtistVisible(ARTISTS.map(() => false));
+      // ✅ BUGFIX: reset matches sorted list length
+      setArtistVisible(SORTED_ARTISTS.map(() => false));
     }
 
     setPage(next);
@@ -342,10 +352,19 @@ export default function Preview() {
   const renderUpcoming = () => (
     <section className="section">
       <div className="upcoming">
-        {/* Removed ST. MORITZ from UPCOMING */}
-
         <p style={{ animationDelay: '0ms' }}>JAN 30 ZURICH</p>
-        <p className="tba" style={{ animationDelay: '40ms' }}>
+
+        {/* NEW: flyer under Jan 30 */}
+        <div className="upcoming-flyer" style={{ animationDelay: '30ms' }}>
+          <img
+            src={ZURICH_JAN30_FLYER_URL}
+            alt="ARCHIVE 404 — JAN 30 ZURICH"
+            decoding="async"
+            loading="lazy"
+          />
+        </div>
+
+        <p className="tba" style={{ animationDelay: '60ms' }}>
           TBA
         </p>
 
@@ -394,9 +413,7 @@ export default function Preview() {
             {isSubmittingNewsletter ? 'SENDING…' : 'JOIN'}
           </button>
         </form>
-        {newsletterMessage && (
-          <p className="newsletter-message">{newsletterMessage}</p>
-        )}
+        {newsletterMessage && <p className="newsletter-message">{newsletterMessage}</p>}
       </div>
 
       <div className="homebtn-wrapper">
@@ -542,11 +559,7 @@ export default function Preview() {
 
   // NAV: fade logic (HOME only), but keep it mounted. Off-home it's removed from flow.
   const navClass =
-    page === 'home'
-      ? isEntering
-        ? 'fade-hidden'
-        : 'fade-visible'
-      : 'fade-hidden';
+    page === 'home' ? (isEntering ? 'fade-hidden' : 'fade-visible') : 'fade-hidden';
 
   const navOffHomeClass = page === 'home' ? '' : 'nav-offhome';
 
@@ -559,7 +572,8 @@ export default function Preview() {
         <div
           className="bg-layer"
           aria-hidden="true"
-          style={{ transform: `scale(${bgZoom})` }}
+          // ✅ BUGFIX: keep GPU hint + scale together
+          style={{ transform: `translateZ(0) scale(${bgZoom})` }}
         />
 
         <div
@@ -590,9 +604,7 @@ export default function Preview() {
                 className="navbtn"
                 tabIndex={page === 'home' ? 0 : -1}
                 aria-hidden={page !== 'home'}
-                onPointerUp={(e) =>
-                  onTouchActivate(e, () => handleNavigate(key as Page))
-                }
+                onPointerUp={(e) => onTouchActivate(e, () => handleNavigate(key as Page))}
                 onClick={(e) => onClickActivate(e, () => handleNavigate(key as Page))}
               >
                 {label}
@@ -625,29 +637,30 @@ export default function Preview() {
               <section className="section">
                 <div className="artists-list">
                   <p className="az-label">A–Z</p>
-                  {ARTISTS.slice()
-                    .sort()
-                    .map((artist, index) => {
-                      const isHighlight = HIGHLIGHT_ARTISTS.has(artist);
-                      return (
-                        <div key={artist} className="artist-block">
-                          <p
-                            className={`artist-name ${
-                              artistVisible[index] ? 'artist-name-visible' : ''
-                            } ${isHighlight ? 'artist-name-highlight' : ''}`}
-                            ref={(el) => {
-                              artistRefs.current[index] = el;
-                            }}
-                          >
-                            {artist}
-                          </p>
-                          {artist === 'BOYSDONTCRY' && (
-                            <p className="artist-resident">RESIDENT</p>
-                          )}
-                        </div>
-                      );
-                    })}
+
+                  {SORTED_ARTISTS.map((artist, index) => {
+                    const isHighlight = HIGHLIGHT_ARTISTS.has(artist);
+                    return (
+                      <div key={artist} className="artist-block">
+                        <p
+                          className={`artist-name ${
+                            artistVisible[index] ? 'artist-name-visible' : ''
+                          } ${isHighlight ? 'artist-name-highlight' : ''}`}
+                          ref={(el) => {
+                            artistRefs.current[index] = el;
+                            if (el) (el as HTMLElement).dataset.artistIndex = String(index);
+                          }}
+                        >
+                          {artist}
+                        </p>
+                        {artist === 'BOYSDONTCRY' && (
+                          <p className="artist-resident">RESIDENT</p>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
+
                 <div className="homebtn-wrapper">
                   <button
                     className="homebtn"
@@ -701,7 +714,6 @@ html, body {
   transform-origin: center center;
   transition: none;
   will-change: transform;
-  transform: translateZ(0);
 }
 
 .center {
@@ -763,8 +775,7 @@ html, body {
   gap: 24px;
 }
 
-/* Off-home: nav takes ZERO space (matches original conditional render),
-   but stays mounted for smooth return to HOME and fixes first-tap */
+/* Off-home: nav takes ZERO space, but stays mounted for smooth return to HOME and fixes first-tap */
 .nav-offhome {
   position: absolute !important;
   left: 0 !important;
@@ -925,6 +936,23 @@ html, body {
   background: rgba(255, 255, 255, 0.35);
 }
 
+/* UPCOMING flyer (JAN 30) */
+.upcoming-flyer {
+  width: 100%;
+  max-width: 420px;
+  margin: 14px auto 14px;
+  border-radius: 12px;
+  overflow: hidden;
+  opacity: 0.96;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 24px 6px rgba(255, 180, 90, 0.10);
+}
+.upcoming-flyer img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 /* Newsletter */
 .newsletter {
   margin: 40px auto 0;
@@ -969,7 +997,7 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
-  box-shadow: 0 0 0px.transparent inset !important;
+  box-shadow: 0 0 0px 1000px transparent inset !important;
   background: transparent !important;
   -webkit-text-fill-color: #fff !important;
 }
@@ -1140,6 +1168,8 @@ input:-webkit-autofill:active {
 
   .nav { margin-top: 32px; gap: 16px; }
   .center-home .nav { margin-top: 96px; }
+
+  .upcoming-flyer { max-width: 360px; }
 }
 
 @keyframes logo-intro {
