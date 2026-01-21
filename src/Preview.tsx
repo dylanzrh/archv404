@@ -9,6 +9,9 @@ const INSTAGRAM_URL = 'https://instagram.com/archv404';
 const MAILTO_URL = 'mailto:info@archv404.com';
 const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
 
+// Tickets (temp)
+const JAN30_TICKETS_URL = 'https://eventfrog.ch/de/home.html';
+
 // Background zoom tuning
 const BASE_ZOOM = 1.02;
 const MAX_ZOOM = 1.1;
@@ -17,7 +20,7 @@ const MAX_ZOOM = 1.1;
 const ST_MORITZ_FLYER_URL =
   'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1765023902/AR4_Instagram-Post_251203_l5i1md.png';
 
-// NEW: Jan 30 Zurich flyer for UPCOMING
+// Jan 30 Zurich flyer for UPCOMING
 const ZURICH_JAN30_FLYER_URL =
   'https://res.cloudinary.com/dsas5i0fx/image/upload/v1769005674/AR402_Instagram-Post_SH_260121-08_qxhube.png';
 
@@ -26,7 +29,6 @@ const ABOUT_TEXT =
   'ARCHIVE 404 IS A ZURICH-BASED EVENT LABEL CRAFTING CAREFULLY DESIGNED EXPERIENCES WHERE MUSIC, LIGHT AND SPACE CREATE IMMERSIVE MOMENTS. ITS NAME REINTERPRETS A DIGITAL ERROR AS AN INVITATION TO RECONNECT THROUGH PEOPLE AND SOUND. BY BRINGING TOGETHER RESPECTED INTERNATIONAL ARTISTS AND SOME OF THE MOST PROMISING LOCAL TALENTS, ARCHIVE 404 CREATES A DISTINCT ENERGY THAT FEELS CONTEMPORARY YET TIMELESS.';
 
 const PAST_FLYERS: string[] = [
-  // Added: St. Moritz flyer moved from UPCOMING to PAST (top-left)
   ST_MORITZ_FLYER_URL,
   'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060268/archive404_251025_post_yus7xj.jpg',
   'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060242/archive03102025_post_eptqbf.jpg',
@@ -121,24 +123,20 @@ export default function Preview() {
     e: React.PointerEvent | React.MouseEvent,
     action: () => void
   ) => {
-    // PointerEvent path (best on iOS/modern)
     if ('pointerType' in e) {
       const pe = e as React.PointerEvent;
       if (pe.pointerType === 'touch') {
         pe.preventDefault();
         pe.stopPropagation();
         lastTouchActivateTsRef.current = Date.now();
-        // remove “stuck focus” behavior on iOS
         (pe.currentTarget as HTMLElement).blur?.();
         action();
         return;
       }
     }
-    // Mouse/trackpad: do nothing here; let onClick handle it.
   };
 
   const onClickActivate = (e: React.MouseEvent, action: () => void) => {
-    // If we just handled via touch, ignore the synthetic click
     if (Date.now() - lastTouchActivateTsRef.current < TOUCH_DEDUPE_MS) {
       e.preventDefault();
       e.stopPropagation();
@@ -337,7 +335,6 @@ export default function Preview() {
       );
     }
     if (next === 'artists') {
-      // ✅ BUGFIX: reset matches sorted list length
       setArtistVisible(SORTED_ARTISTS.map(() => false));
     }
 
@@ -354,8 +351,8 @@ export default function Preview() {
       <div className="upcoming">
         <p style={{ animationDelay: '0ms' }}>JAN 30 ZURICH</p>
 
-        {/* NEW: flyer under Jan 30 */}
-        <div className="upcoming-flyer" style={{ animationDelay: '30ms' }}>
+        {/* Flyer (same visual style as PAST flyers: no rounding) */}
+        <div className="upcoming-flyer">
           <img
             src={ZURICH_JAN30_FLYER_URL}
             alt="ARCHIVE 404 — JAN 30 ZURICH"
@@ -364,9 +361,27 @@ export default function Preview() {
           />
         </div>
 
-        <p className="tba" style={{ animationDelay: '60ms' }}>
-          TBA
-        </p>
+        {/* Tickets button */}
+        <div className="tickets-wrapper">
+          <a
+            className="homebtn ticketbtn"
+            href={JAN30_TICKETS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onPointerUp={(e) =>
+              onTouchActivate(e, () => {
+                window.open(JAN30_TICKETS_URL, '_blank', 'noopener,noreferrer');
+              })
+            }
+            onClick={(e) =>
+              onClickActivate(e, () => {
+                // normal anchor behavior
+              })
+            }
+          >
+            TICKETS
+          </a>
+        </div>
 
         <div className="date-divider" aria-hidden="true" />
 
@@ -400,7 +415,6 @@ export default function Preview() {
             disabled={isSubmittingNewsletter}
             onPointerUp={(e) =>
               onTouchActivate(e, () => {
-                // let form submit handler run via native submit; touch path just ensures activation
                 (e.currentTarget as HTMLButtonElement).form?.requestSubmit?.();
               })
             }
@@ -557,7 +571,6 @@ export default function Preview() {
 
   const tagClass = isEntering ? 'tag-hidden' : 'tag-visible';
 
-  // NAV: fade logic (HOME only), but keep it mounted. Off-home it's removed from flow.
   const navClass =
     page === 'home' ? (isEntering ? 'fade-hidden' : 'fade-visible') : 'fade-hidden';
 
@@ -572,7 +585,6 @@ export default function Preview() {
         <div
           className="bg-layer"
           aria-hidden="true"
-          // ✅ BUGFIX: keep GPU hint + scale together
           style={{ transform: `translateZ(0) scale(${bgZoom})` }}
         />
 
@@ -775,7 +787,6 @@ html, body {
   gap: 24px;
 }
 
-/* Off-home: nav takes ZERO space, but stays mounted for smooth return to HOME and fixes first-tap */
 .nav-offhome {
   position: absolute !important;
   left: 0 !important;
@@ -821,11 +832,6 @@ html, body {
   user-select: none;
 }
 
-.upcoming-res-btn {
-  font-weight: 600;
-  letter-spacing: 0.14em;
-}
-
 .navbtn {
   z-index: 9999;
   min-height: 48px;
@@ -845,6 +851,7 @@ html, body {
   align-items: center;
   justify-content: center;
   min-height: 36px;
+  text-decoration: none;
 }
 
 /* Hover styles only on real hover devices */
@@ -936,21 +943,26 @@ html, body {
   background: rgba(255, 255, 255, 0.35);
 }
 
-/* UPCOMING flyer (JAN 30) */
+/* UPCOMING flyer (match PAST style: no rounding / no border / no glow) */
 .upcoming-flyer {
   width: 100%;
-  max-width: 420px;
-  margin: 14px auto 14px;
-  border-radius: 12px;
-  overflow: hidden;
-  opacity: 0.96;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 24px 6px rgba(255, 180, 90, 0.10);
+  max-width: 320px; /* desktop: same “single-flyer” feel as before */
+  margin: 12px auto 10px;
 }
 .upcoming-flyer img {
   display: block;
   width: 100%;
   height: auto;
+}
+
+/* Tickets button spacing */
+.tickets-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0 6px;
+}
+.ticketbtn {
+  min-width: 160px;
 }
 
 /* Newsletter */
@@ -1169,7 +1181,8 @@ input:-webkit-autofill:active {
   .nav { margin-top: 32px; gap: 16px; }
   .center-home .nav { margin-top: 96px; }
 
-  .upcoming-flyer { max-width: 360px; }
+  /* smaller flyer on phone */
+  .upcoming-flyer { max-width: 240px; }
 }
 
 @keyframes logo-intro {
@@ -1181,4 +1194,3 @@ input:-webkit-autofill:active {
     </>
   );
 }
-
