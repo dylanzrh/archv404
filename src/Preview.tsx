@@ -60,6 +60,7 @@ const ARTISTS: string[] = [
   'RUBEN SCORZA',
   'SAM MADI',
   'SEBASTIAN KONRAD',
+  'SOLIQUE',
   'TIM ENGELHARDT',
 ];
 
