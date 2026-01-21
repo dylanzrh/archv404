@@ -9,8 +9,9 @@ const INSTAGRAM_URL = 'https://instagram.com/archv404';
 const MAILTO_URL = 'mailto:info@archv404.com';
 const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
 
-// Tickets (temp)
-const JAN30_TICKETS_URL = 'https://eventfrog.ch/de/home.html';
+// Tickets (Jan 30)
+const JAN30_TICKETS_URL =
+  'https://eventfrog.ch/de/p/party/house-techno/archive-404-w-solique-7419771019097816136.html';
 
 // Background zoom tuning
 const BASE_ZOOM = 1.02;
@@ -351,18 +352,8 @@ export default function Preview() {
       <div className="upcoming">
         <p style={{ animationDelay: '0ms' }}>JAN 30 ZURICH</p>
 
-        {/* Flyer (same visual style as PAST flyers: no rounding) */}
-        <div className="upcoming-flyer">
-          <img
-            src={ZURICH_JAN30_FLYER_URL}
-            alt="ARCHIVE 404 — JAN 30 ZURICH"
-            decoding="async"
-            loading="lazy"
-          />
-        </div>
-
-        {/* Tickets button */}
-        <div className="tickets-wrapper">
+        {/* Tickets button (smaller + above flyer) */}
+        <div className="tickets-wrapper tickets-wrapper-top">
           <a
             className="homebtn ticketbtn"
             href={JAN30_TICKETS_URL}
@@ -381,6 +372,16 @@ export default function Preview() {
           >
             TICKETS
           </a>
+        </div>
+
+        {/* Flyer (same visual style as PAST flyers: no rounding) */}
+        <div className="upcoming-flyer">
+          <img
+            src={ZURICH_JAN30_FLYER_URL}
+            alt="ARCHIVE 404 — JAN 30 ZURICH"
+            decoding="async"
+            loading="lazy"
+          />
         </div>
 
         <div className="date-divider" aria-hidden="true" />
@@ -946,8 +947,8 @@ html, body {
 /* UPCOMING flyer (match PAST style: no rounding / no border / no glow) */
 .upcoming-flyer {
   width: 100%;
-  max-width: 320px; /* desktop: same “single-flyer” feel as before */
-  margin: 12px auto 10px;
+  max-width: 320px;
+  margin: 10px auto 10px;
 }
 .upcoming-flyer img {
   display: block;
@@ -955,14 +956,23 @@ html, body {
   height: auto;
 }
 
-/* Tickets button spacing */
+/* Tickets button (smaller + above flyer) */
 .tickets-wrapper {
   display: flex;
   justify-content: center;
-  margin: 10px 0 6px;
+  margin: 10px 0 8px;
+}
+.tickets-wrapper-top {
+  margin-top: 12px;
+  margin-bottom: 10px;
 }
 .ticketbtn {
-  min-width: 160px;
+  min-width: 118px;
+  min-height: 32px;
+  padding: 8px 14px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  border-radius: 9px;
 }
 
 /* Newsletter */
@@ -1183,6 +1193,13 @@ input:-webkit-autofill:active {
 
   /* smaller flyer on phone */
   .upcoming-flyer { max-width: 240px; }
+
+  /* slightly tighter ticket button on phone */
+  .ticketbtn {
+    min-width: 108px;
+    padding: 7px 12px;
+    font-size: 10px;
+  }
 }
 
 @keyframes logo-intro {
