@@ -60,7 +60,6 @@ const ARTISTS: string[] = [
   'RUBEN SCORZA',
   'SAM MADI',
   'SEBASTIAN KONRAD',
-  'SOLIQUE',
   'TIM ENGELHARDT',
 ];
 
@@ -1182,3 +1181,4 @@ input:-webkit-autofill:active {
     </>
   );
 }
+
