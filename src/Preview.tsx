@@ -357,7 +357,7 @@ export default function Preview() {
       <div className="upcoming">
         <p style={{ animationDelay: '0ms' }}>JAN 30 ZURICH</p>
 
-        {/* Tickets button (same height as JOIN, bold, above flyer) */}
+        {/* Tickets button (desktop: same height as JOIN; phone overrides below) */}
         <div className="tickets-wrapper tickets-wrapper-top">
           <a
             className="homebtn ticketbtn"
@@ -969,23 +969,23 @@ html, body {
   outline-offset: 6px;
 }
 
-/* Tickets button: same HEIGHT as JOIN + bold */
+/* Tickets button: desktop baseline */
 .tickets-wrapper {
   display: flex;
   justify-content: center;
   margin: 10px 0 10px;
 }
-.ticketbtn {
-  min-height: 36px;              /* match .homebtn and aligns w/ JOIN visually */
-  padding: 10px 16px;            /* closer to JOIN button sizing */
-  min-width: 132px;              /* slightly smaller than before but still premium */
-  font-weight: 700;              /* bold for visibility */
-  letter-spacing: 0.16em;        /* a bit more “label-like” */
-  font-size: 11px;               /* keep consistent */
-}
 .tickets-wrapper-top {
   margin-top: 12px;
   margin-bottom: 12px;
+}
+.ticketbtn {
+  min-height: 36px;
+  padding: 10px 16px;
+  min-width: 132px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  font-size: 11px;
 }
 
 /* Newsletter */
@@ -1207,8 +1207,22 @@ input:-webkit-autofill:active {
   /* smaller flyer on phone */
   .upcoming-flyer { max-width: 240px; }
 
-  /* keep tickets same height as JOIN even on phone; just slightly narrower */
-  .ticketbtn { min-width: 124px; }
+  /* PHONE: ticket button as wide as flyer, less high, slightly bigger text */
+  .tickets-wrapper {
+    width: 100%;
+    max-width: 240px;       /* matches flyer max-width on phone */
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .ticketbtn {
+    width: 100%;
+    min-width: 0;
+    min-height: 30px;       /* less high */
+    padding: 7px 12px;      /* slimmer vertical padding */
+    font-size: 12px;        /* slightly bigger text */
+    letter-spacing: 0.14em;
+    border-radius: 10px;
+  }
 }
 
 @keyframes logo-intro {
