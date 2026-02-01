@@ -9,10 +9,6 @@ const INSTAGRAM_URL = 'https://instagram.com/archv404';
 const MAILTO_URL = 'mailto:info@archv404.com';
 const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
 
-// Tickets (Jan 30)
-const JAN30_TICKETS_URL =
-  'https://eventfrog.ch/de/p/party/house-techno/archive-404-w-solique-7419771019097816136.html';
-
 // Background zoom tuning
 const BASE_ZOOM = 1.02;
 const MAX_ZOOM = 1.1;
@@ -21,15 +17,16 @@ const MAX_ZOOM = 1.1;
 const ST_MORITZ_FLYER_URL =
   'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1765023902/AR4_Instagram-Post_251203_l5i1md.png';
 
-// Jan 30 Zurich flyer for UPCOMING
+// Jan 30 Zurich flyer (moved to PAST)
 const ZURICH_JAN30_FLYER_URL =
-  'https://res.cloudinary.com/dsas5i0fx/image/upload/v1769005674/AR402_Instagram-Post_SH_260121-08_qxhube.png';
+  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1769005674/AR402_Instagram-Post_SH_260121-08_qxhube.png';
 
 // ABOUT text as a single block paragraph
 const ABOUT_TEXT =
   'ARCHIVE 404 IS A ZURICH-BASED EVENT LABEL CRAFTING CAREFULLY DESIGNED EXPERIENCES WHERE MUSIC, LIGHT AND SPACE CREATE IMMERSIVE MOMENTS. ITS NAME REINTERPRETS A DIGITAL ERROR AS AN INVITATION TO RECONNECT THROUGH PEOPLE AND SOUND. BY BRINGING TOGETHER RESPECTED INTERNATIONAL ARTISTS AND SOME OF THE MOST PROMISING LOCAL TALENTS, ARCHIVE 404 CREATES A DISTINCT ENERGY THAT FEELS CONTEMPORARY YET TIMELESS.';
 
 const PAST_FLYERS: string[] = [
+  ZURICH_JAN30_FLYER_URL,
   ST_MORITZ_FLYER_URL,
   'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060268/archive404_251025_post_yus7xj.jpg',
   'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060242/archive03102025_post_eptqbf.jpg',
@@ -147,11 +144,6 @@ export default function Preview() {
     action();
   };
 
-  const openTickets = () => {
-    if (typeof window === 'undefined') return;
-    window.open(JAN30_TICKETS_URL, '_blank', 'noopener,noreferrer');
-  };
-
   const playIntro = () => {
     setIsEntering(true);
     requestAnimationFrame(() => {
@@ -165,7 +157,7 @@ export default function Preview() {
     playIntro();
   }, []);
 
-  // Preload flyers
+  // Preload key flyers (now both are in PAST)
   useEffect(() => {
     const img1 = new Image();
     img1.src = ST_MORITZ_FLYER_URL;
@@ -356,43 +348,8 @@ export default function Preview() {
   const renderUpcoming = () => (
     <section className="section">
       <div className="upcoming">
-        <p style={{ animationDelay: '0ms' }}>JAN 30 ZURICH</p>
-
-        {/* Tickets button (desktop: same height as JOIN; phone overrides below) */}
-        <div className="tickets-wrapper tickets-wrapper-top">
-          <a
-            className="homebtn ticketbtn"
-            href={JAN30_TICKETS_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            onPointerUp={(e) => onTouchActivate(e, openTickets)}
-            onClick={(e) => onClickActivate(e, () => {})}
-          >
-            TICKETS
-          </a>
-        </div>
-
-        {/* Flyer (clickable -> tickets) */}
-        <a
-          className="upcoming-flyer upcoming-flyer-link"
-          href={JAN30_TICKETS_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Open tickets"
-          onPointerUp={(e) => onTouchActivate(e, openTickets)}
-          onClick={(e) => onClickActivate(e, () => {})}
-        >
-          <img
-            src={ZURICH_JAN30_FLYER_URL}
-            alt="ARCHIVE 404 — JAN 30 ZURICH"
-            decoding="async"
-            loading="lazy"
-          />
-        </a>
-
-        <div className="date-divider" aria-hidden="true" />
-
-        <p style={{ animationDelay: '80ms' }}>FEB 27 ZURICH</p>
+        {/* Removed JAN 30 block (now in PAST) */}
+        <p style={{ animationDelay: '0ms' }}>FEB 27 ZURICH</p>
         <p className="tba" style={{ animationDelay: '120ms' }}>
           TBA
         </p>
@@ -946,49 +903,6 @@ html, body {
   background: rgba(255, 255, 255, 0.35);
 }
 
-/* UPCOMING flyer (match PAST style: no rounding / no border / no glow) */
-.upcoming-flyer {
-  width: 100%;
-  max-width: 320px;
-  margin: 10px auto 10px;
-}
-.upcoming-flyer img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-/* Clickable flyer */
-.upcoming-flyer-link {
-  display: block;
-  text-decoration: none;
-  cursor: pointer;
-  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.12);
-}
-.upcoming-flyer-link:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.28);
-  outline-offset: 6px;
-}
-
-/* Tickets button: desktop baseline */
-.tickets-wrapper {
-  display: flex;
-  justify-content: center;
-  margin: 10px 0 10px;
-}
-.tickets-wrapper-top {
-  margin-top: 12px;
-  margin-bottom: 12px;
-}
-.ticketbtn {
-  min-height: 36px;
-  padding: 10px 16px;
-  min-width: 132px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  font-size: 11px;
-}
-
 /* Newsletter */
 .newsletter {
   margin: 40px auto 0;
@@ -1204,26 +1118,6 @@ input:-webkit-autofill:active {
 
   .nav { margin-top: 32px; gap: 16px; }
   .center-home .nav { margin-top: 96px; }
-
-  /* smaller flyer on phone */
-  .upcoming-flyer { max-width: 240px; }
-
-  /* PHONE: ticket button as wide as flyer, less high, slightly bigger text */
-  .tickets-wrapper {
-    width: 100%;
-    max-width: 240px;       /* matches flyer max-width on phone */
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .ticketbtn {
-    width: 100%;
-    min-width: 0;
-    min-height: 30px;       /* less high */
-    padding: 7px 12px;      /* slimmer vertical padding */
-    font-size: 12px;        /* slightly bigger text */
-    letter-spacing: 0.14em;
-    border-radius: 10px;
-  }
 }
 
 @keyframes logo-intro {
