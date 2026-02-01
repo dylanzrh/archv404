@@ -345,17 +345,17 @@ export default function Preview() {
     resetScrollToTop();
   };
 
+  // UPDATED: UPCOMING page layout (content down + newsletter at bottom)
   const renderUpcoming = () => (
-    <section className="section">
+    <section className="section upcoming-section">
       <div className="upcoming">
-        {/* Removed JAN 30 block (now in PAST) */}
         <p style={{ animationDelay: '0ms' }}>FEB 27 ZURICH</p>
         <p className="tba" style={{ animationDelay: '120ms' }}>
           TBA
         </p>
       </div>
 
-      <div className="newsletter">
+      <div className="newsletter upcoming-newsletter">
         <p className="newsletter-label">FOR THOSE WHO KNOW.</p>
 
         <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
@@ -390,7 +390,7 @@ export default function Preview() {
         {newsletterMessage && <p className="newsletter-message">{newsletterMessage}</p>}
       </div>
 
-      <div className="homebtn-wrapper">
+      <div className="homebtn-wrapper upcoming-homebtn">
         <button
           className="homebtn"
           onPointerUp={(e) => onTouchActivate(e, () => handleNavigate('home'))}
@@ -903,6 +903,23 @@ html, body {
   background: rgba(255, 255, 255, 0.35);
 }
 
+/* NEW: UPCOMING page vertical rhythm */
+.upcoming-section{
+  display: flex;
+  flex-direction: column;
+  min-height: 72vh;
+}
+.upcoming-section .upcoming{
+  margin-top: 34px;
+}
+.upcoming-newsletter{
+  margin-top: auto;
+  padding-top: 18px;
+}
+.upcoming-homebtn{
+  margin-top: 28px;
+}
+
 /* Newsletter */
 .newsletter {
   margin: 40px auto 0;
@@ -1118,6 +1135,11 @@ input:-webkit-autofill:active {
 
   .nav { margin-top: 32px; gap: 16px; }
   .center-home .nav { margin-top: 96px; }
+
+  /* keep the new spacing on mobile too */
+  .upcoming-section{ min-height: 76vh; }
+  .upcoming-section .upcoming{ margin-top: 26px; }
+  .upcoming-homebtn{ margin-bottom: 80px; }
 }
 
 @keyframes logo-intro {
