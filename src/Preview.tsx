@@ -73,7 +73,39 @@ const HIGHLIGHT_ARTISTS = new Set<string>([
 
 type Page = 'home' | 'upcoming' | 'past' | 'artists' | 'about';
 
+/* ---------------------------------
+   Lightweight URL routing (SPA)
+---------------------------------- */
+const pageToPath = (p: Page) => {
+  switch (p) {
+    case 'home':
+      return '/';
+    case 'upcoming':
+      return '/upcoming';
+    case 'past':
+      return '/past';
+    case 'artists':
+      return '/artists';
+    case 'about':
+      return '/about';
+    default:
+      return '/';
+  }
+};
+
+const pathToPage = (pathname: string): Page => {
+  const clean =
+    (pathname || '/').split('?')[0].split('#')[0].replace(/\/+$/, '') || '/';
+  if (clean === '/') return 'home';
+  if (clean === '/upcoming') return 'upcoming';
+  if (clean === '/past') return 'past';
+  if (clean === '/artists') return 'artists';
+  if (clean === '/about') return 'about';
+  return 'home';
+};
+
 export default function Preview() {
+  // Start as home (SSR-safe), then sync to URL on mount
   const [page, setPage] = useState<Page>('home');
 
   const [isEntering, setIsEntering] = useState(true);
@@ -152,6 +184,39 @@ export default function Preview() {
       });
     });
   };
+
+  // Sync initial page from URL + handle back/forward
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const applyFromUrl = () => {
+      const next = pathToPage(window.location.pathname);
+
+      // Prep visibility state BEFORE switching (so it animates correctly)
+      if (next === 'past') {
+        setRowVisible(
+          Array.from({ length: Math.ceil(PAST_FLYERS.length / 2) }, (_, i) => i === 0)
+        );
+      }
+      if (next === 'artists') {
+        setArtistVisible(SORTED_ARTISTS.map(() => false));
+      }
+
+      setPage((prev) => (prev === next ? prev : next));
+      setLogoAnimKey((k) => k + 1);
+      playIntro();
+      setBgZoom(BASE_ZOOM);
+      // Do NOT force scroll on popstate; browser handles it better.
+    };
+
+    // initial
+    applyFromUrl();
+
+    // back/forward
+    window.addEventListener('popstate', applyFromUrl);
+    return () => window.removeEventListener('popstate', applyFromUrl);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // intentionally run once
 
   useEffect(() => {
     playIntro();
@@ -325,6 +390,16 @@ export default function Preview() {
     });
   };
 
+  const pushUrlForPage = (next: Page, replace = false) => {
+    if (typeof window === 'undefined') return;
+    const target = pageToPath(next);
+    const current = window.location.pathname;
+    if (current === target) return;
+
+    const fn = replace ? 'replaceState' : 'pushState';
+    window.history[fn]({}, '', target);
+  };
+
   const handleNavigate = (next: Page) => {
     if (next === page) return;
 
@@ -343,6 +418,8 @@ export default function Preview() {
 
     setBgZoom(BASE_ZOOM);
     resetScrollToTop();
+
+    pushUrlForPage(next);
   };
 
   // UPDATED: UPCOMING page layout (content down + newsletter at bottom)
