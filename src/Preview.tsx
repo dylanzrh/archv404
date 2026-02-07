@@ -42,7 +42,9 @@ const PAST_FLYERS: string[] = [
   'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060124/ARCHIVE404_280225_POST03_LOGO_nqcgah.jpg',
 ];
 
+// ✅ Added: JULIA LINKOGEL, 2M, YENI:SAM
 const ARTISTS: string[] = [
+  '2M',
   'ANCHI',
   'ARWIN AZIZ',
   'AXEL NORD',
@@ -59,6 +61,7 @@ const ARTISTS: string[] = [
   'HEUER',
   'HOMEOFFICE',
   'JOSEPH',
+  'JULIA LINKOGEL',
   'KASSETTE',
   'LOU COMBO',
   'PAUL ALMQVIST',
@@ -67,6 +70,7 @@ const ARTISTS: string[] = [
   'SEBASTIAN KONRAD',
   'SOLIQUE',
   'TIM ENGELHARDT',
+  'YENI:SAM',
 ];
 
 const HIGHLIGHT_ARTISTS = new Set<string>([
@@ -495,6 +499,8 @@ export default function Preview() {
             }}
             className="newsletter-input"
           />
+
+          {/* ✅ Restored exactly like original behavior */}
           <button
             type="submit"
             className="newsletter-btn"
@@ -509,6 +515,7 @@ export default function Preview() {
             {isSubmittingNewsletter ? 'SENDING…' : 'JOIN'}
           </button>
         </form>
+
         {newsletterMessage && <p className="newsletter-message">{newsletterMessage}</p>}
       </div>
 
@@ -772,7 +779,7 @@ html, body { margin: 0; padding: 0; background: #000; font-family: ${FONT_STACK}
 .nav { position: relative; z-index: 10; margin-top: 32px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; }
 .nav-offhome { position: absolute !important; left: 0 !important; right: 0 !important; top: -9999px !important; margin: 0 !important; padding: 0 !important; height: 0 !important; overflow: hidden !important; }
 
-/* Shared glass buttons (same blur base as homepage) */
+/* Shared glass buttons */
 .navbtn, .newsletter-btn, .homebtn, .ticket-btn {
   position: relative;
   pointer-events: auto;
@@ -803,31 +810,30 @@ html, body { margin: 0; padding: 0; background: #000; font-family: ${FONT_STACK}
 
 .homebtn { display: inline-flex; align-items: center; justify-content: center; min-height: 36px; padding: 10px 18px; font-size: 11px; }
 
-/* ✅ Ticket button: smaller (close to mail button, slightly bigger) */
+/* ✅ Ticket button: less bulky box, slightly bigger text */
 .ticket-btn{
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  min-height: 32px;
-  padding: 8px 22px;
-
+  min-height: 28px;           /* lower height */
+  padding: 6px 18px;          /* tighter box */
   font-weight: 700;
-  font-size: 11px;
+  font-size: 12px;            /* slightly bigger text */
   letter-spacing: 0.18em;
 
-  background: rgba(255, 255, 255, 0.018);
-  border: 1px solid rgba(255, 255, 255, 0.20);
-  outline: 1px solid rgba(255, 255, 255, 0.030);
+  background: rgba(255, 255, 255, 0.014);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  outline: 1px solid rgba(255, 255, 255, 0.028);
 
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.42), 0 0 16px rgba(255, 255, 255, 0.04);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.38), 0 0 14px rgba(255, 255, 255, 0.03);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .navbtn:hover, .newsletter-btn:hover:not(:disabled), .homebtn:hover, .ticket-btn:hover {
-    background: rgba(255, 255, 255, 0.024);
-    border-color: rgba(255, 255, 255, 0.26);
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5), 0 0 22px rgba(255, 180, 90, 0.10);
+    background: rgba(255, 255, 255, 0.022);
+    border-color: rgba(255, 255, 255, 0.24);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.46), 0 0 20px rgba(255, 180, 90, 0.10);
     transform: translateY(-1px);
   }
   .iconlink:hover { opacity: 1; }
@@ -880,6 +886,13 @@ html, body { margin: 0; padding: 0; background: #000; font-family: ${FONT_STACK}
 .newsletter { margin: 40px auto 0; max-width: 420px; text-align: center; }
 .newsletter-label { font-size: 13px; letter-spacing: 0.26em; text-transform: uppercase; opacity: 0.9; margin-bottom: 6px; }
 .newsletter-form { display: flex; gap: 12px; justify-content: center; align-items: center; margin-top: 10px; }
+
+.newsletter-btn{
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+}
 
 .newsletter-input {
   flex: 1; padding: 10px 14px; border-radius: 8px; background: transparent; color: #fff;
