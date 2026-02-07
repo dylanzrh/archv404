@@ -414,7 +414,7 @@ export default function Preview() {
     pushUrlForPage(next);
   };
 
-  // ✅ UPCOMING: flyer width equals EXACT rendered text width of the line above
+  // UPCOMING: match flyer/button width to exact rendered text width
   const upcomingLineRef = useRef<HTMLSpanElement | null>(null);
   const [upcomingWidth, setUpcomingWidth] = useState<number>(0);
 
@@ -427,10 +427,7 @@ export default function Preview() {
       if (w > 0) setUpcomingWidth(w);
     };
 
-    // measure after paint
     requestAnimationFrame(() => measure());
-
-    // keep synced on resize/font changes
     window.addEventListener('resize', measure);
     return () => window.removeEventListener('resize', measure);
   }, [page]);
@@ -455,7 +452,7 @@ export default function Preview() {
                 width: upcomingWidth ? `${upcomingWidth}px` : undefined,
               }}
             >
-              LIMITED FAMILY TICKETS
+              GET YOUR TICKET
             </a>
           </div>
 
@@ -806,28 +803,24 @@ html, body { margin: 0; padding: 0; background: #000; font-family: ${FONT_STACK}
 
 .homebtn { display: inline-flex; align-items: center; justify-content: center; min-height: 36px; padding: 10px 18px; font-size: 11px; }
 
+/* ✅ Ticket button: smaller (close to mail button, slightly bigger) */
 .ticket-btn{
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  /* ✅ less tall + wider */
-  min-height: 34px;
-  padding: 9px 28px;
+  min-height: 32px;
+  padding: 8px 22px;
 
-  /* ✅ bold + slightly bigger */
   font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 0.16em;
+  font-size: 11px;
+  letter-spacing: 0.18em;
 
-  /* ✅ more visible */
-  background: rgba(255, 255, 255, 0.020);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  outline: 1px solid rgba(255, 255, 255, 0.035);
+  background: rgba(255, 255, 255, 0.018);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  outline: 1px solid rgba(255, 255, 255, 0.030);
 
-  box-shadow:
-    0 6px 18px rgba(0, 0, 0, 0.45),
-    0 0 18px rgba(255, 255, 255, 0.05);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.42), 0 0 16px rgba(255, 255, 255, 0.04);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -861,23 +854,19 @@ html, body { margin: 0; padding: 0; background: #000; font-family: ${FONT_STACK}
 .upcoming-line{ display: block; }
 .upcoming-line-measure{ display: inline-block; }
 
-.upcoming-cta { margin-top: 18px; display: flex; justify-content: center; }
+.upcoming-cta { margin-top: 16px; display: flex; justify-content: center; }
 
 .upcoming-flyer-link{
   display: block;
-  margin: 22px auto 0;
+  margin: 20px auto 0;
   text-decoration: none;
-  /* width is set inline to the measured text width */
 }
 .upcoming-flyer{
   width: 100%;
   height: auto;
   display: block;
   margin: 0 auto;
-
-  /* ✅ no rounded corners */
   border-radius: 0;
-
   border: 1px solid rgba(255,255,255,0.06);
   outline: 1px solid rgba(255,255,255,0.015);
 }
