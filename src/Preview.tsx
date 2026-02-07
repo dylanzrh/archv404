@@ -418,7 +418,8 @@ export default function Preview() {
     pushUrlForPage(next);
   };
 
-  // UPCOMING: match flyer/button width to exact rendered text width
+  // UPCOMING: match flyer width to exact rendered text width,
+  // and set ticket button narrower than flyer.
   const upcomingLineRef = useRef<HTMLSpanElement | null>(null);
   const [upcomingWidth, setUpcomingWidth] = useState<number>(0);
 
@@ -435,6 +436,11 @@ export default function Preview() {
     window.addEventListener('resize', measure);
     return () => window.removeEventListener('resize', measure);
   }, [page]);
+
+  const flyerPx = upcomingWidth ? Math.round(upcomingWidth) : 0;
+  // ✅ narrower than flyer: 82% (clamped so it never gets silly)
+  const buttonPx =
+    flyerPx > 0 ? Math.max(180, Math.min(Math.round(flyerPx * 0.82), flyerPx - 24)) : 0;
 
   const renderUpcoming = () => (
     <section className="section upcoming-section">
@@ -453,7 +459,7 @@ export default function Preview() {
               target="_blank"
               rel="noopener noreferrer"
               style={{
-                width: upcomingWidth ? `${upcomingWidth}px` : undefined,
+                width: buttonPx ? `${buttonPx}px` : undefined,
               }}
             >
               GET YOUR TICKET
@@ -467,7 +473,7 @@ export default function Preview() {
             className="upcoming-flyer-link"
             aria-label="Open tickets"
             style={{
-              width: upcomingWidth ? `${upcomingWidth}px` : undefined,
+              width: flyerPx ? `${flyerPx}px` : undefined,
             }}
           >
             <img
@@ -499,8 +505,6 @@ export default function Preview() {
             }}
             className="newsletter-input"
           />
-
-          {/* ✅ Restored exactly like original behavior */}
           <button
             type="submit"
             className="newsletter-btn"
@@ -515,7 +519,6 @@ export default function Preview() {
             {isSubmittingNewsletter ? 'SENDING…' : 'JOIN'}
           </button>
         </form>
-
         {newsletterMessage && <p className="newsletter-message">{newsletterMessage}</p>}
       </div>
 
@@ -810,16 +813,16 @@ html, body { margin: 0; padding: 0; background: #000; font-family: ${FONT_STACK}
 
 .homebtn { display: inline-flex; align-items: center; justify-content: center; min-height: 36px; padding: 10px 18px; font-size: 11px; }
 
-/* ✅ Ticket button: less bulky box, slightly bigger text */
+/* Ticket button: narrower than flyer via inline width */
 .ticket-btn{
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  min-height: 28px;           /* lower height */
-  padding: 6px 18px;          /* tighter box */
+  min-height: 28px;
+  padding: 6px 18px;
   font-weight: 700;
-  font-size: 12px;            /* slightly bigger text */
+  font-size: 12px;
   letter-spacing: 0.18em;
 
   background: rgba(255, 255, 255, 0.014);
@@ -862,11 +865,7 @@ html, body { margin: 0; padding: 0; background: #000; font-family: ${FONT_STACK}
 
 .upcoming-cta { margin-top: 16px; display: flex; justify-content: center; }
 
-.upcoming-flyer-link{
-  display: block;
-  margin: 20px auto 0;
-  text-decoration: none;
-}
+.upcoming-flyer-link{ display: block; margin: 20px auto 0; text-decoration: none; }
 .upcoming-flyer{
   width: 100%;
   height: auto;
@@ -887,12 +886,7 @@ html, body { margin: 0; padding: 0; background: #000; font-family: ${FONT_STACK}
 .newsletter-label { font-size: 13px; letter-spacing: 0.26em; text-transform: uppercase; opacity: 0.9; margin-bottom: 6px; }
 .newsletter-form { display: flex; gap: 12px; justify-content: center; align-items: center; margin-top: 10px; }
 
-.newsletter-btn{
-  padding: 10px 18px;
-  border-radius: 10px;
-  font-size: 11px;
-  letter-spacing: 0.12em;
-}
+.newsletter-btn{ padding: 10px 18px; border-radius: 10px; font-size: 11px; letter-spacing: 0.12em; }
 
 .newsletter-input {
   flex: 1; padding: 10px 14px; border-radius: 8px; background: transparent; color: #fff;
