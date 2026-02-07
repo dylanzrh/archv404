@@ -9,7 +9,7 @@ const INSTAGRAM_URL = 'https://instagram.com/archv404';
 const MAILTO_URL = 'mailto:info@archv404.com';
 const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
 
-// ✅ Ticket link + Upcoming flyer (same as mail)
+// Ticket link + Upcoming flyer
 const TICKET_URL = 'https://supermarket.li/events/archive-404-5/';
 const UPCOMING_FLYER_URL =
   'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1770251160/IMG_1687_wvmczm.png';
@@ -115,17 +115,14 @@ export default function Preview() {
   const [isEntering, setIsEntering] = useState(true);
   const [logoAnimKey, setLogoAnimKey] = useState(0);
 
-  // Background zoom (smooth)
   const [bgZoom, setBgZoom] = useState(BASE_ZOOM);
 
   const scrollYRef = useRef(0);
   const inputFocusedRef = useRef(false);
 
-  // De-dupe touch activation vs click (Safari can be flaky after animations)
   const lastTouchActivateTsRef = useRef<number>(0);
   const TOUCH_DEDUPE_MS = 800;
 
-  // lock sorted artists once
   const SORTED_ARTISTS = useMemo(() => [...ARTISTS].sort(), []);
 
   const [rowVisible, setRowVisible] = useState<boolean[]>(() =>
@@ -153,7 +150,6 @@ export default function Preview() {
     []
   );
 
-  // --- Instant activation helper (touch) + click fallback (desktop) ---
   const onTouchActivate = (
     e: React.PointerEvent | React.MouseEvent,
     action: () => void
@@ -189,7 +185,6 @@ export default function Preview() {
     });
   };
 
-  // Sync initial page from URL + handle back/forward
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
@@ -221,18 +216,15 @@ export default function Preview() {
     playIntro();
   }, []);
 
-  // Preload key flyers
   useEffect(() => {
     const img1 = new Image();
     img1.src = ST_MORITZ_FLYER_URL;
     const img2 = new Image();
     img2.src = ZURICH_JAN30_FLYER_URL;
-
     const img3 = new Image();
     img3.src = UPCOMING_FLYER_URL;
   }, []);
 
-  // Smooth background zoom on scroll (single smoothing system: RAF)
   useEffect(() => {
     const maxScroll = 600;
 
@@ -422,12 +414,36 @@ export default function Preview() {
     pushUrlForPage(next);
   };
 
-  // ✅ UPCOMING: flyer width is locked to date line width
+  // ✅ UPCOMING: flyer width equals EXACT rendered text width of the line above
+  const upcomingLineRef = useRef<HTMLSpanElement | null>(null);
+  const [upcomingWidth, setUpcomingWidth] = useState<number>(0);
+
+  useEffect(() => {
+    if (page !== 'upcoming') return;
+    if (typeof window === 'undefined') return;
+
+    const measure = () => {
+      const w = upcomingLineRef.current?.getBoundingClientRect().width ?? 0;
+      if (w > 0) setUpcomingWidth(w);
+    };
+
+    // measure after paint
+    requestAnimationFrame(() => measure());
+
+    // keep synced on resize/font changes
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [page]);
+
   const renderUpcoming = () => (
     <section className="section upcoming-section">
       <div className="upcoming">
         <div className="upcoming-wrap">
-          <p className="upcoming-line">FEB 27 SUPERMARKET CLUB</p>
+          <p className="upcoming-line">
+            <span ref={upcomingLineRef} className="upcoming-line-measure">
+              FEB 27 SUPERMARKET CLUB
+            </span>
+          </p>
 
           <div className="upcoming-cta">
             <a
@@ -435,6 +451,9 @@ export default function Preview() {
               href={TICKET_URL}
               target="_blank"
               rel="noopener noreferrer"
+              style={{
+                width: upcomingWidth ? `${upcomingWidth}px` : undefined,
+              }}
             >
               LIMITED FAMILY TICKETS
             </a>
@@ -446,6 +465,9 @@ export default function Preview() {
             rel="noopener noreferrer"
             className="upcoming-flyer-link"
             aria-label="Open tickets"
+            style={{
+              width: upcomingWidth ? `${upcomingWidth}px` : undefined,
+            }}
           >
             <img
               className="upcoming-flyer"
@@ -713,7 +735,6 @@ export default function Preview() {
 html, body { margin: 0; padding: 0; background: #000; font-family: ${FONT_STACK}; }
 .root { position: relative; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; color: #fff; overflow: hidden; padding-bottom: 0; }
 
-/* Fixed background image */
 .bg-layer {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background-image: linear-gradient(rgba(0,0,0,0.34), rgba(0,0,0,0.44)),
@@ -754,11 +775,10 @@ html, body { margin: 0; padding: 0; background: #000; font-family: ${FONT_STACK}
 .nav { position: relative; z-index: 10; margin-top: 32px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; }
 .nav-offhome { position: absolute !important; left: 0 !important; right: 0 !important; top: -9999px !important; margin: 0 !important; padding: 0 !important; height: 0 !important; overflow: hidden !important; }
 
-/* Shared glass buttons (exact blur feel) */
+/* Shared glass buttons (same blur base as homepage) */
 .navbtn, .newsletter-btn, .homebtn, .ticket-btn {
   position: relative;
   pointer-events: auto;
-  padding: 10px 18px;
   border-radius: 10px;
 
   background: rgba(255, 255, 255, 0.008);
@@ -771,7 +791,6 @@ html, body { margin: 0; padding: 0; background: #000; font-family: ${FONT_STACK}
 
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  font-size: 11px;
   cursor: pointer;
   text-decoration: none;
 
@@ -782,39 +801,40 @@ html, body { margin: 0; padding: 0; background: #000; font-family: ${FONT_STACK}
   user-select: none;
 }
 
-.navbtn { z-index: 9999; min-height: 48px; min-width: 160px; padding: 12px 18px; opacity: 0; transform: translateY(22px); }
+.navbtn { z-index: 9999; min-height: 48px; min-width: 160px; padding: 12px 18px; opacity: 0; transform: translateY(22px); font-size: 11px; }
 .nav.fade-visible .navbtn { opacity: 1; transform: translateY(0); }
 
-.homebtn { display: inline-flex; align-items: center; justify-content: center; min-height: 36px; }
+.homebtn { display: inline-flex; align-items: center; justify-content: center; min-height: 36px; padding: 10px 18px; font-size: 11px; }
 
-/* ✅ Ticket button: more visible + bold + slightly bigger, same glass blur base */
 .ticket-btn{
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 40px;
-  padding: 12px 22px;
 
+  /* ✅ less tall + wider */
+  min-height: 34px;
+  padding: 9px 28px;
+
+  /* ✅ bold + slightly bigger */
   font-weight: 700;
   font-size: 12px;
   letter-spacing: 0.16em;
 
-  background: rgba(255, 255, 255, 0.018);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  /* ✅ more visible */
+  background: rgba(255, 255, 255, 0.020);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   outline: 1px solid rgba(255, 255, 255, 0.035);
 
   box-shadow:
     0 6px 18px rgba(0, 0, 0, 0.45),
-    0 0 18px rgba(255, 255, 255, 0.06);
+    0 0 18px rgba(255, 255, 255, 0.05);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .navbtn:hover, .newsletter-btn:hover:not(:disabled), .homebtn:hover, .ticket-btn:hover {
     background: rgba(255, 255, 255, 0.024);
     border-color: rgba(255, 255, 255, 0.26);
-    box-shadow:
-      0 8px 22px rgba(0, 0, 0, 0.5),
-      0 0 22px rgba(255, 180, 90, 0.10);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5), 0 0 22px rgba(255, 180, 90, 0.10);
     transform: translateY(-1px);
   }
   .iconlink:hover { opacity: 1; }
@@ -837,32 +857,27 @@ html, body { margin: 0; padding: 0; background: #000; font-family: ${FONT_STACK}
 .upcoming { text-align: center; text-transform: uppercase; letter-spacing: 0.2em; line-height: 1.45; font-size: 16px; opacity: 0.95; margin-top: 10px; }
 .upcoming p { margin: 0; font-weight: 700; }
 
-/* ✅ Lock layout width to date line, so flyer matches it */
-.upcoming-wrap{
-  display: inline-block;
-  text-align: center;
-  margin: 0 auto;
-}
-.upcoming-line{
-  display: inline-block; /* this becomes the width reference */
-}
+.upcoming-wrap{ display: inline-block; text-align: center; margin: 0 auto; }
+.upcoming-line{ display: block; }
+.upcoming-line-measure{ display: inline-block; }
 
-/* CTA spacing */
 .upcoming-cta { margin-top: 18px; display: flex; justify-content: center; }
 
-/* ✅ Flyer uses the same width as .upcoming-wrap (i.e., date line) */
 .upcoming-flyer-link{
   display: block;
-  width: 100%;
   margin: 22px auto 0;
   text-decoration: none;
+  /* width is set inline to the measured text width */
 }
 .upcoming-flyer{
   width: 100%;
   height: auto;
   display: block;
   margin: 0 auto;
-  border-radius: 12px;
+
+  /* ✅ no rounded corners */
+  border-radius: 0;
+
   border: 1px solid rgba(255,255,255,0.06);
   outline: 1px solid rgba(255,255,255,0.015);
 }
@@ -945,9 +960,6 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
   .upcoming-section { min-height: 76vh; }
   .upcoming-section .upcoming { margin-top: 26px; }
   .upcoming-homebtn { margin-bottom: 80px; }
-
-  /* keep flyer locked to date width; just tighten radius slightly on small screens if needed */
-  .upcoming-flyer { border-radius: 12px; }
 }
 
 @keyframes logo-intro {
