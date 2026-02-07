@@ -9,19 +9,24 @@ const INSTAGRAM_URL = 'https://instagram.com/archv404';
 const MAILTO_URL = 'mailto:info@archv404.com';
 const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
 
+// ✅ Ticket link + Upcoming flyer (same as mail)
+const TICKET_URL = 'https://supermarket.li/events/archive-404-5/';
+const UPCOMING_FLYER_URL =
+  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1770251160/IMG_1687_wvmczm.png';
+
 // Background zoom tuning
 const BASE_ZOOM = 1.02;
 const MAX_ZOOM = 1.1;
 
-// St. Moritz flyer (was UPCOMING, now moved to PAST)
+// St. Moritz flyer (PAST)
 const ST_MORITZ_FLYER_URL =
   'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1765023902/AR4_Instagram-Post_251203_l5i1md.png';
 
-// Jan 30 Zurich flyer (moved to PAST)
+// Jan 30 Zurich flyer (PAST)
 const ZURICH_JAN30_FLYER_URL =
   'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1769005674/AR402_Instagram-Post_SH_260121-08_qxhube.png';
 
-// ABOUT text as a single block paragraph
+// ABOUT text
 const ABOUT_TEXT =
   'ARCHIVE 404 IS A ZURICH-BASED EVENT LABEL CRAFTING CAREFULLY DESIGNED EXPERIENCES WHERE MUSIC, LIGHT AND SPACE CREATE IMMERSIVE MOMENTS. ITS NAME REINTERPRETS A DIGITAL ERROR AS AN INVITATION TO RECONNECT THROUGH PEOPLE AND SOUND. BY BRINGING TOGETHER RESPECTED INTERNATIONAL ARTISTS AND SOME OF THE MOST PROMISING LOCAL TALENTS, ARCHIVE 404 CREATES A DISTINCT ENERGY THAT FEELS CONTEMPORARY YET TIMELESS.';
 
@@ -105,7 +110,6 @@ const pathToPage = (pathname: string): Page => {
 };
 
 export default function Preview() {
-  // Start as home (SSR-safe), then sync to URL on mount
   const [page, setPage] = useState<Page>('home');
 
   const [isEntering, setIsEntering] = useState(true);
@@ -121,7 +125,7 @@ export default function Preview() {
   const lastTouchActivateTsRef = useRef<number>(0);
   const TOUCH_DEDUPE_MS = 800;
 
-  // ✅ BUGFIX: lock sorted artists once, and index everything off this list
+  // ✅ lock sorted artists once
   const SORTED_ARTISTS = useMemo(() => [...ARTISTS].sort(), []);
 
   const [rowVisible, setRowVisible] = useState<boolean[]>(() =>
@@ -192,7 +196,6 @@ export default function Preview() {
     const applyFromUrl = () => {
       const next = pathToPage(window.location.pathname);
 
-      // Prep visibility state BEFORE switching (so it animates correctly)
       if (next === 'past') {
         setRowVisible(
           Array.from({ length: Math.ceil(PAST_FLYERS.length / 2) }, (_, i) => i === 0)
@@ -206,28 +209,28 @@ export default function Preview() {
       setLogoAnimKey((k) => k + 1);
       playIntro();
       setBgZoom(BASE_ZOOM);
-      // Do NOT force scroll on popstate; browser handles it better.
     };
 
-    // initial
     applyFromUrl();
-
-    // back/forward
     window.addEventListener('popstate', applyFromUrl);
     return () => window.removeEventListener('popstate', applyFromUrl);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // intentionally run once
+  }, []);
 
   useEffect(() => {
     playIntro();
   }, []);
 
-  // Preload key flyers (now both are in PAST)
+  // Preload key flyers
   useEffect(() => {
     const img1 = new Image();
     img1.src = ST_MORITZ_FLYER_URL;
     const img2 = new Image();
     img2.src = ZURICH_JAN30_FLYER_URL;
+
+    // ✅ preload upcoming
+    const img3 = new Image();
+    img3.src = UPCOMING_FLYER_URL;
   }, []);
 
   // Smooth background zoom on scroll (single smoothing system: RAF)
@@ -379,7 +382,7 @@ export default function Preview() {
     }
   };
 
-  // Mobile-safe scroll reset for each page (no layout change)
+  // Mobile-safe scroll reset for each page
   const resetScrollToTop = () => {
     if (typeof window === 'undefined') return;
 
@@ -422,14 +425,38 @@ export default function Preview() {
     pushUrlForPage(next);
   };
 
-  // UPDATED: UPCOMING page layout (content down + newsletter at bottom)
+  // ✅ UPDATED: UPCOMING page (date+venue line, ticket button under it, flyer below)
   const renderUpcoming = () => (
     <section className="section upcoming-section">
       <div className="upcoming">
-        <p style={{ animationDelay: '0ms' }}>FEB 27 ZURICH</p>
-        <p className="tba" style={{ animationDelay: '120ms' }}>
-          TBA
-        </p>
+        <p style={{ animationDelay: '0ms' }}>FEB 27 SUPERMARKET CLUB</p>
+
+        <div className="upcoming-cta">
+          <a
+            className="ticket-btn"
+            href={TICKET_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            LIMITED FAMILY TICKETS
+          </a>
+        </div>
+
+        <a
+          href={TICKET_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="upcoming-flyer-link"
+          aria-label="Open tickets"
+        >
+          <img
+            className="upcoming-flyer"
+            src={UPCOMING_FLYER_URL}
+            alt="ARCHIVE 404 · FEB 27"
+            decoding="async"
+            loading="eager"
+          />
+        </a>
       </div>
 
       <div className="newsletter upcoming-newsletter">
@@ -534,15 +561,7 @@ export default function Preview() {
         aria-label="Join WhatsApp Community"
         className="iconlink"
       >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          aria-hidden
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.6"
-        >
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
           <path
             d="M12 2.75C7.17 2.75 3.25 6.67 3.25 11.5c0 1.86.53 3.57 1.52 5.03L4 21l4.62-.78A8.6 8.6 0 0 0 12 20.25c4.83 0 8.75-3.92 8.75-8.75S16.83 2.75 12 2.75Z"
             strokeLinecap="round"
@@ -556,22 +575,8 @@ export default function Preview() {
         </svg>
       </a>
       <span className="dot">·</span>
-      <a
-        href={INSTAGRAM_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Open Instagram"
-        className="iconlink"
-      >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          aria-hidden
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.6"
-        >
+      <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" aria-label="Open Instagram" className="iconlink">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
           <rect x="4" y="4" width="16" height="16" rx="4.5" ry="4.5" />
           <circle cx="12" cy="12" r="3.25" />
           <circle cx="17.2" cy="6.8" r="0.9" />
@@ -586,44 +591,25 @@ export default function Preview() {
         className="iconlink"
         style={{ lineHeight: 0 }}
       >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          aria-hidden
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.6"
-        >
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
           <rect x="3" y="6" width="18" height="12" rx="2" ry="2" />
-          <path
-            d="M5 8.5 12 13l7-4.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          <path d="M5 8.5 12 13l7-4.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </a>
     </div>
   );
 
   const tagClass = isEntering ? 'tag-hidden' : 'tag-visible';
-
   const navClass =
     page === 'home' ? (isEntering ? 'fade-hidden' : 'fade-visible') : 'fade-hidden';
-
   const navOffHomeClass = page === 'home' ? '' : 'nav-offhome';
-
   const footerFadeClass = isEntering ? 'footer-hidden' : 'footer-visible';
   const panelClass = isEntering ? 'panel-intro' : 'panel-steady';
 
   return (
     <>
       <div className="root" style={{ fontFamily: FONT_STACK }}>
-        <div
-          className="bg-layer"
-          aria-hidden="true"
-          style={{ transform: `translateZ(0) scale(${bgZoom})` }}
-        />
+        <div className="bg-layer" aria-hidden="true" style={{ transform: `translateZ(0) scale(${bgZoom})` }} />
 
         <div
           className={`center ${page === 'home' ? 'center-home' : 'center-subpage'} ${
@@ -692,9 +678,9 @@ export default function Preview() {
                     return (
                       <div key={artist} className="artist-block">
                         <p
-                          className={`artist-name ${
-                            artistVisible[index] ? 'artist-name-visible' : ''
-                          } ${isHighlight ? 'artist-name-highlight' : ''}`}
+                          className={`artist-name ${artistVisible[index] ? 'artist-name-visible' : ''} ${
+                            isHighlight ? 'artist-name-highlight' : ''
+                          }`}
                           ref={(el) => {
                             artistRefs.current[index] = el;
                             if (el) (el as HTMLElement).dataset.artistIndex = String(index);
@@ -702,9 +688,7 @@ export default function Preview() {
                         >
                           {artist}
                         </p>
-                        {artist === 'BOYSDONTCRY' && (
-                          <p className="artist-resident">RESIDENT</p>
-                        )}
+                        {artist === 'BOYSDONTCRY' && <p className="artist-resident">RESIDENT</p>}
                       </div>
                     );
                   })}
@@ -730,32 +714,13 @@ export default function Preview() {
 
         <style>{`
 :root { color-scheme: dark; }
-html, body {
-  margin: 0;
-  padding: 0;
-  background: #000;
-  font-family: ${FONT_STACK};
-}
-.root {
-  position: relative;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  color: #fff;
-  overflow: hidden;
-  padding-bottom: 0;
-}
+html, body { margin: 0; padding: 0; background: #000; font-family: ${FONT_STACK}; }
+.root { position: relative; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; color: #fff; overflow: hidden; padding-bottom: 0; }
 
 /* Fixed background image */
 .bg-layer {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(0, 0, 0, 0.34), rgba(0, 0, 0, 0.44)),
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: linear-gradient(rgba(0,0,0,0.34), rgba(0,0,0,0.44)),
     url('https://res.cloudinary.com/dsas5i0fx/image/upload/v1763336289/IMG_5984_wjkvk6.jpg');
   background-position: center center, center 48%;
   background-size: cover, 115%;
@@ -766,280 +731,119 @@ html, body {
 }
 
 .center {
-  text-align: center;
-  max-width: 900px;
-  padding: 6vh 24px 8vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 80vh;
-  opacity: 1;
-  transition: opacity 0.32s ease;
-  position: relative;
-  z-index: 1;
+  text-align: center; max-width: 900px; padding: 6vh 24px 8vh;
+  display: flex; flex-direction: column; justify-content: center;
+  min-height: 80vh; opacity: 1; transition: opacity 0.32s ease; position: relative; z-index: 1;
 }
 
-.center-subpage {
-  justify-content: flex-start;
-  padding-top: 4vh;
-  padding-bottom: 6vh;
-  min-height: auto;
-}
+.center-subpage { justify-content: flex-start; padding-top: 4vh; padding-bottom: 6vh; min-height: auto; }
 .center-about { padding-top: 8vh; }
 .center-upcoming { padding-top: 14vh; padding-bottom: 4vh; }
 
 .logo-main {
-  margin: 0 auto;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-weight: 700;
-  letter-spacing: -0.082em;
-  text-transform: uppercase;
-  line-height: 0.86;
-  font-size: clamp(36px, 12vw, 140px);
+  margin: 0 auto; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 700; letter-spacing: -0.082em; text-transform: uppercase;
+  line-height: 0.86; font-size: clamp(36px, 12vw, 140px);
 }
-.logo-animate {
-  animation: logo-intro 0.6s ease forwards;
-  will-change: transform, opacity;
-}
+.logo-animate { animation: logo-intro 0.6s ease forwards; will-change: transform, opacity; }
 
 .tag {
-  margin-top: 20px;
-  margin-bottom: 40px;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
+  margin-top: 20px; margin-bottom: 40px;
+  letter-spacing: 0.28em; text-transform: uppercase;
   font-size: clamp(12px, 2.4vw, 16px);
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
 .tag-hidden { opacity: 0; transform: translateY(32px); }
 .tag-visible { opacity: 0.95; transform: translateY(0); }
 
-.nav {
-  position: relative;
-  z-index: 10;
-  margin-top: 32px;
-  margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 24px;
-}
-
-.nav-offhome {
-  position: absolute !important;
-  left: 0 !important;
-  right: 0 !important;
-  top: -9999px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  height: 0 !important;
-  overflow: hidden !important;
-}
+.nav { position: relative; z-index: 10; margin-top: 32px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; }
+.nav-offhome { position: absolute !important; left: 0 !important; right: 0 !important; top: -9999px !important; margin: 0 !important; padding: 0 !important; height: 0 !important; overflow: hidden !important; }
 
 /* Shared glass buttons */
-.navbtn,
-.newsletter-btn,
-.homebtn {
-  position: relative;
-  pointer-events: auto;
-  padding: 10px 18px;
-  border-radius: 10px;
-
+.navbtn, .newsletter-btn, .homebtn, .ticket-btn {
+  position: relative; pointer-events: auto; padding: 10px 18px; border-radius: 10px;
   background: rgba(255, 255, 255, 0.008);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
+  color: #fff; border: 1px solid rgba(255, 255, 255, 0.06);
   outline: 1px solid rgba(255, 255, 255, 0.015);
-
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 11px;
-  cursor: pointer;
-  transition:
-    opacity 0.6s ease,
-    transform 0.2s ease,
-    background 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.25s ease;
-
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.12);
-  -webkit-user-select: none;
-  user-select: none;
+  text-transform: uppercase; letter-spacing: 0.12em; font-size: 11px;
+  cursor: pointer; text-decoration: none;
+  transition: opacity 0.6s ease, transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.25s ease;
+  touch-action: manipulation; -webkit-tap-highlight-color: rgba(255, 255, 255, 0.12);
+  -webkit-user-select: none; user-select: none;
 }
 
-.navbtn {
-  z-index: 9999;
-  min-height: 48px;
-  min-width: 160px;
-  padding: 12px 18px;
-  opacity: 0;
-  transform: translateY(22px);
-}
+.navbtn { z-index: 9999; min-height: 48px; min-width: 160px; padding: 12px 18px; opacity: 0; transform: translateY(22px); }
+.nav.fade-visible .navbtn { opacity: 1; transform: translateY(0); }
 
-.nav.fade-visible .navbtn {
-  opacity: 1;
-  transform: translateY(0);
-}
+.homebtn { display: inline-flex; align-items: center; justify-content: center; min-height: 36px; }
+.ticket-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 36px; }
 
-.homebtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 36px;
-  text-decoration: none;
-}
-
-/* Hover styles only on real hover devices */
 @media (hover: hover) and (pointer: fine) {
-  .navbtn:hover,
-  .newsletter-btn:hover:not(:disabled),
-  .homebtn:hover {
+  .navbtn:hover, .newsletter-btn:hover:not(:disabled), .homebtn:hover, .ticket-btn:hover {
     background: rgba(255, 255, 255, 0.018);
     border-color: rgba(255, 255, 255, 0.10);
-    box-shadow:
-      0 3px 8px rgba(0, 0, 0, 0.3),
-      0 0 10px rgba(255, 180, 90, 0.06);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3), 0 0 10px rgba(255, 180, 90, 0.06);
     transform: translateY(-1px);
   }
   .iconlink:hover { opacity: 1; }
 }
 
-.newsletter-btn:disabled {
-  opacity: 0.6;
-  cursor: default;
-}
+.newsletter-btn:disabled { opacity: 0.6; cursor: default; }
 
-.panel {
-  position: relative;
-  z-index: 1;
-  margin: 12px auto 0;
-  padding: 0;
-  max-width: 900px;
-}
+.panel { position: relative; z-index: 1; margin: 12px auto 0; padding: 0; max-width: 900px; }
 .panel-intro { opacity: 0; transform: translateY(32px); }
-.panel-steady {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
+.panel-steady { opacity: 1; transform: translateY(0); transition: opacity 0.6s ease, transform 0.6s ease; }
 
-.section {
-  text-align: left;
-  margin: 18px auto 0;
-  max-width: 900px;
-}
+.section { text-align: left; margin: 18px auto 0; max-width: 900px; }
 .section-past { padding: 24px 20px 40px; }
 
 .about-section { padding-top: 0; padding-bottom: 24px; }
-
-.about {
-  max-width: 38ch;
-  margin: 0 auto;
-  text-transform: uppercase;
-}
+.about { max-width: 38ch; margin: 0 auto; text-transform: uppercase; }
 .about-block {
-  margin: 0 0 24px;
-  line-height: 1.5;
-  font-size: 15px;
-  opacity: 0.95;
-  text-align: justify;
-  text-align-last: justify;
-  text-justify: inter-word;
-  letter-spacing: 0.02em;
+  margin: 0 0 24px; line-height: 1.5; font-size: 15px; opacity: 0.95;
+  text-align: justify; text-align-last: justify; text-justify: inter-word; letter-spacing: 0.02em;
 }
 
 /* UPCOMING */
 .upcoming {
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  line-height: 1.45;
-  font-size: 16px;
-  opacity: 0.95;
-  margin-top: 10px;
+  text-align: center; text-transform: uppercase; letter-spacing: 0.2em;
+  line-height: 1.45; font-size: 16px; opacity: 0.95; margin-top: 10px;
 }
 .upcoming p { margin: 0; font-weight: 700; }
-.upcoming > p:not(.tba) { margin-bottom: 18px; }
 
-.upcoming .tba { font-weight: 400; }
-
-.tba {
-  font-size: 14px;
-  letter-spacing: 0.2em;
-  opacity: 0.8;
-  margin-top: 0;
-  margin-bottom: 24px;
-}
-
-.date-divider {
-  width: 64px;
-  height: 1px;
-  margin: 24px auto;
-  background: rgba(255, 255, 255, 0.35);
+.upcoming-cta { margin-top: 18px; display: flex; justify-content: center; }
+.upcoming-flyer-link { display: block; margin: 22px auto 0; max-width: 420px; text-decoration: none; }
+.upcoming-flyer {
+  width: min(520px, 86vw);
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.06);
+  outline: 1px solid rgba(255,255,255,0.015);
 }
 
-/* NEW: UPCOMING page vertical rhythm */
-.upcoming-section{
-  display: flex;
-  flex-direction: column;
-  min-height: 72vh;
-}
-.upcoming-section .upcoming{
-  margin-top: 34px;
-}
-.upcoming-newsletter{
-  margin-top: auto;
-  padding-top: 18px;
-}
-.upcoming-homebtn{
-  margin-top: 28px;
-}
+.upcoming-section { display: flex; flex-direction: column; min-height: 72vh; }
+.upcoming-section .upcoming { margin-top: 34px; }
+.upcoming-newsletter { margin-top: auto; padding-top: 18px; }
+.upcoming-homebtn { margin-top: 28px; }
 
 /* Newsletter */
-.newsletter {
-  margin: 40px auto 0;
-  max-width: 420px;
-  text-align: center;
-}
-
-.newsletter-label {
-  font-size: 13px;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  opacity: 0.9;
-  margin-bottom: 6px;
-}
-
-.newsletter-form {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  align-items: center;
-  margin-top: 10px;
-}
+.newsletter { margin: 40px auto 0; max-width: 420px; text-align: center; }
+.newsletter-label { font-size: 13px; letter-spacing: 0.26em; text-transform: uppercase; opacity: 0.9; margin-bottom: 6px; }
+.newsletter-form { display: flex; gap: 12px; justify-content: center; align-items: center; margin-top: 10px; }
 
 .newsletter-input {
-  flex: 1;
-  padding: 10px 14px;
-  border-radius: 8px;
-  background: transparent;
-  color: #fff;
+  flex: 1; padding: 10px 14px; border-radius: 8px; background: transparent; color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.16);
-  letter-spacing: 0.12em;
-  font-size: 11px;
-  outline: none;
-  transition: all 0.2s ease;
+  letter-spacing: 0.12em; font-size: 11px; outline: none; transition: all 0.2s ease;
   -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
   -webkit-text-fill-color: #fff !important;
   caret-color: #fff !important;
 }
 
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
+input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
   box-shadow: 0 0 0px 1000px transparent inset !important;
   background: transparent !important;
@@ -1047,176 +851,74 @@ input:-webkit-autofill:active {
 }
 
 .newsletter-input::placeholder { color: rgba(255, 255, 255, 0.45); }
+.newsletter-input:hover, .newsletter-input:focus { border-color: rgba(255, 255, 255, 0.32); box-shadow: 0 0 20px 6px rgba(255, 180, 90, 0.20); }
 
-.newsletter-input:hover,
-.newsletter-input:focus {
-  border-color: rgba(255, 255, 255, 0.32);
-  box-shadow: 0 0 20px 6px rgba(255, 180, 90, 0.20);
-}
-
-.newsletter-message {
-  margin-bottom: 26px;
-  margin-top: 10px;
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  opacity: 0.8;
-}
+.newsletter-message { margin-bottom: 26px; margin-top: 10px; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.8; }
 
 /* PAST */
-.flyer-grid {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  row-gap: 20px;
-  margin-top: 0;
-  padding: 0;
-}
+.flyer-grid { display: flex; flex-direction: column; align-items: center; row-gap: 20px; margin-top: 0; padding: 0; }
 .flyer-row {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  width: 100%;
-  max-width: 520px;
-  margin: 0 auto;
-  opacity: 0;
-  transform: translateY(10px);
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%;
+  max-width: 520px; margin: 0 auto; opacity: 0; transform: translateY(10px);
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
 .flyer-row-visible { opacity: 1; transform: translateY(0); }
 .flyer-cell img { display: block; width: 100%; height: auto; }
 
 /* ARTISTS */
-.artists-list {
-  max-width: 76ch;
-  margin: 8px auto 0;
-  text-align: center;
-}
-.az-label {
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.55);
-  letter-spacing: 0.22em;
-  font-size: 16px;
-  margin-bottom: 24px;
-  text-transform: uppercase;
-}
+.artists-list { max-width: 76ch; margin: 8px auto 0; text-align: center; }
+.az-label { font-weight: 700; color: rgba(255, 255, 255, 0.55); letter-spacing: 0.22em; font-size: 16px; margin-bottom: 24px; text-transform: uppercase; }
 .artist-block { display: flex; flex-direction: column; align-items: center; }
 .artist-name {
-  margin: 8px 0;
-  font-size: 16px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  opacity: 0;
-  line-height: 1.45;
-  transform: translateY(6px);
+  margin: 8px 0; font-size: 16px; letter-spacing: 0.18em; text-transform: uppercase;
+  opacity: 0; line-height: 1.45; transform: translateY(6px);
   transition: opacity 0.4s ease, transform 0.4s ease;
 }
 .artist-name-visible { opacity: 0.92; transform: translateY(0); }
 .artist-name-highlight { color: #fff; }
-.artist-resident {
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.55);
-  letter-spacing: 0.22em;
-  font-size: 10px;
-  margin-top: -10px;
-  text-transform: uppercase;
-}
+.artist-resident { font-weight: 700; color: rgba(255, 255, 255, 0.55); letter-spacing: 0.22em; font-size: 10px; margin-top: -10px; text-transform: uppercase; }
 
 /* FOOTER / ICONS */
 .icons { display: flex; align-items: center; justify-content: center; }
-.iconlink {
-  pointer-events: auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 0;
-  color: #fff;
-  opacity: 0.96;
-  text-decoration: none;
-}
+.iconlink { pointer-events: auto; display: inline-flex; align-items: center; justify-content: center; line-height: 0; color: #fff; opacity: 0.96; text-decoration: none; }
 .dot { display: inline-block; margin: 0 0.6rem; opacity: 0.75; }
 
-.homebtn-wrapper {
-  display: flex;
-  justify-content: center;
-  margin-top: 54px;
-  margin-bottom: 80px;
-}
+.homebtn-wrapper { display: flex; justify-content: center; margin-top: 54px; margin-bottom: 80px; }
 
 .footer {
-  pointer-events: none;
-  width: 100%;
-  padding: 14px 0 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 5;
+  pointer-events: none; width: 100%; padding: 14px 0 18px;
+  display: flex; align-items: center; justify-content: center;
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 5;
 }
 .footer-hidden { opacity: 0; transform: translateY(32px); }
-.footer-visible {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
+.footer-visible { opacity: 1; transform: translateY(0); transition: opacity 0.6s ease, transform 0.6s ease; }
 
 .fade-hidden { opacity: 0; }
 .fade-visible { opacity: 1; }
 
 @media (max-width: 640px) {
   .bg-layer {
-    background-image:
-      linear-gradient(rgba(0, 0, 0, 0.30), rgba(0, 0, 0, 0.40)),
+    background-image: linear-gradient(rgba(0,0,0,0.30), rgba(0,0,0,0.40)),
       url('https://res.cloudinary.com/dsas5i0fx/image/upload/v1763336289/IMG_5984_wjkvk6.jpg');
     background-position: center center, center 55%;
     background-size: cover, 118%;
   }
 
-  .logo-main {
-    font-size: clamp(36px, 16vw, 72px);
-    white-space: nowrap;
-  }
-
-  .center-home {
-    padding-top: 16vh;
-    padding-bottom: 2vh;
-    min-height: 96vh;
-    justify-content: flex-start;
-  }
-
-  .center-subpage {
-    padding-top: 12vh;
-    padding-bottom: 8vh;
-    min-height: 96vh;
-    justify-content: flex-start;
-  }
-
-  .center-upcoming {
-    padding-top: 10vh;
-    padding-bottom: 2vh;
-    min-height: 96vh;
-    justify-content: flex-start;
-  }
-
-  .center-about {
-    padding-top: 10vh;
-    padding-bottom: 2vh;
-    min-height: 96vh;
-    justify-content: flex-start;
-  }
+  .logo-main { font-size: clamp(36px, 16vw, 72px); white-space: nowrap; }
+  .center-home { padding-top: 16vh; padding-bottom: 2vh; min-height: 96vh; justify-content: flex-start; }
+  .center-subpage { padding-top: 12vh; padding-bottom: 8vh; min-height: 96vh; justify-content: flex-start; }
+  .center-upcoming { padding-top: 10vh; padding-bottom: 2vh; min-height: 96vh; justify-content: flex-start; }
+  .center-about { padding-top: 10vh; padding-bottom: 2vh; min-height: 96vh; justify-content: flex-start; }
 
   .about { max-width: 34ch; }
-
   .nav { margin-top: 32px; gap: 16px; }
   .center-home .nav { margin-top: 96px; }
 
-  /* keep the new spacing on mobile too */
-  .upcoming-section{ min-height: 76vh; }
-  .upcoming-section .upcoming{ margin-top: 26px; }
-  .upcoming-homebtn{ margin-bottom: 80px; }
+  .upcoming-section { min-height: 76vh; }
+  .upcoming-section .upcoming { margin-top: 26px; }
+  .upcoming-homebtn { margin-bottom: 80px; }
+
+  .upcoming-flyer { width: min(520px, 92vw); border-radius: 12px; }
 }
 
 @keyframes logo-intro {
