@@ -42,7 +42,7 @@ const PAST_FLYERS: string[] = [
   'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060124/ARCHIVE404_280225_POST03_LOGO_nqcgah.jpg',
 ];
 
-// ✅ Put 2M LAST (no rules, no sorting tricks)
+// ✅ Just keep 2M last
 const ARTISTS: string[] = [
   'ANCHI',
   'ARWIN AZIZ',
@@ -114,25 +114,20 @@ const pathToPage = (pathname: string): Page => {
 };
 
 export default function Preview() {
-  // Start as home (SSR-safe), then sync to URL on mount
   const [page, setPage] = useState<Page>('home');
 
   const [isEntering, setIsEntering] = useState(true);
   const [logoAnimKey, setLogoAnimKey] = useState(0);
 
-  // Background zoom (smooth)
   const [bgZoom, setBgZoom] = useState(BASE_ZOOM);
 
   const scrollYRef = useRef(0);
   const inputFocusedRef = useRef(false);
 
-  // De-dupe touch activation vs click
   const lastTouchActivateTsRef = useRef<number>(0);
   const TOUCH_DEDUPE_MS = 800;
 
-  // ✅ Keep your original simple sort (A–Z), but since 2M is literally last in the array,
-  // we must NOT sort anymore — otherwise it would move again.
-  // So we keep the list as-is.
+  // ✅ no sorting; keep list as defined (so 2M stays last)
   const SORTED_ARTISTS = useMemo(() => [...ARTISTS], []);
 
   const [rowVisible, setRowVisible] = useState<boolean[]>(() =>
@@ -160,7 +155,6 @@ export default function Preview() {
     []
   );
 
-  // --- Instant activation helper (touch) + click fallback (desktop) ---
   const onTouchActivate = (
     e: React.PointerEvent | React.MouseEvent,
     action: () => void
@@ -485,7 +479,6 @@ export default function Preview() {
             }}
             className="newsletter-input"
           />
-          {/* ✅ JOIN button restored (unchanged) */}
           <button
             type="submit"
             className="newsletter-btn"
@@ -833,15 +826,13 @@ html, body {
   overflow: hidden !important;
 }
 
-/* Shared glass buttons */
+/* Shared glass buttons (same feel everywhere) */
 .navbtn,
 .newsletter-btn,
 .homebtn,
 .ticket-btn {
   position: relative;
   pointer-events: auto;
-  padding: 10px 18px;
-  border-radius: 10px;
 
   background: rgba(255, 255, 255, 0.008);
   backdrop-filter: blur(2px);
@@ -855,6 +846,7 @@ html, body {
   letter-spacing: 0.12em;
   font-size: 11px;
   cursor: pointer;
+
   transition:
     opacity 0.6s ease,
     transform 0.2s ease,
@@ -873,6 +865,7 @@ html, body {
   min-height: 48px;
   min-width: 160px;
   padding: 12px 18px;
+  border-radius: 10px;
   opacity: 0;
   transform: translateY(22px);
 }
@@ -880,6 +873,12 @@ html, body {
 .nav.fade-visible .navbtn {
   opacity: 1;
   transform: translateY(0);
+}
+
+.newsletter-btn,
+.homebtn {
+  padding: 10px 18px;
+  border-radius: 10px;
 }
 
 .homebtn {
@@ -890,20 +889,23 @@ html, body {
   text-decoration: none;
 }
 
+/* ✅ Ticket button: same “nice” glass feel, compact, not bulky */
 .ticket-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 28px;
-  padding: 8px 14px;
-  font-size: 12px;
+
+  padding: 9px 16px;     /* compact box */
+  min-height: 34px;
+  font-size: 12px;       /* label slightly larger */
   font-weight: 700;
   letter-spacing: 0.18em;
-  border-radius: 0; /* no round corners */
-  background: rgba(255, 255, 255, 0.018);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  outline: 1px solid rgba(255, 255, 255, 0.02);
+
+  border-radius: 0;      /* keep crisp */
   text-decoration: none;
+
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  outline: 1px solid rgba(255, 255, 255, 0.015);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -912,7 +914,7 @@ html, body {
   .homebtn:hover,
   .ticket-btn:hover {
     background: rgba(255, 255, 255, 0.018);
-    border-color: rgba(255, 255, 255, 0.10);
+    border-color: rgba(255, 255, 255, 0.14);
     box-shadow:
       0 3px 8px rgba(0, 0, 0, 0.3),
       0 0 10px rgba(255, 180, 90, 0.06);
@@ -979,13 +981,13 @@ html, body {
 
 /* updated upcoming layout */
 .upcoming-updated { max-width: 520px; margin: 0 auto; }
-.upcoming-head { font-weight: 700; margin-bottom: 18px; }
+.upcoming-head { font-weight: 700; margin-bottom: 16px; }
 .ticket-btn-wrap { display: flex; justify-content: center; margin: 0 auto 18px; }
 .upcoming-flyer-wrap { display: flex; justify-content: center; }
 .upcoming-flyer-link { display: block; text-decoration: none; max-width: 320px; width: 100%; }
 .upcoming-flyer { display: block; width: 100%; height: auto; border: 0; border-radius: 0; }
 
-/* NEW: UPCOMING page vertical rhythm */
+/* UPCOMING page vertical rhythm */
 .upcoming-section{
   display: flex;
   flex-direction: column;
