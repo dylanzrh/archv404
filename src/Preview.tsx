@@ -563,15 +563,7 @@ export default function Preview() {
         aria-label="Join WhatsApp Community"
         className="iconlink"
       >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          aria-hidden
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.6"
-        >
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
           <path
             d="M12 2.75C7.17 2.75 3.25 6.67 3.25 11.5c0 1.86.53 3.57 1.52 5.03L4 21l4.62-.78A8.6 8.6 0 0 0 12 20.25c4.83 0 8.75-3.92 8.75-8.75S16.83 2.75 12 2.75Z"
             strokeLinecap="round"
@@ -592,15 +584,7 @@ export default function Preview() {
         aria-label="Open Instagram"
         className="iconlink"
       >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          aria-hidden
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.6"
-        >
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
           <rect x="4" y="4" width="16" height="16" rx="4.5" ry="4.5" />
           <circle cx="12" cy="12" r="3.25" />
           <circle cx="17.2" cy="6.8" r="0.9" />
@@ -615,15 +599,7 @@ export default function Preview() {
         className="iconlink"
         style={{ lineHeight: 0 }}
       >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          aria-hidden
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.6"
-        >
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
           <rect x="3" y="6" width="18" height="12" rx="2" ry="2" />
           <path d="M5 8.5 12 13l7-4.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
@@ -632,8 +608,7 @@ export default function Preview() {
   );
 
   const tagClass = isEntering ? 'tag-hidden' : 'tag-visible';
-  const navClass =
-    page === 'home' ? (isEntering ? 'fade-hidden' : 'fade-visible') : 'fade-hidden';
+  const navClass = page === 'home' ? (isEntering ? 'fade-hidden' : 'fade-visible') : 'fade-hidden';
   const navOffHomeClass = page === 'home' ? '' : 'nav-offhome';
   const footerFadeClass = isEntering ? 'footer-hidden' : 'footer-visible';
   const panelClass = isEntering ? 'panel-intro' : 'panel-steady';
@@ -641,11 +616,7 @@ export default function Preview() {
   return (
     <>
       <div className="root" style={{ fontFamily: FONT_STACK }}>
-        <div
-          className="bg-layer"
-          aria-hidden="true"
-          style={{ transform: `translateZ(0) scale(${bgZoom})` }}
-        />
+        <div className="bg-layer" aria-hidden="true" style={{ transform: `translateZ(0) scale(${bgZoom})` }} />
 
         <div
           className={`center ${page === 'home' ? 'center-home' : 'center-subpage'} ${
@@ -714,9 +685,9 @@ export default function Preview() {
                     return (
                       <div key={artist} className="artist-block">
                         <p
-                          className={`artist-name ${
-                            artistVisible[index] ? 'artist-name-visible' : ''
-                          } ${isHighlight ? 'artist-name-highlight' : ''}`}
+                          className={`artist-name ${artistVisible[index] ? 'artist-name-visible' : ''} ${
+                            isHighlight ? 'artist-name-highlight' : ''
+                          }`}
                           ref={(el) => {
                             artistRefs.current[index] = el;
                             if (el) (el as HTMLElement).dataset.artistIndex = String(index);
@@ -918,27 +889,42 @@ html, body {
   text-decoration: none;
 }
 
-/* ✅ Ticket button: less wide + less high (tight like the earlier design) */
-.ticket-btn-wrap {
+/* ✅ Ticket: a bit wider, slightly less high, perfectly equal spacing above/below via layout gap */
+.upcoming-updated{
+  max-width: 520px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px; /* equal spacing between HEAD / BUTTON / FLYER */
+}
+
+.upcoming-head{
+  margin: 0;
+}
+
+.ticket-btn-wrap{
   display: flex;
   justify-content: center;
-  margin: 0 auto 18px;
+  margin: 0;
 }
-.ticket-btn {
+
+.ticket-btn{
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  width: auto;            /* not stretched */
-  padding: 8px 14px;      /* less high */
-  min-height: 34px;       /* less high */
+  width: auto;
+  min-width: 240px;     /* a bit wider */
+  padding: 7px 18px;    /* slightly less high */
+  min-height: 32px;     /* slightly less high */
   line-height: 1;
 
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.18em;
 
-  border-radius: 12px;    /* rounded corners, not bulky */
+  border-radius: 12px;
   text-decoration: none;
 
   border: 1px solid rgba(255, 255, 255, 0.10);
@@ -950,7 +936,8 @@ html, body {
 
   overflow: hidden;
 }
-.ticket-btn::before {
+
+.ticket-btn::before{
   content: '';
   position: absolute;
   inset: -1px;
@@ -961,7 +948,8 @@ html, body {
   opacity: 0.9;
   pointer-events: none;
 }
-.ticket-btn::after {
+
+.ticket-btn::after{
   content: '';
   position: absolute;
   top: -50%;
@@ -1050,10 +1038,7 @@ html, body {
 }
 .upcoming p { margin: 0; font-weight: 700; }
 
-/* updated upcoming layout */
-.upcoming-updated { max-width: 520px; margin: 0 auto; }
-.upcoming-head { font-weight: 700; margin-bottom: 16px; }
-.upcoming-flyer-wrap { display: flex; justify-content: center; }
+.upcoming-flyer-wrap { display: flex; justify-content: center; margin: 0; }
 .upcoming-flyer-link { display: block; text-decoration: none; max-width: 320px; width: 100%; }
 .upcoming-flyer { display: block; width: 100%; height: auto; border: 0; border-radius: 0; }
 
@@ -1295,9 +1280,11 @@ input:-webkit-autofill:active {
   .upcoming-homebtn{ margin-bottom: 80px; }
   .upcoming-flyer-link{ max-width: 300px; }
 
-  .ticket-btn {
-    padding: 7px 12px;
-    min-height: 32px;
+  .upcoming-updated { gap: 12px; }
+  .ticket-btn{
+    min-width: 228px;
+    padding: 7px 16px;
+    min-height: 31px;
     border-radius: 11px;
     font-size: 10.5px;
   }
