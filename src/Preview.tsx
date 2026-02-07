@@ -889,7 +889,7 @@ html, body {
   text-decoration: none;
 }
 
-/* ✅ Ticket: a bit wider, slightly less high, perfectly equal spacing above/below via layout gap */
+/* ✅ Ticket: equal spacing above/below via gap; slightly less high; text slightly bigger */
 .upcoming-updated{
   max-width: 520px;
   margin: 0 auto;
@@ -915,12 +915,12 @@ html, body {
   justify-content: center;
 
   width: auto;
-  min-width: 240px;     /* a bit wider */
-  padding: 7px 18px;    /* slightly less high */
-  min-height: 32px;     /* slightly less high */
-  line-height: 1;
+  min-width: 240px;     /* keep the "bit wider" feel */
+  padding: 6px 18px;    /* slightly less high */
+  min-height: 30px;     /* slightly less high */
+  line-height: 1;       /* optical centering */
 
-  font-size: 11px;
+  font-size: 12px;      /* text a bit bigger */
   font-weight: 700;
   letter-spacing: 0.18em;
 
@@ -1282,11 +1282,11 @@ input:-webkit-autofill:active {
 
   .upcoming-updated { gap: 12px; }
   .ticket-btn{
-    min-width: 228px;
-    padding: 7px 16px;
-    min-height: 31px;
+    min-width: 232px;
+    padding: 6px 16px;
+    min-height: 29px;
     border-radius: 11px;
-    font-size: 10.5px;
+    font-size: 11.5px;
   }
 }
 
