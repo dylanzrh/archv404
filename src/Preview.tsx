@@ -570,7 +570,7 @@ export default function Preview() {
             strokeLinejoin="round"
           />
           <path
-            d="M9.05 8.7c.1-.24.16-.39.16-.39.08-.18.14-.27.33-.3.2-.03.33-.01.48.2.15.2.63.77.69.83.06.07.1.16.03.3-.07.13-.11.2-.21.32-.1.12-.21.26-.3.35-.1.1-.2.21-.09.4.12.2.52.86 1.21 1.39.84.66 1.54.86 1.77.96.23.1.37.08.5-.06.15-.16.52-.6.7-.81.18-.22.35-.18.58-.1.24.07 1.51.71 1.51.71.22.09.37.15.4.24.05.14.05.81-.19 1.28-.24.47-.72.96-1.23 1.01-.51.05-1.37.01-2.29-.38-.92-.39-1.79-1.06-2.61-1.9-.82-.84-1.38-1.73-1.74-2.44-.36-.71-.53-1.32-.58-1.62-.05-.3-.05-.48-.05-.61 0-.13.05-.3.15-.54Z"
+            d="M9.05 8.7c.1-.24.16-.39.16-.39.08-.18.14-.27.33-.3.2-.03.33-.01.48.2.15.2.63.77.69.83.06.07.10.16.03.3-.07.13-.11.2-.21.32-.1.12-.21.26-.3.35-.1.1-.2.21-.09.4.12.2.52.86 1.21 1.39.84.66 1.54.86 1.77.96.23.1.37.08.5-.06.15-.16.52-.6.7-.81.18-.22.35-.18.58-.1.24.07 1.51.71 1.51.71.22.09.37.15.4.24.05.14.05.81-.19 1.28-.24.47-.72.96-1.23 1.01-.51.05-1.37.01-2.29-.38-.92-.39-1.79-1.06-2.61-1.9-.82-.84-1.38-1.73-1.74-2.44-.36-.71-.53-1.32-.58-1.62-.05-.3-.05-.48-.05-.61 0-.13.05-.3.15-.54Z"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
@@ -889,7 +889,19 @@ html, body {
   text-decoration: none;
 }
 
-/* ✅ Ticket: keep sizing; make blur identical by matching shared glass exactly (no special blur values) */
+/* UPCOMING */
+.upcoming {
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  line-height: 1.45;
+  font-size: 16px;
+  opacity: 0.95;
+  margin-top: 10px;
+}
+.upcoming p { margin: 0; font-weight: 700; }
+
+/* updated upcoming layout */
 .upcoming-updated{
   max-width: 520px;
   margin: 0 auto;
@@ -898,14 +910,13 @@ html, body {
   align-items: center;
   gap: 14px;
 }
-.upcoming-head{ margin: 0; }
+.upcoming-head{ margin: 0; font-weight: 700; }
+.ticket-btn-wrap{ display: flex; justify-content: center; margin: 0; }
+.upcoming-flyer-wrap{ display: flex; justify-content: center; margin: 0; }
+.upcoming-flyer-link{ display: block; text-decoration: none; max-width: 320px; width: 100%; }
+.upcoming-flyer{ display: block; width: 100%; height: auto; border: 0; border-radius: 0; }
 
-.ticket-btn-wrap{
-  display: flex;
-  justify-content: center;
-  margin: 0;
-}
-
+/* ✅ THE FIX: create an internal “blur layer” that always has something to blur */
 .ticket-btn{
   display: inline-flex;
   align-items: center;
@@ -927,25 +938,42 @@ html, body {
   border: 1px solid rgba(255, 255, 255, 0.10);
   outline: 1px solid rgba(255, 255, 255, 0.015);
 
+  /* keep base background super subtle */
+  background: rgba(255, 255, 255, 0.010);
+
   box-shadow:
     0 10px 22px rgba(0, 0, 0, 0.26),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
 
   overflow: hidden;
+
+  /* force Safari to actually render the filter */
+  transform: translateZ(0);
+  will-change: transform;
+  isolation: isolate;
 }
 
+/* blur layer (this is what makes it finally visible) */
+.ticket-btn > * { position: relative; z-index: 2; }
 .ticket-btn::before{
   content: '';
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-  background:
-    radial-gradient(70% 120% at 50% 0%, rgba(255, 255, 255, 0.06), transparent 60%),
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03), transparent);
-  opacity: 0.9;
+
+  /* This is the “glass” layer */
+  background: rgba(255, 255, 255, 0.035);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  /* subtle highlight like the homepage vibe */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+
   pointer-events: none;
+  z-index: 1;
 }
 
+/* keep your sheen */
 .ticket-btn::after{
   content: '';
   position: absolute;
@@ -957,6 +985,7 @@ html, body {
   transform: rotate(18deg);
   opacity: 0;
   pointer-events: none;
+  z-index: 3;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -1022,22 +1051,6 @@ html, body {
   text-justify: inter-word;
   letter-spacing: 0.02em;
 }
-
-/* UPCOMING */
-.upcoming {
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  line-height: 1.45;
-  font-size: 16px;
-  opacity: 0.95;
-  margin-top: 10px;
-}
-.upcoming p { margin: 0; font-weight: 700; }
-
-.upcoming-flyer-wrap { display: flex; justify-content: center; margin: 0; }
-.upcoming-flyer-link { display: block; text-decoration: none; max-width: 320px; width: 100%; }
-.upcoming-flyer { display: block; width: 100%; height: auto; border: 0; border-radius: 0; }
 
 /* UPCOMING page vertical rhythm */
 .upcoming-section{
@@ -1278,12 +1291,18 @@ input:-webkit-autofill:active {
   .upcoming-flyer-link{ max-width: 300px; }
 
   .upcoming-updated { gap: 12px; }
+
   .ticket-btn{
     min-width: 232px;
     padding: 6px 16px;
     min-height: 29px;
     border-radius: 11px;
     font-size: 11.5px;
+  }
+  .ticket-btn::before{
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    background: rgba(255,255,255,0.032);
   }
 }
 
