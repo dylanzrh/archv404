@@ -125,7 +125,7 @@ export default function Preview() {
   const lastTouchActivateTsRef = useRef<number>(0);
   const TOUCH_DEDUPE_MS = 800;
 
-  // ✅ lock sorted artists once
+  // lock sorted artists once
   const SORTED_ARTISTS = useMemo(() => [...ARTISTS].sort(), []);
 
   const [rowVisible, setRowVisible] = useState<boolean[]>(() =>
@@ -228,7 +228,6 @@ export default function Preview() {
     const img2 = new Image();
     img2.src = ZURICH_JAN30_FLYER_URL;
 
-    // ✅ preload upcoming
     const img3 = new Image();
     img3.src = UPCOMING_FLYER_URL;
   }, []);
@@ -382,7 +381,6 @@ export default function Preview() {
     }
   };
 
-  // Mobile-safe scroll reset for each page
   const resetScrollToTop = () => {
     if (typeof window === 'undefined') return;
 
@@ -421,42 +419,43 @@ export default function Preview() {
 
     setBgZoom(BASE_ZOOM);
     resetScrollToTop();
-
     pushUrlForPage(next);
   };
 
-  // ✅ UPDATED: UPCOMING page (date+venue line, ticket button under it, flyer below)
+  // ✅ UPCOMING: flyer width is locked to date line width
   const renderUpcoming = () => (
     <section className="section upcoming-section">
       <div className="upcoming">
-        <p style={{ animationDelay: '0ms' }}>FEB 27 SUPERMARKET CLUB</p>
+        <div className="upcoming-wrap">
+          <p className="upcoming-line">FEB 27 SUPERMARKET CLUB</p>
 
-        <div className="upcoming-cta">
+          <div className="upcoming-cta">
+            <a
+              className="ticket-btn"
+              href={TICKET_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              LIMITED FAMILY TICKETS
+            </a>
+          </div>
+
           <a
-            className="ticket-btn"
             href={TICKET_URL}
             target="_blank"
             rel="noopener noreferrer"
+            className="upcoming-flyer-link"
+            aria-label="Open tickets"
           >
-            LIMITED FAMILY TICKETS
+            <img
+              className="upcoming-flyer"
+              src={UPCOMING_FLYER_URL}
+              alt="ARCHIVE 404 · FEB 27"
+              decoding="async"
+              loading="eager"
+            />
           </a>
         </div>
-
-        <a
-          href={TICKET_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="upcoming-flyer-link"
-          aria-label="Open tickets"
-        >
-          <img
-            className="upcoming-flyer"
-            src={UPCOMING_FLYER_URL}
-            alt="ARCHIVE 404 · FEB 27"
-            decoding="async"
-            loading="eager"
-          />
-        </a>
       </div>
 
       <div className="newsletter upcoming-newsletter">
@@ -508,9 +507,7 @@ export default function Preview() {
 
   const renderPast = () => {
     const rows: string[][] = [];
-    for (let i = 0; i < PAST_FLYERS.length; i += 2) {
-      rows.push(PAST_FLYERS.slice(i, i + 2));
-    }
+    for (let i = 0; i < PAST_FLYERS.length; i += 2) rows.push(PAST_FLYERS.slice(i, i + 2));
 
     return (
       <section className="section section-past">
@@ -600,8 +597,7 @@ export default function Preview() {
   );
 
   const tagClass = isEntering ? 'tag-hidden' : 'tag-visible';
-  const navClass =
-    page === 'home' ? (isEntering ? 'fade-hidden' : 'fade-visible') : 'fade-hidden';
+  const navClass = page === 'home' ? (isEntering ? 'fade-hidden' : 'fade-visible') : 'fade-hidden';
   const navOffHomeClass = page === 'home' ? '' : 'nav-offhome';
   const footerFadeClass = isEntering ? 'footer-hidden' : 'footer-visible';
   const panelClass = isEntering ? 'panel-intro' : 'panel-steady';
@@ -735,7 +731,6 @@ html, body { margin: 0; padding: 0; background: #000; font-family: ${FONT_STACK}
   display: flex; flex-direction: column; justify-content: center;
   min-height: 80vh; opacity: 1; transition: opacity 0.32s ease; position: relative; z-index: 1;
 }
-
 .center-subpage { justify-content: flex-start; padding-top: 4vh; padding-bottom: 6vh; min-height: auto; }
 .center-about { padding-top: 8vh; }
 .center-upcoming { padding-top: 14vh; padding-bottom: 4vh; }
@@ -759,31 +754,67 @@ html, body { margin: 0; padding: 0; background: #000; font-family: ${FONT_STACK}
 .nav { position: relative; z-index: 10; margin-top: 32px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; }
 .nav-offhome { position: absolute !important; left: 0 !important; right: 0 !important; top: -9999px !important; margin: 0 !important; padding: 0 !important; height: 0 !important; overflow: hidden !important; }
 
-/* Shared glass buttons */
+/* Shared glass buttons (exact blur feel) */
 .navbtn, .newsletter-btn, .homebtn, .ticket-btn {
-  position: relative; pointer-events: auto; padding: 10px 18px; border-radius: 10px;
+  position: relative;
+  pointer-events: auto;
+  padding: 10px 18px;
+  border-radius: 10px;
+
   background: rgba(255, 255, 255, 0.008);
-  backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
-  color: #fff; border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.06);
   outline: 1px solid rgba(255, 255, 255, 0.015);
-  text-transform: uppercase; letter-spacing: 0.12em; font-size: 11px;
-  cursor: pointer; text-decoration: none;
+
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 11px;
+  cursor: pointer;
+  text-decoration: none;
+
   transition: opacity 0.6s ease, transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.25s ease;
-  touch-action: manipulation; -webkit-tap-highlight-color: rgba(255, 255, 255, 0.12);
-  -webkit-user-select: none; user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.12);
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .navbtn { z-index: 9999; min-height: 48px; min-width: 160px; padding: 12px 18px; opacity: 0; transform: translateY(22px); }
 .nav.fade-visible .navbtn { opacity: 1; transform: translateY(0); }
 
 .homebtn { display: inline-flex; align-items: center; justify-content: center; min-height: 36px; }
-.ticket-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 36px; }
+
+/* ✅ Ticket button: more visible + bold + slightly bigger, same glass blur base */
+.ticket-btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 12px 22px;
+
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+
+  background: rgba(255, 255, 255, 0.018);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  outline: 1px solid rgba(255, 255, 255, 0.035);
+
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.45),
+    0 0 18px rgba(255, 255, 255, 0.06);
+}
 
 @media (hover: hover) and (pointer: fine) {
   .navbtn:hover, .newsletter-btn:hover:not(:disabled), .homebtn:hover, .ticket-btn:hover {
-    background: rgba(255, 255, 255, 0.018);
-    border-color: rgba(255, 255, 255, 0.10);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3), 0 0 10px rgba(255, 180, 90, 0.06);
+    background: rgba(255, 255, 255, 0.024);
+    border-color: rgba(255, 255, 255, 0.26);
+    box-shadow:
+      0 8px 22px rgba(0, 0, 0, 0.5),
+      0 0 22px rgba(255, 180, 90, 0.10);
     transform: translateY(-1px);
   }
   .iconlink:hover { opacity: 1; }
@@ -800,22 +831,34 @@ html, body { margin: 0; padding: 0; background: #000; font-family: ${FONT_STACK}
 
 .about-section { padding-top: 0; padding-bottom: 24px; }
 .about { max-width: 38ch; margin: 0 auto; text-transform: uppercase; }
-.about-block {
-  margin: 0 0 24px; line-height: 1.5; font-size: 15px; opacity: 0.95;
-  text-align: justify; text-align-last: justify; text-justify: inter-word; letter-spacing: 0.02em;
-}
+.about-block { margin: 0 0 24px; line-height: 1.5; font-size: 15px; opacity: 0.95; text-align: justify; text-align-last: justify; text-justify: inter-word; letter-spacing: 0.02em; }
 
 /* UPCOMING */
-.upcoming {
-  text-align: center; text-transform: uppercase; letter-spacing: 0.2em;
-  line-height: 1.45; font-size: 16px; opacity: 0.95; margin-top: 10px;
-}
+.upcoming { text-align: center; text-transform: uppercase; letter-spacing: 0.2em; line-height: 1.45; font-size: 16px; opacity: 0.95; margin-top: 10px; }
 .upcoming p { margin: 0; font-weight: 700; }
 
+/* ✅ Lock layout width to date line, so flyer matches it */
+.upcoming-wrap{
+  display: inline-block;
+  text-align: center;
+  margin: 0 auto;
+}
+.upcoming-line{
+  display: inline-block; /* this becomes the width reference */
+}
+
+/* CTA spacing */
 .upcoming-cta { margin-top: 18px; display: flex; justify-content: center; }
-.upcoming-flyer-link { display: block; margin: 22px auto 0; max-width: 420px; text-decoration: none; }
-.upcoming-flyer {
-  width: min(520px, 86vw);
+
+/* ✅ Flyer uses the same width as .upcoming-wrap (i.e., date line) */
+.upcoming-flyer-link{
+  display: block;
+  width: 100%;
+  margin: 22px auto 0;
+  text-decoration: none;
+}
+.upcoming-flyer{
+  width: 100%;
   height: auto;
   display: block;
   margin: 0 auto;
@@ -842,26 +885,19 @@ html, body { margin: 0; padding: 0; background: #000; font-family: ${FONT_STACK}
   -webkit-text-fill-color: #fff !important;
   caret-color: #fff !important;
 }
-
 input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
   box-shadow: 0 0 0px 1000px transparent inset !important;
   background: transparent !important;
   -webkit-text-fill-color: #fff !important;
 }
-
 .newsletter-input::placeholder { color: rgba(255, 255, 255, 0.45); }
 .newsletter-input:hover, .newsletter-input:focus { border-color: rgba(255, 255, 255, 0.32); box-shadow: 0 0 20px 6px rgba(255, 180, 90, 0.20); }
-
 .newsletter-message { margin-bottom: 26px; margin-top: 10px; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.8; }
 
 /* PAST */
 .flyer-grid { display: flex; flex-direction: column; align-items: center; row-gap: 20px; margin-top: 0; padding: 0; }
-.flyer-row {
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%;
-  max-width: 520px; margin: 0 auto; opacity: 0; transform: translateY(10px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
+.flyer-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; max-width: 520px; margin: 0 auto; opacity: 0; transform: translateY(10px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .flyer-row-visible { opacity: 1; transform: translateY(0); }
 .flyer-cell img { display: block; width: 100%; height: auto; }
 
@@ -869,11 +905,7 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
 .artists-list { max-width: 76ch; margin: 8px auto 0; text-align: center; }
 .az-label { font-weight: 700; color: rgba(255, 255, 255, 0.55); letter-spacing: 0.22em; font-size: 16px; margin-bottom: 24px; text-transform: uppercase; }
 .artist-block { display: flex; flex-direction: column; align-items: center; }
-.artist-name {
-  margin: 8px 0; font-size: 16px; letter-spacing: 0.18em; text-transform: uppercase;
-  opacity: 0; line-height: 1.45; transform: translateY(6px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
+.artist-name { margin: 8px 0; font-size: 16px; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0; line-height: 1.45; transform: translateY(6px); transition: opacity 0.4s ease, transform 0.4s ease; }
 .artist-name-visible { opacity: 0.92; transform: translateY(0); }
 .artist-name-highlight { color: #fff; }
 .artist-resident { font-weight: 700; color: rgba(255, 255, 255, 0.55); letter-spacing: 0.22em; font-size: 10px; margin-top: -10px; text-transform: uppercase; }
@@ -885,11 +917,7 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
 
 .homebtn-wrapper { display: flex; justify-content: center; margin-top: 54px; margin-bottom: 80px; }
 
-.footer {
-  pointer-events: none; width: 100%; padding: 14px 0 18px;
-  display: flex; align-items: center; justify-content: center;
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 5;
-}
+.footer { pointer-events: none; width: 100%; padding: 14px 0 18px; display: flex; align-items: center; justify-content: center; position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; }
 .footer-hidden { opacity: 0; transform: translateY(32px); }
 .footer-visible { opacity: 1; transform: translateY(0); transition: opacity 0.6s ease, transform 0.6s ease; }
 
@@ -918,7 +946,8 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
   .upcoming-section .upcoming { margin-top: 26px; }
   .upcoming-homebtn { margin-bottom: 80px; }
 
-  .upcoming-flyer { width: min(520px, 92vw); border-radius: 12px; }
+  /* keep flyer locked to date width; just tighten radius slightly on small screens if needed */
+  .upcoming-flyer { border-radius: 12px; }
 }
 
 @keyframes logo-intro {
