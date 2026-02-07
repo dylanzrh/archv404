@@ -889,23 +889,63 @@ html, body {
   text-decoration: none;
 }
 
-/* ✅ Ticket button: same “nice” glass feel, compact, not bulky */
+/* ✅ Ticket button: less wide than flyer + rounded corners (adapted “ticket button” feel) */
+.ticket-btn-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto 18px;
+  width: 100%;
+}
+
 .ticket-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  padding: 9px 16px;     /* compact box */
-  min-height: 34px;
-  font-size: 12px;       /* label slightly larger */
+  width: 100%;
+  max-width: 260px;          /* less wide than flyer */
+  padding: 12px 18px;
+  min-height: 44px;
+
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.18em;
 
-  border-radius: 0;      /* keep crisp */
+  border-radius: 14px;       /* rounded corners */
   text-decoration: none;
 
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  outline: 1px solid rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  outline: 1px solid rgba(255, 255, 255, 0.02);
+
+  box-shadow:
+    0 10px 26px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.ticket-btn::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background:
+    radial-gradient(70% 120% at 50% 0%, rgba(255, 255, 255, 0.06), transparent 55%),
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.035), transparent);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.ticket-btn::after {
+  content: '';
+  position: absolute;
+  top: -40%;
+  left: -60%;
+  width: 60%;
+  height: 180%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  transform: rotate(18deg);
+  opacity: 0;
+  pointer-events: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -914,12 +954,20 @@ html, body {
   .homebtn:hover,
   .ticket-btn:hover {
     background: rgba(255, 255, 255, 0.018);
-    border-color: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.16);
     box-shadow:
-      0 3px 8px rgba(0, 0, 0, 0.3),
-      0 0 10px rgba(255, 180, 90, 0.06);
+      0 14px 34px rgba(0, 0, 0, 0.36),
+      0 0 10px rgba(255, 180, 90, 0.06),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
     transform: translateY(-1px);
   }
+
+  .ticket-btn:hover::after {
+    opacity: 1;
+    left: 120%;
+    transition: left 0.65s ease, opacity 0.2s ease;
+  }
+
   .iconlink:hover { opacity: 1; }
 }
 
@@ -982,7 +1030,7 @@ html, body {
 /* updated upcoming layout */
 .upcoming-updated { max-width: 520px; margin: 0 auto; }
 .upcoming-head { font-weight: 700; margin-bottom: 16px; }
-.ticket-btn-wrap { display: flex; justify-content: center; margin: 0 auto 18px; }
+
 .upcoming-flyer-wrap { display: flex; justify-content: center; }
 .upcoming-flyer-link { display: block; text-decoration: none; max-width: 320px; width: 100%; }
 .upcoming-flyer { display: block; width: 100%; height: auto; border: 0; border-radius: 0; }
@@ -1224,6 +1272,8 @@ input:-webkit-autofill:active {
   .upcoming-section .upcoming{ margin-top: 26px; }
   .upcoming-homebtn{ margin-bottom: 80px; }
   .upcoming-flyer-link{ max-width: 300px; }
+
+  .ticket-btn { max-width: 250px; }
 }
 
 @keyframes logo-intro {
