@@ -563,15 +563,7 @@ export default function Preview() {
         aria-label="Join WhatsApp Community"
         className="iconlink"
       >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          aria-hidden
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.6"
-        >
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
           <path
             d="M12 2.75C7.17 2.75 3.25 6.67 3.25 11.5c0 1.86.53 3.57 1.52 5.03L4 21l4.62-.78A8.6 8.6 0 0 0 12 20.25c4.83 0 8.75-3.92 8.75-8.75S16.83 2.75 12 2.75Z"
             strokeLinecap="round"
@@ -592,15 +584,7 @@ export default function Preview() {
         aria-label="Open Instagram"
         className="iconlink"
       >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          aria-hidden
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.6"
-        >
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
           <rect x="4" y="4" width="16" height="16" rx="4.5" ry="4.5" />
           <circle cx="12" cy="12" r="3.25" />
           <circle cx="17.2" cy="6.8" r="0.9" />
@@ -615,15 +599,7 @@ export default function Preview() {
         className="iconlink"
         style={{ lineHeight: 0 }}
       >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          aria-hidden
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.6"
-        >
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
           <rect x="3" y="6" width="18" height="12" rx="2" ry="2" />
           <path d="M5 8.5 12 13l7-4.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
@@ -632,8 +608,7 @@ export default function Preview() {
   );
 
   const tagClass = isEntering ? 'tag-hidden' : 'tag-visible';
-  const navClass =
-    page === 'home' ? (isEntering ? 'fade-hidden' : 'fade-visible') : 'fade-hidden';
+  const navClass = page === 'home' ? (isEntering ? 'fade-hidden' : 'fade-visible') : 'fade-hidden';
   const navOffHomeClass = page === 'home' ? '' : 'nav-offhome';
   const footerFadeClass = isEntering ? 'footer-hidden' : 'footer-visible';
   const panelClass = isEntering ? 'panel-intro' : 'panel-steady';
@@ -641,11 +616,7 @@ export default function Preview() {
   return (
     <>
       <div className="root" style={{ fontFamily: FONT_STACK }}>
-        <div
-          className="bg-layer"
-          aria-hidden="true"
-          style={{ transform: `translateZ(0) scale(${bgZoom})` }}
-        />
+        <div className="bg-layer" aria-hidden="true" style={{ transform: `translateZ(0) scale(${bgZoom})` }} />
 
         <div
           className={`center ${page === 'home' ? 'center-home' : 'center-subpage'} ${
@@ -918,7 +889,7 @@ html, body {
   text-decoration: none;
 }
 
-/* ✅ Ticket: keep your sizing; only enforce the SAME visible blur/glass as homepage */
+/* ✅ Ticket: keep sizing; make blur identical by matching shared glass exactly (no special blur values) */
 .upcoming-updated{
   max-width: 520px;
   margin: 0 auto;
@@ -952,11 +923,6 @@ html, body {
 
   border-radius: 12px;
   text-decoration: none;
-
-  /* IMPORTANT: make blur actually visible */
-  background: rgba(255, 255, 255, 0.040);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
 
   border: 1px solid rgba(255, 255, 255, 0.10);
   outline: 1px solid rgba(255, 255, 255, 0.015);
@@ -1318,11 +1284,6 @@ input:-webkit-autofill:active {
     min-height: 29px;
     border-radius: 11px;
     font-size: 11.5px;
-
-    /* keep visible blur on mobile too */
-    background: rgba(255, 255, 255, 0.040);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
   }
 }
 
