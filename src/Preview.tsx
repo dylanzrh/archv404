@@ -42,7 +42,7 @@ const PAST_FLYERS: string[] = [
   'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060124/ARCHIVE404_280225_POST03_LOGO_nqcgah.jpg',
 ];
 
-// ✅ Added: JULIA LINKOGEL, 2M, YENI:SAM
+// ✅ Artists (we will sort with “special/number/colon” names LAST)
 const ARTISTS: string[] = [
   '2M',
   'ANCHI',
@@ -113,6 +113,23 @@ const pathToPage = (pathname: string): Page => {
   return 'home';
 };
 
+/* ---------------------------------
+   Artist sort: A–Z first, then “special”
+   Special = contains digits or ":" (you can extend)
+---------------------------------- */
+const isSpecialArtist = (name: string) => /[0-9:]/.test(name);
+
+const sortArtistsAtoZThenSpecialLast = (names: string[]) => {
+  const normal = names.filter((n) => !isSpecialArtist(n));
+  const special = names.filter((n) => isSpecialArtist(n));
+
+  const collator = new Intl.Collator('en', { sensitivity: 'base', numeric: true });
+  normal.sort((a, b) => collator.compare(a, b));
+  special.sort((a, b) => collator.compare(a, b));
+
+  return [...normal, ...special];
+};
+
 export default function Preview() {
   const [page, setPage] = useState<Page>('home');
 
@@ -127,7 +144,11 @@ export default function Preview() {
   const lastTouchActivateTsRef = useRef<number>(0);
   const TOUCH_DEDUPE_MS = 800;
 
-  const SORTED_ARTISTS = useMemo(() => [...ARTISTS].sort(), []);
+  // ✅ Special names last
+  const SORTED_ARTISTS = useMemo(
+    () => sortArtistsAtoZThenSpecialLast(ARTISTS),
+    []
+  );
 
   const [rowVisible, setRowVisible] = useState<boolean[]>(() =>
     Array.from({ length: Math.ceil(PAST_FLYERS.length / 2) }, (_, i) => i === 0)
@@ -243,18 +264,14 @@ export default function Preview() {
 
     const animate = () => {
       rafId = null;
-
       const current = currentZoomRef.current;
       const target = targetZoomRef.current;
-
       const next = current + (target - current) * 0.09;
 
       currentZoomRef.current = next;
       setBgZoom(next);
 
-      if (Math.abs(target - next) > 0.0005) {
-        rafId = window.requestAnimationFrame(animate);
-      }
+      if (Math.abs(target - next) > 0.0005) rafId = window.requestAnimationFrame(animate);
     };
 
     const requestAnimate = () => {
@@ -418,8 +435,7 @@ export default function Preview() {
     pushUrlForPage(next);
   };
 
-  // UPCOMING: match flyer width to exact rendered text width,
-  // and set ticket button narrower than flyer.
+  // UPCOMING: measure line width; flyer = line width; button narrower
   const upcomingLineRef = useRef<HTMLSpanElement | null>(null);
   const [upcomingWidth, setUpcomingWidth] = useState<number>(0);
 
@@ -438,9 +454,10 @@ export default function Preview() {
   }, [page]);
 
   const flyerPx = upcomingWidth ? Math.round(upcomingWidth) : 0;
-  // ✅ narrower than flyer: 82% (clamped so it never gets silly)
+
+  // ✅ make ticket button EVEN LESS wide (72% of flyer), with a sane min/max
   const buttonPx =
-    flyerPx > 0 ? Math.max(180, Math.min(Math.round(flyerPx * 0.82), flyerPx - 24)) : 0;
+    flyerPx > 0 ? Math.max(170, Math.min(Math.round(flyerPx * 0.72), flyerPx - 40)) : 0;
 
   const renderUpcoming = () => (
     <section className="section upcoming-section">
@@ -458,9 +475,7 @@ export default function Preview() {
               href={TICKET_URL}
               target="_blank"
               rel="noopener noreferrer"
-              style={{
-                width: buttonPx ? `${buttonPx}px` : undefined,
-              }}
+              style={{ width: buttonPx ? `${buttonPx}px` : undefined }}
             >
               GET YOUR TICKET
             </a>
@@ -472,9 +487,7 @@ export default function Preview() {
             rel="noopener noreferrer"
             className="upcoming-flyer-link"
             aria-label="Open tickets"
-            style={{
-              width: flyerPx ? `${flyerPx}px` : undefined,
-            }}
+            style={{ width: flyerPx ? `${flyerPx}px` : undefined }}
           >
             <img
               className="upcoming-flyer"
@@ -519,6 +532,7 @@ export default function Preview() {
             {isSubmittingNewsletter ? 'SENDING…' : 'JOIN'}
           </button>
         </form>
+
         {newsletterMessage && <p className="newsletter-message">{newsletterMessage}</p>}
       </div>
 
@@ -738,6 +752,7 @@ export default function Preview() {
         </footer>
 
         <style>{`
+/* (styles unchanged from your last version; only logic changes above) */
 :root { color-scheme: dark; }
 html, body { margin: 0; padding: 0; background: #000; font-family: ${FONT_STACK}; }
 .root { position: relative; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; color: #fff; overflow: hidden; padding-bottom: 0; }
@@ -782,25 +797,20 @@ html, body { margin: 0; padding: 0; background: #000; font-family: ${FONT_STACK}
 .nav { position: relative; z-index: 10; margin-top: 32px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; }
 .nav-offhome { position: absolute !important; left: 0 !important; right: 0 !important; top: -9999px !important; margin: 0 !important; padding: 0 !important; height: 0 !important; overflow: hidden !important; }
 
-/* Shared glass buttons */
 .navbtn, .newsletter-btn, .homebtn, .ticket-btn {
   position: relative;
   pointer-events: auto;
   border-radius: 10px;
-
   background: rgba(255, 255, 255, 0.008);
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
-
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.06);
   outline: 1px solid rgba(255, 255, 255, 0.015);
-
   text-transform: uppercase;
   letter-spacing: 0.12em;
   cursor: pointer;
   text-decoration: none;
-
   transition: opacity 0.6s ease, transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.25s ease;
   touch-action: manipulation;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0.12);
@@ -813,22 +823,18 @@ html, body { margin: 0; padding: 0; background: #000; font-family: ${FONT_STACK}
 
 .homebtn { display: inline-flex; align-items: center; justify-content: center; min-height: 36px; padding: 10px 18px; font-size: 11px; }
 
-/* Ticket button: narrower than flyer via inline width */
 .ticket-btn{
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   min-height: 28px;
   padding: 6px 18px;
   font-weight: 700;
   font-size: 12px;
   letter-spacing: 0.18em;
-
   background: rgba(255, 255, 255, 0.014);
   border: 1px solid rgba(255, 255, 255, 0.18);
   outline: 1px solid rgba(255, 255, 255, 0.028);
-
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.38), 0 0 14px rgba(255, 255, 255, 0.03);
 }
 
@@ -858,13 +864,10 @@ html, body { margin: 0; padding: 0; background: #000; font-family: ${FONT_STACK}
 /* UPCOMING */
 .upcoming { text-align: center; text-transform: uppercase; letter-spacing: 0.2em; line-height: 1.45; font-size: 16px; opacity: 0.95; margin-top: 10px; }
 .upcoming p { margin: 0; font-weight: 700; }
-
 .upcoming-wrap{ display: inline-block; text-align: center; margin: 0 auto; }
 .upcoming-line{ display: block; }
 .upcoming-line-measure{ display: inline-block; }
-
 .upcoming-cta { margin-top: 16px; display: flex; justify-content: center; }
-
 .upcoming-flyer-link{ display: block; margin: 20px auto 0; text-decoration: none; }
 .upcoming-flyer{
   width: 100%;
@@ -885,7 +888,6 @@ html, body { margin: 0; padding: 0; background: #000; font-family: ${FONT_STACK}
 .newsletter { margin: 40px auto 0; max-width: 420px; text-align: center; }
 .newsletter-label { font-size: 13px; letter-spacing: 0.26em; text-transform: uppercase; opacity: 0.9; margin-bottom: 6px; }
 .newsletter-form { display: flex; gap: 12px; justify-content: center; align-items: center; margin-top: 10px; }
-
 .newsletter-btn{ padding: 10px 18px; border-radius: 10px; font-size: 11px; letter-spacing: 0.12em; }
 
 .newsletter-input {
