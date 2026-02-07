@@ -423,7 +423,7 @@ export default function Preview() {
   };
 
   /* ---------------------------------
-     UPCOMING PAGE (updated)
+     UPCOMING PAGE
   ---------------------------------- */
   const renderUpcoming = () => (
     <section className="section upcoming-section">
@@ -563,7 +563,15 @@ export default function Preview() {
         aria-label="Join WhatsApp Community"
         className="iconlink"
       >
-        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          aria-hidden
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+        >
           <path
             d="M12 2.75C7.17 2.75 3.25 6.67 3.25 11.5c0 1.86.53 3.57 1.52 5.03L4 21l4.62-.78A8.6 8.6 0 0 0 12 20.25c4.83 0 8.75-3.92 8.75-8.75S16.83 2.75 12 2.75Z"
             strokeLinecap="round"
@@ -584,7 +592,15 @@ export default function Preview() {
         aria-label="Open Instagram"
         className="iconlink"
       >
-        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          aria-hidden
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+        >
           <rect x="4" y="4" width="16" height="16" rx="4.5" ry="4.5" />
           <circle cx="12" cy="12" r="3.25" />
           <circle cx="17.2" cy="6.8" r="0.9" />
@@ -599,7 +615,15 @@ export default function Preview() {
         className="iconlink"
         style={{ lineHeight: 0 }}
       >
-        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          aria-hidden
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+        >
           <rect x="3" y="6" width="18" height="12" rx="2" ry="2" />
           <path d="M5 8.5 12 13l7-4.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
@@ -608,7 +632,8 @@ export default function Preview() {
   );
 
   const tagClass = isEntering ? 'tag-hidden' : 'tag-visible';
-  const navClass = page === 'home' ? (isEntering ? 'fade-hidden' : 'fade-visible') : 'fade-hidden';
+  const navClass =
+    page === 'home' ? (isEntering ? 'fade-hidden' : 'fade-visible') : 'fade-hidden';
   const navOffHomeClass = page === 'home' ? '' : 'nav-offhome';
   const footerFadeClass = isEntering ? 'footer-hidden' : 'footer-visible';
   const panelClass = isEntering ? 'panel-intro' : 'panel-steady';
@@ -616,7 +641,11 @@ export default function Preview() {
   return (
     <>
       <div className="root" style={{ fontFamily: FONT_STACK }}>
-        <div className="bg-layer" aria-hidden="true" style={{ transform: `translateZ(0) scale(${bgZoom})` }} />
+        <div
+          className="bg-layer"
+          aria-hidden="true"
+          style={{ transform: `translateZ(0) scale(${bgZoom})` }}
+        />
 
         <div
           className={`center ${page === 'home' ? 'center-home' : 'center-subpage'} ${
@@ -889,60 +918,57 @@ html, body {
   text-decoration: none;
 }
 
-/* ✅ Ticket button: less wide than flyer + rounded corners (adapted “ticket button” feel) */
+/* ✅ Ticket button: less wide + less high (tight like the earlier design) */
 .ticket-btn-wrap {
   display: flex;
   justify-content: center;
   margin: 0 auto 18px;
-  width: 100%;
 }
-
 .ticket-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  width: 100%;
-  max-width: 260px;          /* less wide than flyer */
-  padding: 12px 18px;
-  min-height: 44px;
+  width: auto;            /* not stretched */
+  padding: 8px 14px;      /* less high */
+  min-height: 34px;       /* less high */
+  line-height: 1;
 
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.18em;
 
-  border-radius: 14px;       /* rounded corners */
+  border-radius: 12px;    /* rounded corners, not bulky */
   text-decoration: none;
 
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  outline: 1px solid rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  outline: 1px solid rgba(255, 255, 255, 0.015);
 
   box-shadow:
-    0 10px 26px rgba(0, 0, 0, 0.28),
+    0 10px 22px rgba(0, 0, 0, 0.26),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
   overflow: hidden;
 }
-
 .ticket-btn::before {
   content: '';
   position: absolute;
   inset: -1px;
   border-radius: inherit;
   background:
-    radial-gradient(70% 120% at 50% 0%, rgba(255, 255, 255, 0.06), transparent 55%),
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.035), transparent);
+    radial-gradient(70% 120% at 50% 0%, rgba(255, 255, 255, 0.05), transparent 60%),
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03), transparent);
   opacity: 0.9;
   pointer-events: none;
 }
-
 .ticket-btn::after {
   content: '';
   position: absolute;
-  top: -40%;
-  left: -60%;
+  top: -50%;
+  left: -70%;
   width: 60%;
-  height: 180%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  height: 200%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.07), transparent);
   transform: rotate(18deg);
   opacity: 0;
   pointer-events: none;
@@ -954,20 +980,17 @@ html, body {
   .homebtn:hover,
   .ticket-btn:hover {
     background: rgba(255, 255, 255, 0.018);
-    border-color: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.14);
     box-shadow:
-      0 14px 34px rgba(0, 0, 0, 0.36),
-      0 0 10px rgba(255, 180, 90, 0.06),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      0 3px 8px rgba(0, 0, 0, 0.3),
+      0 0 10px rgba(255, 180, 90, 0.06);
     transform: translateY(-1px);
   }
-
   .ticket-btn:hover::after {
     opacity: 1;
-    left: 120%;
+    left: 130%;
     transition: left 0.65s ease, opacity 0.2s ease;
   }
-
   .iconlink:hover { opacity: 1; }
 }
 
@@ -1030,7 +1053,6 @@ html, body {
 /* updated upcoming layout */
 .upcoming-updated { max-width: 520px; margin: 0 auto; }
 .upcoming-head { font-weight: 700; margin-bottom: 16px; }
-
 .upcoming-flyer-wrap { display: flex; justify-content: center; }
 .upcoming-flyer-link { display: block; text-decoration: none; max-width: 320px; width: 100%; }
 .upcoming-flyer { display: block; width: 100%; height: auto; border: 0; border-radius: 0; }
@@ -1273,7 +1295,12 @@ input:-webkit-autofill:active {
   .upcoming-homebtn{ margin-bottom: 80px; }
   .upcoming-flyer-link{ max-width: 300px; }
 
-  .ticket-btn { max-width: 250px; }
+  .ticket-btn {
+    padding: 7px 12px;
+    min-height: 32px;
+    border-radius: 11px;
+    font-size: 10.5px;
+  }
 }
 
 @keyframes logo-intro {
