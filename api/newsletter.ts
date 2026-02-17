@@ -1,30 +1,36 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Body can be string or object, depending on Vercel parsing
-  const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
-  const { email } = body as { email?: string };
+  // Vercel may give body as string or object
+  const body =
+    typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+  const email = body?.email;
 
   if (!email || typeof email !== 'string') {
     return res.status(400).json({ error: 'Invalid email' });
+  }
+
+  // Avoid TypeScript "process" type errors without installing @types/node
+  const apiKey = (globalThis as any)?.process?.env?.BREVO_API_KEY as string | undefined;
+
+  if (!apiKey) {
+    return res.status(500).json({ error: 'Missing BREVO_API_KEY' });
   }
 
   try {
     const brevoRes = await fetch('https://api.brevo.com/v3/contacts', {
       method: 'POST',
       headers: {
-        'api-key': process.env.BREVO_API_KEY as string,  // from Vercel env vars
+        'api-key': apiKey,
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        Accept: 'application/json',
       },
       body: JSON.stringify({
         email,
-        listIds: [3],          // your Brevo list ID = 3
-        updateEnabled: true,   // update contact if it already exists
+        listIds: [3],
+        updateEnabled: true,
       }),
     });
 
