@@ -1,8 +1,10 @@
 {
   "extends": "./tsconfig.app.json",
   "compilerOptions": {
-    "types": [
-      "vite/client"
-    ]
-  }
+    "types": ["vite/client", "node"],
+    "moduleResolution": "bundler",
+    "strict": true,
+    "noEmit": true
+  },
+  "exclude": ["node_modules"]
 }
