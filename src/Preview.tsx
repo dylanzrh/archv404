@@ -439,7 +439,7 @@ export default function Preview() {
             rel="noopener noreferrer"
             className="ticket-btn"
           >
-            3RD RELEASE TICKETS
+            LAST TICKETS
           </a>
         </div>
 
