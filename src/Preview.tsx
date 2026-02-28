@@ -10,9 +10,8 @@ const MAILTO_URL = 'mailto:info@archv404.com';
 const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
 
 // Tickets + upcoming flyer
+// (FEB 27 moved to PAST; UPCOMING should only show APR 17 TBA)
 const TICKET_URL = 'https://supermarket.li/events/archive-404-5/';
-const UPCOMING_FLYER_URL =
-  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1770251160/IMG_1687_wvmczm.png';
 
 // Background zoom tuning
 const BASE_ZOOM = 1.02;
@@ -26,11 +25,16 @@ const ST_MORITZ_FLYER_URL =
 const ZURICH_JAN30_FLYER_URL =
   'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1769005674/AR402_Instagram-Post_SH_260121-08_qxhube.png';
 
+// FEB 27 Zurich flyer (moved from UPCOMING -> PAST)
+const FEB27_FLYER_URL =
+  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1770251160/IMG_1687_wvmczm.png';
+
 // ABOUT text as a single block paragraph
 const ABOUT_TEXT =
   'ARCHIVE 404 IS A ZURICH-BASED EVENT LABEL CRAFTING CAREFULLY DESIGNED EXPERIENCES WHERE MUSIC, LIGHT AND SPACE CREATE IMMERSIVE MOMENTS. ITS NAME REINTERPRETS A DIGITAL ERROR AS AN INVITATION TO RECONNECT THROUGH PEOPLE AND SOUND. BY BRINGING TOGETHER RESPECTED INTERNATIONAL ARTISTS AND SOME OF THE MOST PROMISING LOCAL TALENTS, ARCHIVE 404 CREATES A DISTINCT ENERGY THAT FEELS CONTEMPORARY YET TIMELESS.';
 
 const PAST_FLYERS: string[] = [
+  FEB27_FLYER_URL, // ✅ moved from UPCOMING to PAST (top)
   ZURICH_JAN30_FLYER_URL,
   ST_MORITZ_FLYER_URL,
   'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060268/archive404_251025_post_yus7xj.jpg',
@@ -229,7 +233,7 @@ export default function Preview() {
     const img2 = new Image();
     img2.src = ZURICH_JAN30_FLYER_URL;
     const img3 = new Image();
-    img3.src = UPCOMING_FLYER_URL;
+    img3.src = FEB27_FLYER_URL;
   }, []);
 
   // Smooth background zoom on scroll (RAF)
@@ -424,41 +428,15 @@ export default function Preview() {
 
   /* ---------------------------------
      UPCOMING PAGE
+     ✅ Only: APR 17 + TBA
   ---------------------------------- */
   const renderUpcoming = () => (
     <section className="section upcoming-section">
       <div className="upcoming upcoming-updated">
         <p className="upcoming-head" style={{ animationDelay: '0ms' }}>
-          FEB 27 SUPERMARKET CLUB
+          APR 17
         </p>
-
-        <div className="ticket-btn-wrap">
-          <a
-            href={TICKET_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ticket-btn"
-          >
-            LAST TICKETS
-          </a>
-        </div>
-
-        <div className="upcoming-flyer-wrap">
-          <a
-            href={TICKET_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="upcoming-flyer-link"
-          >
-            <img
-              src={UPCOMING_FLYER_URL}
-              alt="ARCHIVE 404 · FEB 27"
-              className="upcoming-flyer"
-              decoding="async"
-              loading="eager"
-            />
-          </a>
-        </div>
+        <p className="upcoming-sub">TBA</p>
       </div>
 
       <div className="newsletter upcoming-newsletter">
@@ -570,7 +548,7 @@ export default function Preview() {
             strokeLinejoin="round"
           />
           <path
-            d="M9.05 8.7c.1-.24.16-.39.16-.39.08-.18.14-.27.33-.3.2-.03.33-.01.48.2.15.2.63.77.69.83.06.07.10.16.03.3-.07.13-.11.2-.21.32-.1.12-.21.26-.3.35-.1.1-.2.21-.09.4.12.2.52.86 1.21 1.39.84.66 1.54.86 1.77.96.23.1.37.08.5-.06.15-.16.52-.6.7-.81.18-.22.35-.18.58-.1.24.07 1.51.71 1.51.71.22.09.37.15.4.24.05.14.05.81-.19 1.28-.24.47-.72.96-1.23 1.01-.51.05-1.37.01-2.29-.38-.92-.39-1.79-1.06-2.61-1.9-.82-.84-1.38-1.73-1.74-2.44-.36-.71-.53-1.32-.58-1.62-.05-.3-.05-.48-.05-.61 0-.13.05-.3.15-.54Z"
+            d="M9.05 8.7c.1-.24.16-.39.16-.39.08-.18.14-.27.33-.3.2-.03.33-.01.48.2.15.2.63.77.69.83.06.07.1.16.03.3-.07.13-.11.2-.21.32-.1.12-.21.26-.3.35-.1.1-.2.21-.09.4.12.2.52.86 1.21 1.39.84.66 1.54.86 1.77.96.23.1.37.08.5-.06.15-.16.52-.6.7-.81.18-.22.35-.18.58-.1.24.07 1.51.71 1.51.71.22.09.37.15.4.24.05.14.05.81-.19 1.28-.24.47-.72.96-1.23 1.01-.51.05-1.37.01-2.29-.38-.92-.39-1.79-1.06-2.61-1.9-.82-.84-1.38-1.73-1.74-2.44-.36-.71-.53-1.32-.58-1.62-.05-.3-.05-.48-.05-.61 0-.13.05-.3.15-.54Z"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
@@ -719,6 +697,7 @@ export default function Preview() {
           <IconBar />
         </footer>
 
+        {/* ✅ YOUR ORIGINAL FULL CSS (UNCHANGED) + only the small new class below */}
         <style>{`
 :root { color-scheme: dark; }
 html, body {
@@ -915,6 +894,15 @@ html, body {
 .upcoming-flyer-wrap{ display: flex; justify-content: center; margin: 0; }
 .upcoming-flyer-link{ display: block; text-decoration: none; max-width: 320px; width: 100%; }
 .upcoming-flyer{ display: block; width: 100%; height: auto; border: 0; border-radius: 0; }
+
+/* ✅ new: subtle second line for TBA (doesn't affect anything else) */
+.upcoming-sub{
+  margin-top: -6px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.75);
+  letter-spacing: 0.22em;
+  font-size: 12px;
+}
 
 /* ✅ THE FIX: create an internal “blur layer” that always has something to blur */
 .ticket-btn{
