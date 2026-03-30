@@ -10,8 +10,9 @@ const MAILTO_URL = 'mailto:info@archv404.com';
 const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
 
 // Tickets + upcoming flyer
-// (FEB 27 moved to PAST; UPCOMING should only show APR 17 TBA)
-const TICKET_URL = 'https://supermarket.li/events/archive-404-5/';
+const TICKET_URL = 'https://supermarket.li/events/archive-404-6/';
+const UPCOMING_FLYER_URL =
+  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1774627082/AR402_Instagram-Post_SH_260227_01_Instapost_Grau_tcxhpc.jpg';
 
 // Background zoom tuning
 const BASE_ZOOM = 1.02;
@@ -34,7 +35,7 @@ const ABOUT_TEXT =
   'ARCHIVE 404 IS A ZURICH-BASED EVENT LABEL CRAFTING CAREFULLY DESIGNED EXPERIENCES WHERE MUSIC, LIGHT AND SPACE CREATE IMMERSIVE MOMENTS. ITS NAME REINTERPRETS A DIGITAL ERROR AS AN INVITATION TO RECONNECT THROUGH PEOPLE AND SOUND. BY BRINGING TOGETHER RESPECTED INTERNATIONAL ARTISTS AND SOME OF THE MOST PROMISING LOCAL TALENTS, ARCHIVE 404 CREATES A DISTINCT ENERGY THAT FEELS CONTEMPORARY YET TIMELESS.';
 
 const PAST_FLYERS: string[] = [
-  FEB27_FLYER_URL, // ✅ moved from UPCOMING to PAST (top)
+  FEB27_FLYER_URL,
   ZURICH_JAN30_FLYER_URL,
   ST_MORITZ_FLYER_URL,
   'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060268/archive404_251025_post_yus7xj.jpg',
@@ -220,7 +221,7 @@ export default function Preview() {
     window.addEventListener('popstate', applyFromUrl);
     return () => window.removeEventListener('popstate', applyFromUrl);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // run once
+  }, []);
 
   useEffect(() => {
     playIntro();
@@ -234,6 +235,8 @@ export default function Preview() {
     img2.src = ZURICH_JAN30_FLYER_URL;
     const img3 = new Image();
     img3.src = FEB27_FLYER_URL;
+    const img4 = new Image();
+    img4.src = UPCOMING_FLYER_URL;
   }, []);
 
   // Smooth background zoom on scroll (RAF)
@@ -428,15 +431,44 @@ export default function Preview() {
 
   /* ---------------------------------
      UPCOMING PAGE
-     ✅ Only: APR 17 + TBA
   ---------------------------------- */
   const renderUpcoming = () => (
     <section className="section upcoming-section">
       <div className="upcoming upcoming-updated">
         <p className="upcoming-head" style={{ animationDelay: '0ms' }}>
-          APR 17
+          APR 17 SUPERMARKET CLUB
         </p>
-        <p className="upcoming-sub">TBA</p>
+
+        <div className="ticket-btn-wrap">
+          <a
+            href={TICKET_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ticket-btn"
+          >
+            <span>FIRST RELEASE TICKETS</span>
+          </a>
+        </div>
+
+        <div className="upcoming-flyer-wrap">
+          <a
+            href={TICKET_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="upcoming-flyer-link"
+            aria-label="Open ticket page"
+          >
+            <img
+              src={UPCOMING_FLYER_URL}
+              alt="ARCHIVE 404 APR 17 SUPERMARKET CLUB"
+              className="upcoming-flyer"
+              loading="eager"
+              decoding="async"
+            />
+          </a>
+        </div>
+
+        <p className="upcoming-sub upcoming-sub-secondary">MAY 8 TBA</p>
       </div>
 
       <div className="newsletter upcoming-newsletter">
@@ -697,7 +729,6 @@ export default function Preview() {
           <IconBar />
         </footer>
 
-        {/* ✅ YOUR ORIGINAL FULL CSS (UNCHANGED) + only the small new class below */}
         <style>{`
 :root { color-scheme: dark; }
 html, body {
@@ -895,13 +926,16 @@ html, body {
 .upcoming-flyer-link{ display: block; text-decoration: none; max-width: 320px; width: 100%; }
 .upcoming-flyer{ display: block; width: 100%; height: auto; border: 0; border-radius: 0; }
 
-/* ✅ new: subtle second line for TBA (doesn't affect anything else) */
 .upcoming-sub{
   margin-top: -6px;
   font-weight: 700;
   color: rgba(255,255,255,0.75);
   letter-spacing: 0.22em;
   font-size: 12px;
+}
+
+.upcoming-sub-secondary{
+  margin-top: 18px;
 }
 
 /* ✅ THE FIX: create an internal “blur layer” that always has something to blur */
@@ -926,7 +960,6 @@ html, body {
   border: 1px solid rgba(255, 255, 255, 0.10);
   outline: 1px solid rgba(255, 255, 255, 0.015);
 
-  /* keep base background super subtle */
   background: rgba(255, 255, 255, 0.010);
 
   box-shadow:
@@ -935,13 +968,11 @@ html, body {
 
   overflow: hidden;
 
-  /* force Safari to actually render the filter */
   transform: translateZ(0);
   will-change: transform;
   isolation: isolate;
 }
 
-/* blur layer (this is what makes it finally visible) */
 .ticket-btn > * { position: relative; z-index: 2; }
 .ticket-btn::before{
   content: '';
@@ -949,19 +980,16 @@ html, body {
   inset: -1px;
   border-radius: inherit;
 
-  /* This is the “glass” layer */
   background: rgba(255, 255, 255, 0.035);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 
-  /* subtle highlight like the homepage vibe */
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
 
   pointer-events: none;
   z-index: 1;
 }
 
-/* keep your sheen */
 .ticket-btn::after{
   content: '';
   position: absolute;
@@ -1291,6 +1319,10 @@ input:-webkit-autofill:active {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     background: rgba(255,255,255,0.032);
+  }
+
+  .upcoming-sub-secondary{
+    margin-top: 16px;
   }
 }
 
