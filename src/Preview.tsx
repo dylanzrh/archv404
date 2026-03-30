@@ -1345,9 +1345,6 @@ header {
   border: 0;
   border-radius: 0;
   content-visibility: auto;
-  /* Aspect ratio to prevent CLS */
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
   background-color: rgba(255, 255, 255, 0.03);
 }
 .upcoming-next {
@@ -1373,7 +1370,7 @@ header {
   width: auto;
   min-width: 240px;
   padding: 6px 18px;
-  min-height: 44px;
+  min-height: 30px;
   line-height: 1;
 
   font-size: 12px;
@@ -1606,9 +1603,6 @@ input:-webkit-autofill:active {
   width: 100%;
   height: auto;
   content-visibility: auto;
-  /* Prevent CLS for lazy-loaded images */
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
   background-color: rgba(255, 255, 255, 0.03);
 }
 
@@ -1758,7 +1752,7 @@ input:-webkit-autofill:active {
   .ticket-btn {
     min-width: 232px;
     padding: 6px 16px;
-    min-height: 44px;
+    min-height: 29px;
     border-radius: 11px;
     font-size: 11.5px;
   }
