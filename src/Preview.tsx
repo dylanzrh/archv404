@@ -38,16 +38,16 @@ const PAST_FLYERS: string[] = [
   FEB27_FLYER_URL,
   ZURICH_JAN30_FLYER_URL,
   ST_MORITZ_FLYER_URL,
-  'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060268/archive404_251025_post_yus7xj.jpg',
-  'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060242/archive03102025_post_eptqbf.jpg',
-  'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060222/ARCHIVE404_06082025_Palm3_wjeh8o.jpg',
-  'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060209/ARCHIVE404_06082025_Soluna_zv1cfx.jpg',
-  'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060195/ARCHIVE404_04072025_POST_ptktcy.jpg',
-  'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060161/ARCHIVE404_02052025_POST01_ly44jq.jpg',
-  'https://res.cloudinary.com/dsas5i0fx/image/upload/v1763060124/ARCHIVE404_280225_POST03_LOGO_nqcgah.jpg',
+  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1763060268/archive404_251025_post_yus7xj.jpg',
+  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1763060242/archive03102025_post_eptqbf.jpg',
+  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1763060222/ARCHIVE404_06082025_Palm3_wjeh8o.jpg',
+  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1763060209/ARCHIVE404_06082025_Soluna_zv1cfx.jpg',
+  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1763060195/ARCHIVE404_04072025_POST_ptktcy.jpg',
+  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1763060161/ARCHIVE404_02052025_POST01_ly44jq.jpg',
+  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1763060124/ARCHIVE404_280225_POST03_LOGO_nqcgah.jpg',
 ];
 
-// ✅ Just keep 2M last
+// ✅ keep list order as defined so 2M stays last
 const ARTISTS: string[] = [
   'ANCHI',
   'ARWIN AZIZ',
@@ -68,6 +68,8 @@ const ARTISTS: string[] = [
   'JULIA LINKOGEL',
   'KASSETTE',
   'LOU COMBO',
+  'MICHELLE VANJA',
+  'ORSAY',
   'PAUL ALMQVIST',
   'RUBEN SCORZA',
   'SAM MADI',
@@ -132,7 +134,6 @@ export default function Preview() {
   const lastTouchActivateTsRef = useRef<number>(0);
   const TOUCH_DEDUPE_MS = 800;
 
-  // ✅ no sorting; keep list as defined (so 2M stays last)
   const SORTED_ARTISTS = useMemo(() => [...ARTISTS], []);
 
   const [rowVisible, setRowVisible] = useState<boolean[]>(() =>
@@ -229,14 +230,18 @@ export default function Preview() {
 
   // Preload key flyers
   useEffect(() => {
-    const img1 = new Image();
-    img1.src = ST_MORITZ_FLYER_URL;
-    const img2 = new Image();
-    img2.src = ZURICH_JAN30_FLYER_URL;
-    const img3 = new Image();
-    img3.src = FEB27_FLYER_URL;
-    const img4 = new Image();
-    img4.src = UPCOMING_FLYER_URL;
+    const urls = [
+      ST_MORITZ_FLYER_URL,
+      ZURICH_JAN30_FLYER_URL,
+      FEB27_FLYER_URL,
+      UPCOMING_FLYER_URL,
+    ];
+
+    urls.forEach((url) => {
+      const img = new Image();
+      img.decoding = 'async';
+      img.src = url;
+    });
   }, []);
 
   // Smooth background zoom on scroll (RAF)
@@ -313,7 +318,7 @@ export default function Preview() {
           return changed ? next : prev;
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1, rootMargin: '200px 0px' }
     );
 
     rowRefs.current.forEach((row, index) => {
@@ -324,7 +329,7 @@ export default function Preview() {
     });
 
     return () => observer.disconnect();
-  }, [page]);
+  }, [page, PAST_FLYERS.length]);
 
   useEffect(() => {
     if (page !== 'artists') return;
@@ -349,7 +354,7 @@ export default function Preview() {
           return changed ? next : prev;
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1, rootMargin: '200px 0px' }
     );
 
     artistRefs.current.forEach((el, index) => {
@@ -360,7 +365,7 @@ export default function Preview() {
     });
 
     return () => observer.disconnect();
-  }, [page]);
+  }, [page, SORTED_ARTISTS]);
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -463,12 +468,16 @@ export default function Preview() {
               alt="ARCHIVE 404 APR 17 SUPERMARKET CLUB"
               className="upcoming-flyer"
               loading="eager"
+              fetchPriority="high"
               decoding="async"
             />
           </a>
         </div>
 
-        <p className="upcoming-sub upcoming-sub-secondary">MAY 8 TBA</p>
+        <div className="upcoming-next">
+          <p className="upcoming-head">MAY 8</p>
+          <p className="upcoming-sub">TBA</p>
+        </div>
       </div>
 
       <div className="newsletter upcoming-newsletter">
@@ -757,7 +766,7 @@ html, body {
   pointer-events: none;
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.34), rgba(0, 0, 0, 0.44)),
-    url('https://res.cloudinary.com/dsas5i0fx/image/upload/v1763336289/IMG_5984_wjkvk6.jpg');
+    url('https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto/v1763336289/IMG_5984_wjkvk6.jpg');
   background-position: center center, center 48%;
   background-size: cover, 115%;
   background-repeat: no-repeat, no-repeat;
@@ -911,7 +920,6 @@ html, body {
 }
 .upcoming p { margin: 0; font-weight: 700; }
 
-/* updated upcoming layout */
 .upcoming-updated{
   max-width: 520px;
   margin: 0 auto;
@@ -924,8 +932,21 @@ html, body {
 .ticket-btn-wrap{ display: flex; justify-content: center; margin: 0; }
 .upcoming-flyer-wrap{ display: flex; justify-content: center; margin: 0; }
 .upcoming-flyer-link{ display: block; text-decoration: none; max-width: 320px; width: 100%; }
-.upcoming-flyer{ display: block; width: 100%; height: auto; border: 0; border-radius: 0; }
-
+.upcoming-flyer{
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  content-visibility: auto;
+}
+.upcoming-next{
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
 .upcoming-sub{
   margin-top: -6px;
   font-weight: 700;
@@ -934,11 +955,6 @@ html, body {
   font-size: 12px;
 }
 
-.upcoming-sub-secondary{
-  margin-top: 18px;
-}
-
-/* ✅ THE FIX: create an internal “blur layer” that always has something to blur */
 .ticket-btn{
   display: inline-flex;
   align-items: center;
@@ -967,7 +983,6 @@ html, body {
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
 
   overflow: hidden;
-
   transform: translateZ(0);
   will-change: transform;
   isolation: isolate;
@@ -979,13 +994,10 @@ html, body {
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-
   background: rgba(255, 255, 255, 0.035);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
-
   pointer-events: none;
   z-index: 1;
 }
@@ -1068,7 +1080,6 @@ html, body {
   letter-spacing: 0.02em;
 }
 
-/* UPCOMING page vertical rhythm */
 .upcoming-section{
   display: flex;
   flex-direction: column;
@@ -1172,7 +1183,12 @@ input:-webkit-autofill:active {
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
 .flyer-row-visible { opacity: 1; transform: translateY(0); }
-.flyer-cell img { display: block; width: 100%; height: auto; }
+.flyer-cell img {
+  display: block;
+  width: 100%;
+  height: auto;
+  content-visibility: auto;
+}
 
 /* ARTISTS */
 .artists-list {
@@ -1258,7 +1274,7 @@ input:-webkit-autofill:active {
   .bg-layer {
     background-image:
       linear-gradient(rgba(0, 0, 0, 0.30), rgba(0, 0, 0, 0.40)),
-      url('https://res.cloudinary.com/dsas5i0fx/image/upload/v1763336289/IMG_5984_wjkvk6.jpg');
+      url('https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto/v1763336289/IMG_5984_wjkvk6.jpg');
     background-position: center center, center 55%;
     background-size: cover, 118%;
   }
@@ -1307,6 +1323,7 @@ input:-webkit-autofill:active {
   .upcoming-flyer-link{ max-width: 300px; }
 
   .upcoming-updated { gap: 12px; }
+  .upcoming-next{ margin-top: 18px; }
 
   .ticket-btn{
     min-width: 232px;
@@ -1319,10 +1336,6 @@ input:-webkit-autofill:active {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     background: rgba(255,255,255,0.032);
-  }
-
-  .upcoming-sub-secondary{
-    margin-top: 16px;
   }
 }
 
