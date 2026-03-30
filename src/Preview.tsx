@@ -193,6 +193,7 @@ export default function Preview() {
   const inputFocusedRef = useRef(false);
   const lastTouchActivateTsRef = useRef<number>(0);
   const mainRef = useRef<HTMLElement>(null);
+  const [navLocked, setNavLocked] = useState(false);
   const TOUCH_DEDUPE_MS = 800;
 
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -210,7 +211,6 @@ export default function Preview() {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [isSubmittingNewsletter, setIsSubmittingNewsletter] = useState(false);
   const [newsletterMessage, setNewsletterMessage] = useState<string | null>(null);
-  const [newsletterSuccess, setNewsletterSuccess] = useState(false);
 
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
   const artistRefs = useRef<(HTMLParagraphElement | null)[]>([]);
@@ -478,7 +478,6 @@ export default function Preview() {
 
     setIsSubmittingNewsletter(true);
     setNewsletterMessage(null);
-    setNewsletterSuccess(false);
 
     try {
       const res = await fetch('/api/newsletter', {
@@ -490,11 +489,9 @@ export default function Preview() {
       if (!res.ok) throw new Error('Request failed');
 
       setNewsletterMessage('WELCOME TO THE ARCHIVE FAMILY.');
-      setNewsletterSuccess(true);
       setNewsletterEmail('');
     } catch {
       setNewsletterMessage('SOMETHING WENT WRONG. PLEASE TRY AGAIN.');
-      setNewsletterSuccess(false);
     } finally {
       setIsSubmittingNewsletter(false);
     }
@@ -524,6 +521,11 @@ export default function Preview() {
     (next: Page) => {
       if (next === page) return;
 
+      // Block all pointer events on content during transition
+      // so stray clicks can't activate links on the new page
+      setNavLocked(true);
+      setTimeout(() => setNavLocked(false), 600);
+
       if (next === 'past') {
         setRowVisible(
           Array.from({ length: Math.ceil(PAST_FLYERS.length / 2) }, (_, i) => i === 0)
@@ -542,16 +544,13 @@ export default function Preview() {
       updateDocTitle(next);
       announcePageChange(next);
 
-      // Move focus to main content for keyboard/screen reader users
-      requestAnimationFrame(() => {
-        mainRef.current?.focus({ preventScroll: true });
-      });
+
     },
     [page, SORTED_ARTISTS, playIntro, resetScrollToTop, pushUrlForPage, updateDocTitle, announcePageChange]
   );
 
-  /* Handle keyboard on nav buttons */
-  const handleNavKeyDown = useCallback(
+  /* Handle keyboard — only needed for elements with role="link" that aren't native <button>/<a> */
+  const handleLinkKeyDown = useCallback(
     (e: React.KeyboardEvent, target: Page) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -687,7 +686,6 @@ export default function Preview() {
           className="homebtn"
           onPointerUp={(e) => onTouchActivate(e, () => handleNavigate('home'))}
           onClick={(e) => onClickActivate(e, () => handleNavigate('home'))}
-          onKeyDown={(e) => handleNavKeyDown(e, 'home')}
         >
           HOME
         </button>
@@ -742,7 +740,7 @@ export default function Preview() {
             className="homebtn"
             onPointerUp={(e) => onTouchActivate(e, () => handleNavigate('home'))}
             onClick={(e) => onClickActivate(e, () => handleNavigate('home'))}
-            onKeyDown={(e) => handleNavKeyDown(e, 'home')}
+
           >
             HOME
           </button>
@@ -886,7 +884,7 @@ export default function Preview() {
               className={`logo-main ${prefersReducedMotion ? '' : 'logo-animate'}`}
               onPointerUp={(e) => onTouchActivate(e, () => handleNavigate('home'))}
               onClick={(e) => onClickActivate(e, () => handleNavigate('home'))}
-              onKeyDown={(e) => handleNavKeyDown(e, 'home')}
+              onKeyDown={(e) => handleLinkKeyDown(e, 'home')}
               style={{ cursor: 'pointer' }}
               tabIndex={0}
               role="link"
@@ -917,8 +915,7 @@ export default function Preview() {
                 onClick={(e) =>
                   onClickActivate(e, () => handleNavigate(key as Page))
                 }
-                onKeyDown={(e) => handleNavKeyDown(e, key as Page)}
-              >
+                >
                 {label}
               </button>
             ))}
@@ -929,7 +926,7 @@ export default function Preview() {
             ref={mainRef}
             className={`panel ${panelClass}`}
             tabIndex={-1}
-            style={{ outline: 'none' }}
+            style={{ outline: 'none', pointerEvents: navLocked ? 'none' : 'auto' }}
           >
             {page === 'about' && (
               <section
@@ -951,7 +948,7 @@ export default function Preview() {
                     onClick={(e) =>
                       onClickActivate(e, () => handleNavigate('home'))
                     }
-                    onKeyDown={(e) => handleNavKeyDown(e, 'home')}
+        
                   >
                     HOME
                   </button>
@@ -1008,7 +1005,7 @@ export default function Preview() {
                     onClick={(e) =>
                       onClickActivate(e, () => handleNavigate('home'))
                     }
-                    onKeyDown={(e) => handleNavKeyDown(e, 'home')}
+        
                   >
                     HOME
                   </button>
