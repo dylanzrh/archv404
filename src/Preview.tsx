@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 // ---------------------------------
 // Constants / Config
@@ -47,7 +47,6 @@ const PAST_FLYERS: string[] = [
   'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1763060124/ARCHIVE404_280225_POST03_LOGO_nqcgah.jpg',
 ];
 
-// ✅ keep list order as defined so 2M stays last
 const ARTISTS: string[] = [
   'ANCHI',
   'ARWIN AZIZ',
@@ -90,6 +89,17 @@ const HIGHLIGHT_ARTISTS = new Set<string>([
 type Page = 'home' | 'upcoming' | 'past' | 'artists' | 'about';
 
 /* ---------------------------------
+   Page titles for document.title
+---------------------------------- */
+const PAGE_TITLES: Record<Page, string> = {
+  home: 'ARCHIVE 404 — The Art of Sound',
+  upcoming: 'Upcoming Events — ARCHIVE 404',
+  past: 'Past Events — ARCHIVE 404',
+  artists: 'Artists — ARCHIVE 404',
+  about: 'About — ARCHIVE 404',
+};
+
+/* ---------------------------------
    Lightweight URL routing (SPA)
 ---------------------------------- */
 const pageToPath = (p: Page) => {
@@ -120,19 +130,73 @@ const pathToPage = (pathname: string): Page => {
   return 'home';
 };
 
+/* ---------------------------------
+   Preconnect / resource hints
+   Rendered once at mount in <head>
+---------------------------------- */
+function useResourceHints() {
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    const hints = [
+      { rel: 'preconnect', href: 'https://res.cloudinary.com' },
+      { rel: 'dns-prefetch', href: 'https://res.cloudinary.com' },
+    ];
+
+    const added: HTMLLinkElement[] = [];
+
+    hints.forEach(({ rel, href }) => {
+      if (!document.querySelector(`link[rel="${rel}"][href="${href}"]`)) {
+        const link = document.createElement('link');
+        link.rel = rel;
+        link.href = href;
+        if (rel === 'preconnect') link.crossOrigin = 'anonymous';
+        document.head.appendChild(link);
+        added.push(link);
+      }
+    });
+
+    return () => {
+      added.forEach((el) => el.remove());
+    };
+  }, []);
+}
+
+/* ---------------------------------
+   Reduced motion hook
+---------------------------------- */
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setReduced(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setReduced(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  return reduced;
+}
+
+/* ---------------------------------
+   Main component
+---------------------------------- */
 export default function Preview() {
   const [page, setPage] = useState<Page>('home');
-
   const [isEntering, setIsEntering] = useState(true);
   const [logoAnimKey, setLogoAnimKey] = useState(0);
-
   const [bgZoom, setBgZoom] = useState(BASE_ZOOM);
 
   const scrollYRef = useRef(0);
   const inputFocusedRef = useRef(false);
-
   const lastTouchActivateTsRef = useRef<number>(0);
+  const mainRef = useRef<HTMLElement>(null);
   const TOUCH_DEDUPE_MS = 800;
+
+  const prefersReducedMotion = usePrefersReducedMotion();
+  useResourceHints();
 
   const SORTED_ARTISTS = useMemo(() => [...ARTISTS], []);
 
@@ -146,9 +210,13 @@ export default function Preview() {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [isSubmittingNewsletter, setIsSubmittingNewsletter] = useState(false);
   const [newsletterMessage, setNewsletterMessage] = useState<string | null>(null);
+  const [newsletterSuccess, setNewsletterSuccess] = useState(false);
 
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
   const artistRefs = useRef<(HTMLParagraphElement | null)[]>([]);
+
+  // Live region ref for route changes
+  const announceRef = useRef<HTMLDivElement>(null);
 
   const nav = useMemo(
     () =>
@@ -161,40 +229,62 @@ export default function Preview() {
     []
   );
 
-  const onTouchActivate = (
-    e: React.PointerEvent | React.MouseEvent,
-    action: () => void
-  ) => {
-    if ('pointerType' in e) {
-      const pe = e as React.PointerEvent;
-      if (pe.pointerType === 'touch') {
-        pe.preventDefault();
-        pe.stopPropagation();
-        lastTouchActivateTsRef.current = Date.now();
-        (pe.currentTarget as HTMLElement).blur?.();
-        action();
+  /* Touch deduplication helpers */
+  const onTouchActivate = useCallback(
+    (e: React.PointerEvent | React.MouseEvent, action: () => void) => {
+      if ('pointerType' in e) {
+        const pe = e as React.PointerEvent;
+        if (pe.pointerType === 'touch') {
+          pe.preventDefault();
+          pe.stopPropagation();
+          lastTouchActivateTsRef.current = Date.now();
+          (pe.currentTarget as HTMLElement).blur?.();
+          action();
+          return;
+        }
+      }
+    },
+    []
+  );
+
+  const onClickActivate = useCallback(
+    (e: React.MouseEvent, action: () => void) => {
+      if (Date.now() - lastTouchActivateTsRef.current < TOUCH_DEDUPE_MS) {
+        e.preventDefault();
+        e.stopPropagation();
         return;
       }
-    }
-  };
+      action();
+    },
+    []
+  );
 
-  const onClickActivate = (e: React.MouseEvent, action: () => void) => {
-    if (Date.now() - lastTouchActivateTsRef.current < TOUCH_DEDUPE_MS) {
-      e.preventDefault();
-      e.stopPropagation();
+  const playIntro = useCallback(() => {
+    if (prefersReducedMotion) {
+      setIsEntering(false);
       return;
     }
-    action();
-  };
-
-  const playIntro = () => {
     setIsEntering(true);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         setIsEntering(false);
       });
     });
-  };
+  }, [prefersReducedMotion]);
+
+  /* Announce page changes to screen readers */
+  const announcePageChange = useCallback((p: Page) => {
+    if (announceRef.current) {
+      announceRef.current.textContent = `Navigated to ${PAGE_TITLES[p]}`;
+    }
+  }, []);
+
+  /* Update document title */
+  const updateDocTitle = useCallback((p: Page) => {
+    if (typeof document !== 'undefined') {
+      document.title = PAGE_TITLES[p];
+    }
+  }, []);
 
   // Sync initial page from URL + handle back/forward
   useEffect(() => {
@@ -216,6 +306,7 @@ export default function Preview() {
       setLogoAnimKey((k) => k + 1);
       playIntro();
       setBgZoom(BASE_ZOOM);
+      updateDocTitle(next);
     };
 
     applyFromUrl();
@@ -226,26 +317,38 @@ export default function Preview() {
 
   useEffect(() => {
     playIntro();
-  }, []);
+  }, [playIntro]);
 
-  // Preload key flyers
+  // Preload the upcoming flyer (high priority), defer the rest
   useEffect(() => {
-    const urls = [
-      ST_MORITZ_FLYER_URL,
-      ZURICH_JAN30_FLYER_URL,
-      FEB27_FLYER_URL,
-      UPCOMING_FLYER_URL,
-    ];
+    // Only preload the upcoming flyer eagerly
+    const highPriority = new Image();
+    highPriority.decoding = 'async';
+    highPriority.fetchPriority = 'high';
+    highPriority.src = UPCOMING_FLYER_URL;
 
-    urls.forEach((url) => {
-      const img = new Image();
-      img.decoding = 'async';
-      img.src = url;
+    // Defer other flyers until idle
+    const idleCallback =
+      typeof window !== 'undefined' && 'requestIdleCallback' in window
+        ? window.requestIdleCallback
+        : (cb: () => void) => setTimeout(cb, 200);
+
+    idleCallback(() => {
+      [ST_MORITZ_FLYER_URL, ZURICH_JAN30_FLYER_URL, FEB27_FLYER_URL].forEach((url) => {
+        const img = new Image();
+        img.decoding = 'async';
+        img.src = url;
+      });
     });
   }, []);
 
-  // Smooth background zoom on scroll (RAF)
+  // Smooth background zoom on scroll (RAF) — skipped if reduced motion
   useEffect(() => {
+    if (prefersReducedMotion) {
+      setBgZoom(BASE_ZOOM);
+      return;
+    }
+
     const maxScroll = 600;
 
     const calcZoom = (scrollY: number) => {
@@ -293,8 +396,9 @@ export default function Preview() {
       window.removeEventListener('scroll', handleScroll);
       if (rafId !== null) cancelAnimationFrame(rafId);
     };
-  }, []);
+  }, [prefersReducedMotion]);
 
+  // Intersection observer for past flyer rows
   useEffect(() => {
     if (page !== 'past') return;
     if (!rowRefs.current.length) return;
@@ -329,8 +433,9 @@ export default function Preview() {
     });
 
     return () => observer.disconnect();
-  }, [page, PAST_FLYERS.length]);
+  }, [page]);
 
+  // Intersection observer for artist names
   useEffect(() => {
     if (page !== 'artists') return;
     if (!artistRefs.current.length) return;
@@ -373,6 +478,7 @@ export default function Preview() {
 
     setIsSubmittingNewsletter(true);
     setNewsletterMessage(null);
+    setNewsletterSuccess(false);
 
     try {
       const res = await fetch('/api/newsletter', {
@@ -384,15 +490,17 @@ export default function Preview() {
       if (!res.ok) throw new Error('Request failed');
 
       setNewsletterMessage('WELCOME TO THE ARCHIVE FAMILY.');
+      setNewsletterSuccess(true);
       setNewsletterEmail('');
     } catch {
       setNewsletterMessage('SOMETHING WENT WRONG. PLEASE TRY AGAIN.');
+      setNewsletterSuccess(false);
     } finally {
       setIsSubmittingNewsletter(false);
     }
   };
 
-  const resetScrollToTop = () => {
+  const resetScrollToTop = useCallback(() => {
     if (typeof window === 'undefined') return;
 
     requestAnimationFrame(() => {
@@ -400,9 +508,9 @@ export default function Preview() {
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
     });
-  };
+  }, []);
 
-  const pushUrlForPage = (next: Page, replace = false) => {
+  const pushUrlForPage = useCallback((next: Page, replace = false) => {
     if (typeof window === 'undefined') return;
     const target = pageToPath(next);
     const current = window.location.pathname;
@@ -410,35 +518,67 @@ export default function Preview() {
 
     const fn = replace ? 'replaceState' : 'pushState';
     window.history[fn]({}, '', target);
-  };
+  }, []);
 
-  const handleNavigate = (next: Page) => {
-    if (next === page) return;
+  const handleNavigate = useCallback(
+    (next: Page) => {
+      if (next === page) return;
 
-    if (next === 'past') {
-      setRowVisible(
-        Array.from({ length: Math.ceil(PAST_FLYERS.length / 2) }, (_, i) => i === 0)
-      );
-    }
-    if (next === 'artists') {
-      setArtistVisible(SORTED_ARTISTS.map(() => false));
-    }
+      if (next === 'past') {
+        setRowVisible(
+          Array.from({ length: Math.ceil(PAST_FLYERS.length / 2) }, (_, i) => i === 0)
+        );
+      }
+      if (next === 'artists') {
+        setArtistVisible(SORTED_ARTISTS.map(() => false));
+      }
 
-    setPage(next);
-    setLogoAnimKey((k) => k + 1);
-    playIntro();
+      setPage(next);
+      setLogoAnimKey((k) => k + 1);
+      playIntro();
+      setBgZoom(BASE_ZOOM);
+      resetScrollToTop();
+      pushUrlForPage(next);
+      updateDocTitle(next);
+      announcePageChange(next);
 
-    setBgZoom(BASE_ZOOM);
-    resetScrollToTop();
+      // Move focus to main content for keyboard/screen reader users
+      requestAnimationFrame(() => {
+        mainRef.current?.focus({ preventScroll: true });
+      });
+    },
+    [page, SORTED_ARTISTS, playIntro, resetScrollToTop, pushUrlForPage, updateDocTitle, announcePageChange]
+  );
 
-    pushUrlForPage(next);
-  };
+  /* Handle keyboard on nav buttons */
+  const handleNavKeyDown = useCallback(
+    (e: React.KeyboardEvent, target: Page) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleNavigate(target);
+      }
+    },
+    [handleNavigate]
+  );
+
+  /* ---------------------------------
+     Skip to content link
+  ---------------------------------- */
+  const handleSkipToContent = useCallback((e: React.MouseEvent | React.KeyboardEvent) => {
+    e.preventDefault();
+    mainRef.current?.focus({ preventScroll: true });
+    mainRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, []);
 
   /* ---------------------------------
      UPCOMING PAGE
   ---------------------------------- */
   const renderUpcoming = () => (
-    <section className="section upcoming-section">
+    <section className="section upcoming-section" aria-labelledby="upcoming-heading">
+      <h2 id="upcoming-heading" className="sr-only">
+        Upcoming Events
+      </h2>
+
       <div className="upcoming upcoming-updated">
         <p className="upcoming-head" style={{ animationDelay: '0ms' }}>
           APR 17 SUPERMARKET CLUB
@@ -450,6 +590,7 @@ export default function Preview() {
             target="_blank"
             rel="noopener noreferrer"
             className="ticket-btn"
+            aria-label="Buy first release tickets for April 17 at Supermarket Club"
           >
             <span>FIRST RELEASE TICKETS</span>
           </a>
@@ -461,15 +602,17 @@ export default function Preview() {
             target="_blank"
             rel="noopener noreferrer"
             className="upcoming-flyer-link"
-            aria-label="Open ticket page"
+            aria-label="View event details and buy tickets for April 17"
           >
             <img
               src={UPCOMING_FLYER_URL}
-              alt="ARCHIVE 404 APR 17 SUPERMARKET CLUB"
+              alt="Flyer for ARCHIVE 404 event on April 17 at Supermarket Club"
               className="upcoming-flyer"
               loading="eager"
               fetchPriority="high"
               decoding="async"
+              width={900}
+              height={900}
             />
           </a>
         </div>
@@ -480,14 +623,26 @@ export default function Preview() {
         </div>
       </div>
 
-      <div className="newsletter upcoming-newsletter">
-        <p className="newsletter-label">FOR THOSE WHO KNOW.</p>
+      <div className="newsletter upcoming-newsletter" role="region" aria-labelledby="newsletter-label">
+        <p className="newsletter-label" id="newsletter-label">
+          FOR THOSE WHO KNOW.
+        </p>
 
-        <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
+        <form
+          className="newsletter-form"
+          onSubmit={handleNewsletterSubmit}
+          aria-label="Newsletter signup"
+        >
+          <label htmlFor="newsletter-email" className="sr-only">
+            Email address
+          </label>
           <input
+            id="newsletter-email"
             type="email"
             required
             placeholder="EMAIL"
+            autoComplete="email"
+            inputMode="email"
             value={newsletterEmail}
             onChange={(e) => setNewsletterEmail(e.target.value)}
             onFocus={() => {
@@ -497,11 +652,13 @@ export default function Preview() {
               inputFocusedRef.current = false;
             }}
             className="newsletter-input"
+            aria-describedby={newsletterMessage ? 'newsletter-status' : undefined}
           />
           <button
             type="submit"
             className="newsletter-btn"
             disabled={isSubmittingNewsletter}
+            aria-busy={isSubmittingNewsletter}
             onPointerUp={(e) =>
               onTouchActivate(e, () => {
                 (e.currentTarget as HTMLButtonElement).form?.requestSubmit?.();
@@ -512,7 +669,17 @@ export default function Preview() {
             {isSubmittingNewsletter ? 'SENDING…' : 'JOIN'}
           </button>
         </form>
-        {newsletterMessage && <p className="newsletter-message">{newsletterMessage}</p>}
+        {newsletterMessage && (
+          <p
+            id="newsletter-status"
+            className="newsletter-message"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            {newsletterMessage}
+          </p>
+        )}
       </div>
 
       <div className="homebtn-wrapper upcoming-homebtn">
@@ -520,6 +687,7 @@ export default function Preview() {
           className="homebtn"
           onPointerUp={(e) => onTouchActivate(e, () => handleNavigate('home'))}
           onClick={(e) => onClickActivate(e, () => handleNavigate('home'))}
+          onKeyDown={(e) => handleNavKeyDown(e, 'home')}
         >
           HOME
         </button>
@@ -534,8 +702,12 @@ export default function Preview() {
     }
 
     return (
-      <section className="section section-past">
-        <div className="flyer-grid">
+      <section className="section section-past" aria-labelledby="past-heading">
+        <h2 id="past-heading" className="sr-only">
+          Past Events
+        </h2>
+
+        <div className="flyer-grid" role="list" aria-label="Past event flyers">
           {rows.map((row, rowIndex) => (
             <div
               key={rowIndex}
@@ -544,15 +716,20 @@ export default function Preview() {
                 rowRefs.current[rowIndex] = el;
               }}
               data-row-index={rowIndex}
-              style={{ transitionDelay: `${rowIndex * 80}ms` }}
+              style={{
+                transitionDelay: prefersReducedMotion ? '0ms' : `${rowIndex * 80}ms`,
+              }}
+              role="listitem"
             >
               {row.map((src, index) => (
                 <div className="flyer-cell" key={index}>
                   <img
                     src={src}
-                    alt={`ARCHIVE 404 PAST EVENT ${rowIndex * 2 + index + 1}`}
+                    alt={`ARCHIVE 404 past event ${rowIndex * 2 + index + 1}`}
                     decoding="async"
                     loading="lazy"
+                    width={450}
+                    height={450}
                   />
                 </div>
               ))}
@@ -565,6 +742,7 @@ export default function Preview() {
             className="homebtn"
             onPointerUp={(e) => onTouchActivate(e, () => handleNavigate('home'))}
             onClick={(e) => onClickActivate(e, () => handleNavigate('home'))}
+            onKeyDown={(e) => handleNavKeyDown(e, 'home')}
           >
             HOME
           </button>
@@ -574,7 +752,7 @@ export default function Preview() {
   };
 
   const IconBar = () => (
-    <div className="icons">
+    <div className="icons" role="group" aria-label="Social media links">
       <a
         href={WHATSAPP_URL}
         target="_blank"
@@ -582,7 +760,16 @@ export default function Preview() {
         aria-label="Join WhatsApp Community"
         className="iconlink"
       >
-        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+          role="img"
+        >
           <path
             d="M12 2.75C7.17 2.75 3.25 6.67 3.25 11.5c0 1.86.53 3.57 1.52 5.03L4 21l4.62-.78A8.6 8.6 0 0 0 12 20.25c4.83 0 8.75-3.92 8.75-8.75S16.83 2.75 12 2.75Z"
             strokeLinecap="round"
@@ -595,30 +782,50 @@ export default function Preview() {
           />
         </svg>
       </a>
-      <span className="dot">·</span>
+      <span className="dot" aria-hidden="true">
+        ·
+      </span>
       <a
         href={INSTAGRAM_URL}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Open Instagram"
+        aria-label="Follow Archive 404 on Instagram"
         className="iconlink"
       >
-        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+          role="img"
+        >
           <rect x="4" y="4" width="16" height="16" rx="4.5" ry="4.5" />
           <circle cx="12" cy="12" r="3.25" />
           <circle cx="17.2" cy="6.8" r="0.9" />
         </svg>
       </a>
-      <span className="dot">·</span>
+      <span className="dot" aria-hidden="true">
+        ·
+      </span>
       <a
         href={MAILTO_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Email Archive 404"
+        aria-label="Email Archive 404 at info@archv404.com"
         className="iconlink"
         style={{ lineHeight: 0 }}
       >
-        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+          role="img"
+        >
           <rect x="3" y="6" width="18" height="12" rx="2" ry="2" />
           <path d="M5 8.5 12 13l7-4.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
@@ -627,35 +834,74 @@ export default function Preview() {
   );
 
   const tagClass = isEntering ? 'tag-hidden' : 'tag-visible';
-  const navClass = page === 'home' ? (isEntering ? 'fade-hidden' : 'fade-visible') : 'fade-hidden';
+  const navClass =
+    page === 'home' ? (isEntering ? 'fade-hidden' : 'fade-visible') : 'fade-hidden';
   const navOffHomeClass = page === 'home' ? '' : 'nav-offhome';
   const footerFadeClass = isEntering ? 'footer-hidden' : 'footer-visible';
   const panelClass = isEntering ? 'panel-intro' : 'panel-steady';
 
   return (
     <>
+      {/* Screen reader: live region for page navigation announcements */}
+      <div
+        ref={announceRef}
+        className="sr-only"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      />
+
       <div className="root" style={{ fontFamily: FONT_STACK }}>
-        <div className="bg-layer" aria-hidden="true" style={{ transform: `translateZ(0) scale(${bgZoom})` }} />
+        {/* Skip to content link */}
+        <a
+          href="#main-content"
+          className="skip-link"
+          onClick={handleSkipToContent}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handleSkipToContent(e);
+          }}
+        >
+          Skip to content
+        </a>
+
+        <div
+          className="bg-layer"
+          aria-hidden="true"
+          style={{
+            transform: prefersReducedMotion
+              ? `translateZ(0) scale(${BASE_ZOOM})`
+              : `translateZ(0) scale(${bgZoom})`,
+          }}
+        />
 
         <div
           className={`center ${page === 'home' ? 'center-home' : 'center-subpage'} ${
             page === 'upcoming' ? 'center-upcoming' : ''
           } ${page === 'about' ? 'center-about' : ''}`}
         >
-          <h1
-            key={logoAnimKey}
-            className="logo-main logo-animate"
-            onPointerUp={(e) => onTouchActivate(e, () => handleNavigate('home'))}
-            onClick={(e) => onClickActivate(e, () => handleNavigate('home'))}
-            style={{ cursor: 'pointer' }}
-          >
-            {LOGO_TEXT}
-          </h1>
+          {/* Header with logo */}
+          <header>
+            <h1
+              key={logoAnimKey}
+              className={`logo-main ${prefersReducedMotion ? '' : 'logo-animate'}`}
+              onPointerUp={(e) => onTouchActivate(e, () => handleNavigate('home'))}
+              onClick={(e) => onClickActivate(e, () => handleNavigate('home'))}
+              onKeyDown={(e) => handleNavKeyDown(e, 'home')}
+              style={{ cursor: 'pointer' }}
+              tabIndex={0}
+              role="link"
+              aria-label="Archive 404 — go to home page"
+            >
+              {LOGO_TEXT}
+            </h1>
+          </header>
 
-          <p className={`tag ${tagClass}`}>THE ART OF SOUND</p>
+          <p className={`tag ${tagClass}`} aria-hidden="true">
+            THE ART OF SOUND
+          </p>
 
           <nav
-            aria-label="Primary"
+            aria-label="Main navigation"
             className={`nav ${navClass} ${navOffHomeClass}`}
             style={{ pointerEvents: page === 'home' ? 'auto' : 'none' }}
           >
@@ -665,25 +911,47 @@ export default function Preview() {
                 className="navbtn"
                 tabIndex={page === 'home' ? 0 : -1}
                 aria-hidden={page !== 'home'}
-                onPointerUp={(e) => onTouchActivate(e, () => handleNavigate(key as Page))}
-                onClick={(e) => onClickActivate(e, () => handleNavigate(key as Page))}
+                onPointerUp={(e) =>
+                  onTouchActivate(e, () => handleNavigate(key as Page))
+                }
+                onClick={(e) =>
+                  onClickActivate(e, () => handleNavigate(key as Page))
+                }
+                onKeyDown={(e) => handleNavKeyDown(e, key as Page)}
               >
                 {label}
               </button>
             ))}
           </nav>
 
-          <main className={`panel ${panelClass}`}>
+          <main
+            id="main-content"
+            ref={mainRef}
+            className={`panel ${panelClass}`}
+            tabIndex={-1}
+            style={{ outline: 'none' }}
+          >
             {page === 'about' && (
-              <section className="section about-section">
+              <section
+                className="section about-section"
+                aria-labelledby="about-heading"
+              >
+                <h2 id="about-heading" className="sr-only">
+                  About Archive 404
+                </h2>
                 <article className="about">
                   <p className="about-block">{ABOUT_TEXT}</p>
                 </article>
                 <div className="homebtn-wrapper" style={{ marginTop: '40px' }}>
                   <button
                     className="homebtn"
-                    onPointerUp={(e) => onTouchActivate(e, () => handleNavigate('home'))}
-                    onClick={(e) => onClickActivate(e, () => handleNavigate('home'))}
+                    onPointerUp={(e) =>
+                      onTouchActivate(e, () => handleNavigate('home'))
+                    }
+                    onClick={(e) =>
+                      onClickActivate(e, () => handleNavigate('home'))
+                    }
+                    onKeyDown={(e) => handleNavKeyDown(e, 'home')}
                   >
                     HOME
                   </button>
@@ -695,26 +963,37 @@ export default function Preview() {
             {page === 'past' && renderPast()}
 
             {page === 'artists' && (
-              <section className="section">
-                <div className="artists-list">
-                  <p className="az-label">A–Z</p>
+              <section className="section" aria-labelledby="artists-heading">
+                <h2 id="artists-heading" className="sr-only">
+                  Artists
+                </h2>
+
+                <div className="artists-list" role="list" aria-label="Artist roster A to Z">
+                  <p className="az-label" aria-hidden="true">
+                    A–Z
+                  </p>
 
                   {SORTED_ARTISTS.map((artist, index) => {
                     const isHighlight = HIGHLIGHT_ARTISTS.has(artist);
                     return (
-                      <div key={artist} className="artist-block">
+                      <div key={artist} className="artist-block" role="listitem">
                         <p
                           className={`artist-name ${
                             artistVisible[index] ? 'artist-name-visible' : ''
                           } ${isHighlight ? 'artist-name-highlight' : ''}`}
                           ref={(el) => {
                             artistRefs.current[index] = el;
-                            if (el) (el as HTMLElement).dataset.artistIndex = String(index);
+                            if (el)
+                              (el as HTMLElement).dataset.artistIndex = String(index);
                           }}
                         >
                           {artist}
                         </p>
-                        {artist === 'BOYSDONTCRY' && <p className="artist-resident">RESIDENT</p>}
+                        {artist === 'BOYSDONTCRY' && (
+                          <p className="artist-resident" aria-label="Resident artist">
+                            RESIDENT
+                          </p>
+                        )}
                       </div>
                     );
                   })}
@@ -723,8 +1002,13 @@ export default function Preview() {
                 <div className="homebtn-wrapper">
                   <button
                     className="homebtn"
-                    onPointerUp={(e) => onTouchActivate(e, () => handleNavigate('home'))}
-                    onClick={(e) => onClickActivate(e, () => handleNavigate('home'))}
+                    onPointerUp={(e) =>
+                      onTouchActivate(e, () => handleNavigate('home'))
+                    }
+                    onClick={(e) =>
+                      onClickActivate(e, () => handleNavigate('home'))
+                    }
+                    onKeyDown={(e) => handleNavKeyDown(e, 'home')}
                   >
                     HOME
                   </button>
@@ -739,6 +1023,49 @@ export default function Preview() {
         </footer>
 
         <style>{`
+/* ---------------------------------
+   Screen reader only utility
+---------------------------------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------------------------------
+   Skip to content link
+---------------------------------- */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  color: #000;
+  padding: 12px 24px;
+  z-index: 10000;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  border-radius: 0 0 8px 8px;
+  transition: top 0.15s ease;
+}
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* ---------------------------------
+   Base / resets
+---------------------------------- */
 :root { color-scheme: dark; }
 html, body {
   margin: 0;
@@ -746,6 +1073,57 @@ html, body {
   background: #000;
   font-family: ${FONT_STACK};
 }
+
+/* ---------------------------------
+   Reduced motion: disable all animations/transitions
+---------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .logo-animate {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .tag-hidden, .tag-visible {
+    opacity: 0.95 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .panel-intro, .panel-steady {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .footer-hidden, .footer-visible {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .fade-hidden, .fade-visible {
+    transition: none !important;
+  }
+  .flyer-row {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .artist-name {
+    opacity: 0.92 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .navbtn {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
 .root {
   position: relative;
   min-height: 100vh;
@@ -798,6 +1176,11 @@ html, body {
 .center-about { padding-top: 8vh; }
 .center-upcoming { padding-top: 14vh; padding-bottom: 4vh; }
 
+/* Header reset */
+header {
+  display: contents;
+}
+
 .logo-main {
   margin: 0 auto;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -810,6 +1193,13 @@ html, body {
 .logo-animate {
   animation: logo-intro 0.6s ease forwards;
   will-change: transform, opacity;
+}
+
+/* Focus visible indicator for logo */
+.logo-main:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 8px;
+  border-radius: 4px;
 }
 
 .tag {
@@ -845,7 +1235,9 @@ html, body {
   overflow: hidden !important;
 }
 
-/* Shared glass buttons (same feel everywhere) */
+/* ---------------------------------
+   Shared glass buttons
+---------------------------------- */
 .navbtn,
 .newsletter-btn,
 .homebtn,
@@ -879,6 +1271,15 @@ html, body {
   user-select: none;
 }
 
+/* Focus visible indicators for all interactive glass buttons */
+.navbtn:focus-visible,
+.newsletter-btn:focus-visible,
+.homebtn:focus-visible,
+.ticket-btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 3px;
+}
+
 .navbtn {
   z-index: 9999;
   min-height: 48px;
@@ -898,13 +1299,13 @@ html, body {
 .homebtn {
   padding: 10px 18px;
   border-radius: 10px;
+  min-height: 44px;
 }
 
 .homebtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 36px;
   text-decoration: none;
 }
 
@@ -920,7 +1321,7 @@ html, body {
 }
 .upcoming p { margin: 0; font-weight: 700; }
 
-.upcoming-updated{
+.upcoming-updated {
   max-width: 520px;
   margin: 0 auto;
   display: flex;
@@ -928,34 +1329,43 @@ html, body {
   align-items: center;
   gap: 14px;
 }
-.upcoming-head{ margin: 0; font-weight: 700; }
-.ticket-btn-wrap{ display: flex; justify-content: center; margin: 0; }
-.upcoming-flyer-wrap{ display: flex; justify-content: center; margin: 0; }
-.upcoming-flyer-link{ display: block; text-decoration: none; max-width: 320px; width: 100%; }
-.upcoming-flyer{
+.upcoming-head { margin: 0; font-weight: 700; }
+.ticket-btn-wrap { display: flex; justify-content: center; margin: 0; }
+.upcoming-flyer-wrap { display: flex; justify-content: center; margin: 0; }
+.upcoming-flyer-link {
+  display: block;
+  text-decoration: none;
+  max-width: 320px;
+  width: 100%;
+}
+.upcoming-flyer {
   display: block;
   width: 100%;
   height: auto;
   border: 0;
   border-radius: 0;
   content-visibility: auto;
+  /* Aspect ratio to prevent CLS */
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background-color: rgba(255, 255, 255, 0.03);
 }
-.upcoming-next{
+.upcoming-next {
   margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0;
 }
-.upcoming-sub{
+.upcoming-sub {
   margin-top: -6px;
   font-weight: 700;
-  color: rgba(255,255,255,0.75);
+  color: rgba(255, 255, 255, 0.75);
   letter-spacing: 0.22em;
   font-size: 12px;
 }
 
-.ticket-btn{
+.ticket-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -963,7 +1373,7 @@ html, body {
   width: auto;
   min-width: 240px;
   padding: 6px 18px;
-  min-height: 30px;
+  min-height: 44px;
   line-height: 1;
 
   font-size: 12px;
@@ -989,7 +1399,7 @@ html, body {
 }
 
 .ticket-btn > * { position: relative; z-index: 2; }
-.ticket-btn::before{
+.ticket-btn::before {
   content: '';
   position: absolute;
   inset: -1px;
@@ -1002,7 +1412,7 @@ html, body {
   z-index: 1;
 }
 
-.ticket-btn::after{
+.ticket-btn::after {
   content: '';
   position: absolute;
   top: -50%;
@@ -1080,19 +1490,19 @@ html, body {
   letter-spacing: 0.02em;
 }
 
-.upcoming-section{
+.upcoming-section {
   display: flex;
   flex-direction: column;
   min-height: 72vh;
 }
-.upcoming-section .upcoming{
+.upcoming-section .upcoming {
   margin-top: 34px;
 }
-.upcoming-newsletter{
+.upcoming-newsletter {
   margin-top: auto;
   padding-top: 18px;
 }
-.upcoming-homebtn{
+.upcoming-homebtn {
   margin-top: 28px;
 }
 
@@ -1129,10 +1539,18 @@ html, body {
   letter-spacing: 0.12em;
   font-size: 11px;
   outline: none;
+  min-height: 44px;
+  box-sizing: border-box;
   transition: all 0.2s ease;
   -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
   -webkit-text-fill-color: #fff !important;
   caret-color: #fff !important;
+}
+
+/* Focus visible for input */
+.newsletter-input:focus-visible {
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25);
 }
 
 input:-webkit-autofill,
@@ -1188,6 +1606,10 @@ input:-webkit-autofill:active {
   width: 100%;
   height: auto;
   content-visibility: auto;
+  /* Prevent CLS for lazy-loaded images */
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background-color: rgba(255, 255, 255, 0.03);
 }
 
 /* ARTISTS */
@@ -1237,6 +1659,14 @@ input:-webkit-autofill:active {
   color: #fff;
   opacity: 0.96;
   text-decoration: none;
+  /* Minimum 44x44 touch target */
+  min-width: 44px;
+  min-height: 44px;
+}
+.iconlink:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 .dot { display: inline-block; margin: 0 0.6rem; opacity: 0.75; }
 
@@ -1317,25 +1747,25 @@ input:-webkit-autofill:active {
   .nav { margin-top: 32px; gap: 16px; }
   .center-home .nav { margin-top: 96px; }
 
-  .upcoming-section{ min-height: 76vh; }
-  .upcoming-section .upcoming{ margin-top: 26px; }
-  .upcoming-homebtn{ margin-bottom: 80px; }
-  .upcoming-flyer-link{ max-width: 300px; }
+  .upcoming-section { min-height: 76vh; }
+  .upcoming-section .upcoming { margin-top: 26px; }
+  .upcoming-homebtn { margin-bottom: 80px; }
+  .upcoming-flyer-link { max-width: 300px; }
 
   .upcoming-updated { gap: 12px; }
-  .upcoming-next{ margin-top: 18px; }
+  .upcoming-next { margin-top: 18px; }
 
-  .ticket-btn{
+  .ticket-btn {
     min-width: 232px;
     padding: 6px 16px;
-    min-height: 29px;
+    min-height: 44px;
     border-radius: 11px;
     font-size: 11.5px;
   }
-  .ticket-btn::before{
+  .ticket-btn::before {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    background: rgba(255,255,255,0.032);
+    background: rgba(255, 255, 255, 0.032);
   }
 }
 
