@@ -451,7 +451,7 @@ export default function Preview() {
             rel="noopener noreferrer"
             className="ticket-btn"
           >
-            <span>FIRST RELEASE TICKETS</span>
+            <span>TICKETS</span>
           </a>
         </div>
 
