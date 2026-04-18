@@ -9,9 +9,8 @@ const INSTAGRAM_URL = 'https://instagram.com/archv404';
 const MAILTO_URL = 'mailto:info@archv404.com';
 const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
 
-// Tickets + upcoming flyer
-const TICKET_URL = 'https://supermarket.li/events/archive-404-6/';
-const UPCOMING_FLYER_URL =
+// APR 17 flyer (moved from UPCOMING to PAST)
+const APR17_FLYER_URL =
   'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1774627082/AR402_Instagram-Post_SH_260227_01_Instapost_Grau_tcxhpc.jpg';
 
 // Background zoom tuning
@@ -35,6 +34,7 @@ const ABOUT_TEXT =
   'ARCHIVE 404 IS A ZURICH-BASED EVENT LABEL CRAFTING CAREFULLY DESIGNED EXPERIENCES WHERE MUSIC, LIGHT AND SPACE CREATE IMMERSIVE MOMENTS. ITS NAME REINTERPRETS A DIGITAL ERROR AS AN INVITATION TO RECONNECT THROUGH PEOPLE AND SOUND. BY BRINGING TOGETHER RESPECTED INTERNATIONAL ARTISTS AND SOME OF THE MOST PROMISING LOCAL TALENTS, ARCHIVE 404 CREATES A DISTINCT ENERGY THAT FEELS CONTEMPORARY YET TIMELESS.';
 
 const PAST_FLYERS: string[] = [
+  APR17_FLYER_URL,
   FEB27_FLYER_URL,
   ZURICH_JAN30_FLYER_URL,
   ST_MORITZ_FLYER_URL,
@@ -234,7 +234,7 @@ export default function Preview() {
       ST_MORITZ_FLYER_URL,
       ZURICH_JAN30_FLYER_URL,
       FEB27_FLYER_URL,
-      UPCOMING_FLYER_URL,
+      APR17_FLYER_URL,
     ];
 
     urls.forEach((url) => {
@@ -440,40 +440,6 @@ export default function Preview() {
   const renderUpcoming = () => (
     <section className="section upcoming-section">
       <div className="upcoming upcoming-updated">
-        <p className="upcoming-head" style={{ animationDelay: '0ms' }}>
-          APR 17 SUPERMARKET CLUB
-        </p>
-
-        <div className="ticket-btn-wrap">
-          <a
-            href={TICKET_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ticket-btn"
-          >
-            <span>LAST TICKETS</span>
-          </a>
-        </div>
-
-        <div className="upcoming-flyer-wrap">
-          <a
-            href={TICKET_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="upcoming-flyer-link"
-            aria-label="Open ticket page"
-          >
-            <img
-              src={UPCOMING_FLYER_URL}
-              alt="ARCHIVE 404 APR 17 SUPERMARKET CLUB"
-              className="upcoming-flyer"
-              loading="eager"
-              fetchPriority="high"
-              decoding="async"
-            />
-          </a>
-        </div>
-
         <div className="upcoming-next">
           <p className="upcoming-head">MAY 8</p>
           <p className="upcoming-sub">TBA</p>
@@ -848,8 +814,7 @@ html, body {
 /* Shared glass buttons (same feel everywhere) */
 .navbtn,
 .newsletter-btn,
-.homebtn,
-.ticket-btn {
+.homebtn {
   position: relative;
   pointer-events: auto;
 
@@ -929,17 +894,6 @@ html, body {
   gap: 14px;
 }
 .upcoming-head{ margin: 0; font-weight: 700; }
-.ticket-btn-wrap{ display: flex; justify-content: center; margin: 0; }
-.upcoming-flyer-wrap{ display: flex; justify-content: center; margin: 0; }
-.upcoming-flyer-link{ display: block; text-decoration: none; max-width: 320px; width: 100%; }
-.upcoming-flyer{
-  display: block;
-  width: 100%;
-  height: auto;
-  border: 0;
-  border-radius: 0;
-  content-visibility: auto;
-}
 .upcoming-next{
   margin-top: 20px;
   display: flex;
@@ -955,83 +909,16 @@ html, body {
   font-size: 12px;
 }
 
-.ticket-btn{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  width: auto;
-  min-width: 240px;
-  padding: 6px 18px;
-  min-height: 30px;
-  line-height: 1;
-
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-
-  border-radius: 12px;
-  text-decoration: none;
-
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  outline: 1px solid rgba(255, 255, 255, 0.015);
-
-  background: rgba(255, 255, 255, 0.010);
-
-  box-shadow:
-    0 10px 22px rgba(0, 0, 0, 0.26),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
-
-  overflow: hidden;
-  transform: translateZ(0);
-  will-change: transform;
-  isolation: isolate;
-}
-
-.ticket-btn > * { position: relative; z-index: 2; }
-.ticket-btn::before{
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  background: rgba(255, 255, 255, 0.035);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.ticket-btn::after{
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -70%;
-  width: 60%;
-  height: 200%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.07), transparent);
-  transform: rotate(18deg);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 3;
-}
-
 @media (hover: hover) and (pointer: fine) {
   .navbtn:hover,
   .newsletter-btn:hover:not(:disabled),
-  .homebtn:hover,
-  .ticket-btn:hover {
+  .homebtn:hover {
     background: rgba(255, 255, 255, 0.018);
     border-color: rgba(255, 255, 255, 0.14);
     box-shadow:
       0 3px 8px rgba(0, 0, 0, 0.3),
       0 0 10px rgba(255, 180, 90, 0.06);
     transform: translateY(-1px);
-  }
-  .ticket-btn:hover::after {
-    opacity: 1;
-    left: 130%;
-    transition: left 0.65s ease, opacity 0.2s ease;
   }
   .iconlink:hover { opacity: 1; }
 }
@@ -1320,23 +1207,9 @@ input:-webkit-autofill:active {
   .upcoming-section{ min-height: 76vh; }
   .upcoming-section .upcoming{ margin-top: 26px; }
   .upcoming-homebtn{ margin-bottom: 80px; }
-  .upcoming-flyer-link{ max-width: 300px; }
 
   .upcoming-updated { gap: 12px; }
   .upcoming-next{ margin-top: 18px; }
-
-  .ticket-btn{
-    min-width: 232px;
-    padding: 6px 16px;
-    min-height: 29px;
-    border-radius: 11px;
-    font-size: 11.5px;
-  }
-  .ticket-btn::before{
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    background: rgba(255,255,255,0.032);
-  }
 }
 
 @keyframes logo-intro {
