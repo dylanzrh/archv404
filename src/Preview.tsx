@@ -964,27 +964,28 @@ html, body {
 }
 
 .upcoming-ticket-wrap-top {
-  margin-top: 2px;
-  margin-bottom: 2px;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .ticketbtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 32px;
+  min-height: 36px;
   min-width: 168px;
-  padding: 8px 18px;
+  padding: 10px 18px;
   border-radius: 10px;
   text-decoration: none;
+  box-sizing: border-box;
 
-  background: rgba(255, 255, 255, 0.008);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+  background: rgba(255, 255, 255, 0.045);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 
   color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  outline: 1px solid rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  outline: 1px solid rgba(255, 255, 255, 0.03);
 
   text-transform: uppercase;
   letter-spacing: 0.14em;
@@ -992,6 +993,10 @@ html, body {
   font-weight: 700;
   line-height: 1;
   cursor: pointer;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 6px 18px rgba(0, 0, 0, 0.22);
 
   transition:
     opacity 0.6s ease,
@@ -1030,11 +1035,11 @@ html, body {
   .newsletter-btn:hover:not(:disabled),
   .homebtn:hover,
   .ticketbtn:hover {
-    background: rgba(255, 255, 255, 0.018);
-    border-color: rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.18);
     box-shadow:
-      0 3px 8px rgba(0, 0, 0, 0.3),
-      0 0 10px rgba(255, 180, 90, 0.06);
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 8px 22px rgba(0, 0, 0, 0.28);
     transform: translateY(-1px);
   }
   .iconlink:hover { opacity: 1; }
@@ -1339,8 +1344,8 @@ input:-webkit-autofill:active {
 
   .ticketbtn {
     min-width: 152px;
-    min-height: 31px;
-    padding: 8px 16px;
+    min-height: 36px;
+    padding: 10px 16px;
     font-size: 11px;
   }
 }
