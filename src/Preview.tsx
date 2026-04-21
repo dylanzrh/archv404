@@ -9,6 +9,11 @@ const INSTAGRAM_URL = 'https://instagram.com/archv404';
 const MAILTO_URL = 'mailto:info@archv404.com';
 const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
 
+// MAY 8 upcoming
+const MAY8_FLYER_URL =
+  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1776801767/AR405_Instagram-Post-Lineup-Grey-4-5_260409_lsw2xb.jpg';
+const MAY8_TICKET_URL = 'https://tickets.samigo.ch/en/events/archive-404';
+
 // APR 17 flyer (moved from UPCOMING to PAST)
 const APR17_FLYER_URL =
   'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1774627082/AR402_Instagram-Post_SH_260227_01_Instapost_Grau_tcxhpc.jpg';
@@ -47,7 +52,7 @@ const PAST_FLYERS: string[] = [
   'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1763060124/ARCHIVE404_280225_POST03_LOGO_nqcgah.jpg',
 ];
 
-// ✅ keep list order as defined so 2M stays last
+// keep list order as defined so 2M stays last
 const ARTISTS: string[] = [
   'ANCHI',
   'ARWIN AZIZ',
@@ -62,20 +67,27 @@ const ARTISTS: string[] = [
   'DYZEN',
   'FELIX DE LEON',
   'GIANNI',
+  'GIORGIO',
   'HEUER',
   'HOMEOFFICE',
   'JOSEPH',
   'JULIA LINKOGEL',
   'KASSETTE',
   'LOU COMBO',
+  'MATTEOMIE',
   'MICHELLE VANJA',
+  'MORIS',
   'ORSAY',
   'PAUL ALMQVIST',
+  'ROCCO',
+  'RONNY GRAUER',
   'RUBEN SCORZA',
   'SAM MADI',
   'SEBASTIAN KONRAD',
+  'SIELLE',
   'SOLIQUE',
   'TIM ENGELHARDT',
+  'WHEREISVERO',
   'YENI:SAM',
   '2M',
 ];
@@ -231,6 +243,7 @@ export default function Preview() {
   // Preload key flyers
   useEffect(() => {
     const urls = [
+      MAY8_FLYER_URL,
       ST_MORITZ_FLYER_URL,
       ZURICH_JAN30_FLYER_URL,
       FEB27_FLYER_URL,
@@ -442,7 +455,29 @@ export default function Preview() {
       <div className="upcoming upcoming-updated">
         <div className="upcoming-next">
           <p className="upcoming-head">MAY 8</p>
-          <p className="upcoming-sub">TBA</p>
+          <p className="upcoming-sub">SAMIGO</p>
+        </div>
+
+        <div className="upcoming-flyer-wrap">
+          <img
+            src={MAY8_FLYER_URL}
+            alt="ARCHIVE 404 MAY 8 SAMIGO"
+            className="upcoming-flyer"
+            decoding="async"
+            loading="eager"
+            fetchPriority="high"
+          />
+        </div>
+
+        <div className="upcoming-ticket-wrap">
+          <a
+            href={MAY8_TICKET_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ticketbtn"
+          >
+            TICKETS
+          </a>
         </div>
       </div>
 
@@ -814,7 +849,8 @@ html, body {
 /* Shared glass buttons (same feel everywhere) */
 .navbtn,
 .newsletter-btn,
-.homebtn {
+.homebtn,
+.ticketbtn {
   position: relative;
   pointer-events: auto;
 
@@ -860,12 +896,14 @@ html, body {
 }
 
 .newsletter-btn,
-.homebtn {
+.homebtn,
+.ticketbtn {
   padding: 10px 18px;
   border-radius: 10px;
 }
 
-.homebtn {
+.homebtn,
+.ticketbtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -909,10 +947,34 @@ html, body {
   font-size: 12px;
 }
 
+.upcoming-flyer-wrap {
+  width: 100%;
+  max-width: 300px;
+  margin: 14px auto 0;
+}
+
+.upcoming-flyer {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0;
+}
+
+.upcoming-ticket-wrap {
+  margin-top: 2px;
+  display: flex;
+  justify-content: center;
+}
+
+.ticketbtn {
+  min-width: 160px;
+}
+
 @media (hover: hover) and (pointer: fine) {
   .navbtn:hover,
   .newsletter-btn:hover:not(:disabled),
-  .homebtn:hover {
+  .homebtn:hover,
+  .ticketbtn:hover {
     background: rgba(255, 255, 255, 0.018);
     border-color: rgba(255, 255, 255, 0.14);
     box-shadow:
@@ -1210,6 +1272,15 @@ input:-webkit-autofill:active {
 
   .upcoming-updated { gap: 12px; }
   .upcoming-next{ margin-top: 18px; }
+
+  .upcoming-flyer-wrap {
+    max-width: 280px;
+    margin-top: 12px;
+  }
+
+  .ticketbtn {
+    min-width: 144px;
+  }
 }
 
 @keyframes logo-intro {
