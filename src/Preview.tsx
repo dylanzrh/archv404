@@ -972,9 +972,9 @@ html, body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 36px;
-  min-width: 160px;
-  padding: 10px 18px;
+  min-height: 32px;
+  min-width: 168px;
+  padding: 8px 18px;
   border-radius: 10px;
   text-decoration: none;
 
@@ -987,8 +987,10 @@ html, body {
   outline: 1px solid rgba(255, 255, 255, 0.015);
 
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 11px;
+  letter-spacing: 0.14em;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
   cursor: pointer;
 
   transition:
@@ -1333,6 +1335,13 @@ input:-webkit-autofill:active {
   .upcoming-flyer-wrap {
     max-width: 280px;
     margin-top: 0;
+  }
+
+  .ticketbtn {
+    min-width: 152px;
+    min-height: 31px;
+    padding: 8px 16px;
+    font-size: 11px;
   }
 }
 
