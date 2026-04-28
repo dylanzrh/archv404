@@ -1,8 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
-// ---------------------------------
-// Constants / Config
-// ---------------------------------
 const LOGO_TEXT = 'ARCHIVE 404';
 const FONT_STACK = 'Helvetica Neue, Helvetica, Arial, sans-serif';
 const INSTAGRAM_URL = 'https://instagram.com/archv404';
@@ -10,34 +7,18 @@ const MAILTO_URL = 'mailto:info@archv404.com';
 const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
 const SOUNDCLOUD_URL = 'https://on.soundcloud.com/rIrQWYEiZFeBBI2o4i';
 
-// MAY 8 flyer + ticket link
-const MAY8_FLYER_URL =
-  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1776801767/AR405_Instagram-Post-Lineup-Grey-4-5_260409_lsw2xb.jpg';
+const MAY8_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1776801767/AR405_Instagram-Post-Lineup-Grey-4-5_260409_lsw2xb.jpg';
 const MAY8_TICKET_URL = 'https://tickets.samigo.ch/en/events/archive-404';
+const APR17_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1774627082/AR402_Instagram-Post_SH_260227_01_Instapost_Grau_tcxhpc.jpg';
 
-// APR 17 flyer (moved from UPCOMING to PAST)
-const APR17_FLYER_URL =
-  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1774627082/AR402_Instagram-Post_SH_260227_01_Instapost_Grau_tcxhpc.jpg';
-
-// Background zoom tuning
 const BASE_ZOOM = 1.02;
 const MAX_ZOOM = 1.1;
 
-// St. Moritz flyer (was UPCOMING, now moved to PAST)
-const ST_MORITZ_FLYER_URL =
-  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1765023902/AR4_Instagram-Post_251203_l5i1md.png';
+const ST_MORITZ_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1765023902/AR4_Instagram-Post_251203_l5i1md.png';
+const ZURICH_JAN30_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1769005674/AR402_Instagram-Post_SH_260121-08_qxhube.png';
+const FEB27_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1770251160/IMG_1687_wvmczm.png';
 
-// Jan 30 Zurich flyer (moved to PAST)
-const ZURICH_JAN30_FLYER_URL =
-  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1769005674/AR402_Instagram-Post_SH_260121-08_qxhube.png';
-
-// FEB 27 Zurich flyer (moved from UPCOMING -> PAST)
-const FEB27_FLYER_URL =
-  'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1770251160/IMG_1687_wvmczm.png';
-
-// ABOUT text as a single block paragraph
-const ABOUT_TEXT =
-  'ARCHIVE 404 IS A ZURICH-BASED EVENT LABEL CRAFTING CAREFULLY DESIGNED EXPERIENCES WHERE MUSIC, LIGHT AND SPACE CREATE IMMERSIVE MOMENTS. ITS NAME REINTERPRETS A DIGITAL ERROR AS AN INVITATION TO RECONNECT THROUGH PEOPLE AND SOUND. BY BRINGING TOGETHER RESPECTED INTERNATIONAL ARTISTS AND SOME OF THE MOST PROMISING LOCAL TALENTS, ARCHIVE 404 CREATES A DISTINCT ENERGY THAT FEELS CONTEMPORARY YET TIMELESS.';
+const ABOUT_TEXT = 'ARCHIVE 404 IS A ZURICH-BASED EVENT LABEL CRAFTING CAREFULLY DESIGNED EXPERIENCES WHERE MUSIC, LIGHT AND SPACE CREATE IMMERSIVE MOMENTS. ITS NAME REINTERPRETS A DIGITAL ERROR AS AN INVITATION TO RECONNECT THROUGH PEOPLE AND SOUND. BY BRINGING TOGETHER RESPECTED INTERNATIONAL ARTISTS AND SOME OF THE MOST PROMISING LOCAL TALENTS, ARCHIVE 404 CREATES A DISTINCT ENERGY THAT FEELS CONTEMPORARY YET TIMELESS.';
 
 const PAST_FLYERS: string[] = [
   APR17_FLYER_URL,
@@ -53,78 +34,27 @@ const PAST_FLYERS: string[] = [
   'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1763060124/ARCHIVE404_280225_POST03_LOGO_nqcgah.jpg',
 ];
 
-// ✅ keep list order as defined so 2M stays last
 const ARTISTS: string[] = [
-  'ANCHI',
-  'ARWIN AZIZ',
-  'AXEL NORD',
-  'BOYSDONTCRY',
-  'CALI:BER',
-  'CAMILLO',
-  'DARREN',
-  'DE:AN',
-  'DEBARRO',
-  'DANGEL TWINS',
-  'DYZEN',
-  'FELIX DE LEON',
-  'GIANNI',
-  'GIORGIO',
-  'HEUER',
-  'HOMEOFFICE',
-  'JOSEPH',
-  'JULIA LINKOGEL',
-  'KASSETTE',
-  'LOU COMBO',
-  'MATTEOMIE',
-  'MICHELLE VANJA',
-  'MORIS',
-  'ORSAY',
-  'PAUL ALMQVIST',
-  'ROCCO',
-  'RONNY GRAUER',
-  'RUBEN SCORZA',
-  'SAM MADI',
-  'SEBASTIAN KONRAD',
-  'SIELLE',
-  'SOLIQUE',
-  'TIM ENGELHARDT',
-  'WHEREISVERO',
-  'YENI:SAM',
-  '2M',
+  'ANCHI','ARWIN AZIZ','AXEL NORD','BOYSDONTCRY','CALI:BER','CAMILLO','DARREN','DE:AN','DEBARRO','DANGEL TWINS','DYZEN','FELIX DE LEON','GIANNI','GIORGIO','HEUER','HOMEOFFICE','JOSEPH','JULIA LINKOGEL','KASSETTE','LOU COMBO','MATTEOMIE','MICHELLE VANJA','MORIS','ORSAY','PAUL ALMQVIST','ROCCO','RONNY GRAUER','RUBEN SCORZA','SAM MADI','SEBASTIAN KONRAD','SIELLE','SOLIQUE','TIM ENGELHARDT','WHEREISVERO','YENI:SAM','2M',
 ];
 
-const HIGHLIGHT_ARTISTS = new Set<string>([
-  'DANGEL TWINS',
-  'DYZEN',
-  'SEBASTIAN KONRAD',
-  'TIM ENGELHARDT',
-]);
+const HIGHLIGHT_ARTISTS = new Set<string>(['DANGEL TWINS','DYZEN','SEBASTIAN KONRAD','TIM ENGELHARDT']);
 
 type Page = 'home' | 'upcoming' | 'past' | 'artists' | 'about';
 
-/* ---------------------------------
-   Lightweight URL routing (SPA)
----------------------------------- */
 const pageToPath = (p: Page) => {
   switch (p) {
-    case 'home':
-      return '/';
-    case 'upcoming':
-      return '/upcoming';
-    case 'past':
-      return '/past';
-    case 'artists':
-      return '/artists';
-    case 'about':
-      return '/about';
-    default:
-      return '/';
+    case 'home': return '/';
+    case 'upcoming': return '/upcoming';
+    case 'past': return '/past';
+    case 'artists': return '/artists';
+    case 'about': return '/about';
+    default: return '/';
   }
 };
 
 const pathToPage = (pathname: string): Page => {
-  const clean =
-    (pathname || '/').split('?')[0].split('#')[0].replace(/\/+$/, '') || '/';
+  const clean = (pathname || '/').split('?')[0].split('#')[0].replace(/\/+$/, '') || '/';
   if (clean === '/') return 'home';
   if (clean === '/upcoming') return 'upcoming';
   if (clean === '/past') return 'past';
@@ -135,15 +65,12 @@ const pathToPage = (pathname: string): Page => {
 
 export default function Preview() {
   const [page, setPage] = useState<Page>('home');
-
   const [isEntering, setIsEntering] = useState(true);
   const [logoAnimKey, setLogoAnimKey] = useState(0);
-
   const [bgZoom, setBgZoom] = useState(BASE_ZOOM);
 
   const scrollYRef = useRef(0);
   const inputFocusedRef = useRef(false);
-
   const lastTouchActivateTsRef = useRef<number>(0);
   const TOUCH_DEDUPE_MS = 800;
 
@@ -152,9 +79,7 @@ export default function Preview() {
   const [rowVisible, setRowVisible] = useState<boolean[]>(() =>
     Array.from({ length: Math.ceil(PAST_FLYERS.length / 2) }, (_, i) => i === 0)
   );
-  const [artistVisible, setArtistVisible] = useState<boolean[]>(() =>
-    SORTED_ARTISTS.map(() => false)
-  );
+  const [artistVisible, setArtistVisible] = useState<boolean[]>(() => SORTED_ARTISTS.map(() => false));
 
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [isSubmittingNewsletter, setIsSubmittingNewsletter] = useState(false);
@@ -163,21 +88,14 @@ export default function Preview() {
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
   const artistRefs = useRef<(HTMLParagraphElement | null)[]>([]);
 
-  const nav = useMemo(
-    () =>
-      [
-        ['UPCOMING', 'upcoming'],
-        ['PAST', 'past'],
-        ['ARTISTS', 'artists'],
-        ['ABOUT', 'about'],
-      ] as const,
-    []
-  );
+  const nav = useMemo(() => ([
+    ['UPCOMING', 'upcoming'],
+    ['PAST', 'past'],
+    ['ARTISTS', 'artists'],
+    ['ABOUT', 'about'],
+  ] as const), []);
 
-  const onTouchActivate = (
-    e: React.PointerEvent | React.MouseEvent,
-    action: () => void
-  ) => {
+  const onTouchActivate = (e: React.PointerEvent | React.MouseEvent, action: () => void) => {
     if ('pointerType' in e) {
       const pe = e as React.PointerEvent;
       if (pe.pointerType === 'touch') {
@@ -203,106 +121,66 @@ export default function Preview() {
   const playIntro = () => {
     setIsEntering(true);
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        setIsEntering(false);
-      });
+      requestAnimationFrame(() => { setIsEntering(false); });
     });
   };
 
-  // Sync initial page from URL + handle back/forward
   useEffect(() => {
     if (typeof window === 'undefined') return;
-
     const applyFromUrl = () => {
       const next = pathToPage(window.location.pathname);
-
       if (next === 'past') {
-        setRowVisible(
-          Array.from({ length: Math.ceil(PAST_FLYERS.length / 2) }, (_, i) => i === 0)
-        );
+        setRowVisible(Array.from({ length: Math.ceil(PAST_FLYERS.length / 2) }, (_, i) => i === 0));
       }
-      if (next === 'artists') {
-        setArtistVisible(SORTED_ARTISTS.map(() => false));
-      }
-
+      if (next === 'artists') { setArtistVisible(SORTED_ARTISTS.map(() => false)); }
       setPage((prev) => (prev === next ? prev : next));
       setLogoAnimKey((k) => k + 1);
       playIntro();
       setBgZoom(BASE_ZOOM);
     };
-
     applyFromUrl();
     window.addEventListener('popstate', applyFromUrl);
     return () => window.removeEventListener('popstate', applyFromUrl);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => { playIntro(); }, []);
+
   useEffect(() => {
-    playIntro();
+    const urls = [MAY8_FLYER_URL, ST_MORITZ_FLYER_URL, ZURICH_JAN30_FLYER_URL, FEB27_FLYER_URL, APR17_FLYER_URL];
+    urls.forEach((url) => { const img = new Image(); img.decoding = 'async'; img.src = url; });
   }, []);
 
-  // Preload key flyers
-  useEffect(() => {
-    const urls = [
-      MAY8_FLYER_URL,
-      ST_MORITZ_FLYER_URL,
-      ZURICH_JAN30_FLYER_URL,
-      FEB27_FLYER_URL,
-      APR17_FLYER_URL,
-    ];
-
-    urls.forEach((url) => {
-      const img = new Image();
-      img.decoding = 'async';
-      img.src = url;
-    });
-  }, []);
-
-  // Smooth background zoom on scroll (RAF)
   useEffect(() => {
     const maxScroll = 600;
-
     const calcZoom = (scrollY: number) => {
       const clamped = Math.min(Math.max(scrollY, 0), maxScroll);
       return BASE_ZOOM + (clamped / maxScroll) * (MAX_ZOOM - BASE_ZOOM);
     };
-
     const currentZoomRef = { current: BASE_ZOOM };
     const targetZoomRef = { current: BASE_ZOOM };
     let rafId: number | null = null;
-
     const animate = () => {
       rafId = null;
-
       const current = currentZoomRef.current;
       const target = targetZoomRef.current;
       const next = current + (target - current) * 0.09;
-
       currentZoomRef.current = next;
       setBgZoom(next);
-
       if (Math.abs(target - next) > 0.0005) {
         rafId = window.requestAnimationFrame(animate);
       }
     };
-
-    const requestAnimate = () => {
-      if (rafId === null) rafId = window.requestAnimationFrame(animate);
-    };
-
+    const requestAnimate = () => { if (rafId === null) rafId = window.requestAnimationFrame(animate); };
     const handleScroll = () => {
       if (inputFocusedRef.current) return;
-
       const y = window.scrollY || window.pageYOffset || 0;
       scrollYRef.current = y;
-
       targetZoomRef.current = calcZoom(y);
       requestAnimate();
     };
-
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
-
     return () => {
       window.removeEventListener('scroll', handleScroll);
       if (rafId !== null) cancelAnimationFrame(rafId);
@@ -312,91 +190,65 @@ export default function Preview() {
   useEffect(() => {
     if (page !== 'past') return;
     if (!rowRefs.current.length) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        setRowVisible((prev) => {
-          const next = [...prev];
-          let changed = false;
-
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            const idxAttr = (entry.target as HTMLElement).dataset.rowIndex;
-            const idx = idxAttr ? parseInt(idxAttr, 10) : -1;
-            if (idx >= 0 && !next[idx]) {
-              next[idx] = true;
-              changed = true;
-            }
-          });
-
-          return changed ? next : prev;
+    const observer = new IntersectionObserver((entries) => {
+      setRowVisible((prev) => {
+        const next = [...prev];
+        let changed = false;
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const idxAttr = (entry.target as HTMLElement).dataset.rowIndex;
+          const idx = idxAttr ? parseInt(idxAttr, 10) : -1;
+          if (idx >= 0 && !next[idx]) { next[idx] = true; changed = true; }
         });
-      },
-      { threshold: 0.1, rootMargin: '200px 0px' }
-    );
-
+        return changed ? next : prev;
+      });
+    }, { threshold: 0.1, rootMargin: '200px 0px' });
     rowRefs.current.forEach((row, index) => {
       if (row) {
         (row as HTMLElement).dataset.rowIndex = String(index);
         observer.observe(row);
       }
     });
-
     return () => observer.disconnect();
   }, [page, PAST_FLYERS.length]);
 
   useEffect(() => {
     if (page !== 'artists') return;
     if (!artistRefs.current.length) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        setArtistVisible((prev) => {
-          const next = [...prev];
-          let changed = false;
-
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            const idxAttr = (entry.target as HTMLElement).dataset.artistIndex;
-            const idx = idxAttr ? parseInt(idxAttr, 10) : -1;
-            if (idx >= 0 && !next[idx]) {
-              next[idx] = true;
-              changed = true;
-            }
-          });
-
-          return changed ? next : prev;
+    const observer = new IntersectionObserver((entries) => {
+      setArtistVisible((prev) => {
+        const next = [...prev];
+        let changed = false;
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const idxAttr = (entry.target as HTMLElement).dataset.artistIndex;
+          const idx = idxAttr ? parseInt(idxAttr, 10) : -1;
+          if (idx >= 0 && !next[idx]) { next[idx] = true; changed = true; }
         });
-      },
-      { threshold: 0.1, rootMargin: '200px 0px' }
-    );
-
+        return changed ? next : prev;
+      });
+    }, { threshold: 0.1, rootMargin: '200px 0px' });
     artistRefs.current.forEach((el, index) => {
       if (el) {
         (el as HTMLElement).dataset.artistIndex = String(index);
         observer.observe(el);
       }
     });
-
     return () => observer.disconnect();
   }, [page, SORTED_ARTISTS]);
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newsletterEmail.trim()) return;
-
     setIsSubmittingNewsletter(true);
     setNewsletterMessage(null);
-
     try {
       const res = await fetch('/api/newsletter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: newsletterEmail.trim() }),
       });
-
       if (!res.ok) throw new Error('Request failed');
-
       setNewsletterMessage('WELCOME TO THE ARCHIVE FAMILY.');
       setNewsletterEmail('');
     } catch {
@@ -408,7 +260,6 @@ export default function Preview() {
 
   const resetScrollToTop = () => {
     if (typeof window === 'undefined') return;
-
     requestAnimationFrame(() => {
       window.scrollTo(0, 0);
       document.documentElement.scrollTop = 0;
@@ -421,77 +272,41 @@ export default function Preview() {
     const target = pageToPath(next);
     const current = window.location.pathname;
     if (current === target) return;
-
     const fn = replace ? 'replaceState' : 'pushState';
     window.history[fn]({}, '', target);
   };
 
   const handleNavigate = (next: Page) => {
     if (next === page) return;
-
     if (next === 'past') {
-      setRowVisible(
-        Array.from({ length: Math.ceil(PAST_FLYERS.length / 2) }, (_, i) => i === 0)
-      );
+      setRowVisible(Array.from({ length: Math.ceil(PAST_FLYERS.length / 2) }, (_, i) => i === 0));
     }
-    if (next === 'artists') {
-      setArtistVisible(SORTED_ARTISTS.map(() => false));
-    }
-
+    if (next === 'artists') { setArtistVisible(SORTED_ARTISTS.map(() => false)); }
     setPage(next);
     setLogoAnimKey((k) => k + 1);
     playIntro();
-
     setBgZoom(BASE_ZOOM);
     resetScrollToTop();
-
     pushUrlForPage(next);
   };
 
-  /* ---------------------------------
-     UPCOMING PAGE
-  ---------------------------------- */
   const renderUpcoming = () => (
     <section className="section upcoming-section">
       <div className="upcoming upcoming-updated">
         <div className="upcoming-next upcoming-line">
           <p className="upcoming-head">MAY 8 SAMIGO</p>
         </div>
-
         <div className="upcoming-ticket-wrap upcoming-ticket-wrap-top">
-          
-            href={MAY8_TICKET_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ticketbtn"
-          >
-            TICKETS
-          </a>
+          <a href={MAY8_TICKET_URL} target="_blank" rel="noopener noreferrer" className="ticketbtn">TICKETS</a>
         </div>
-
         <div className="upcoming-flyer-wrap">
-          
-            href={MAY8_TICKET_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="upcoming-flyer-link"
-            aria-label="Open tickets for Archive 404 May 8 Samigo"
-          >
-            <img
-              src={MAY8_FLYER_URL}
-              alt="ARCHIVE 404 MAY 8 SAMIGO"
-              className="upcoming-flyer"
-              decoding="async"
-              loading="eager"
-              fetchPriority="high"
-            />
+          <a href={MAY8_TICKET_URL} target="_blank" rel="noopener noreferrer" className="upcoming-flyer-link" aria-label="Open tickets for Archive 404 May 8 Samigo">
+            <img src={MAY8_FLYER_URL} alt="ARCHIVE 404 MAY 8 SAMIGO" className="upcoming-flyer" decoding="async" loading="eager" fetchPriority="high" />
           </a>
         </div>
       </div>
-
       <div className="newsletter upcoming-newsletter">
         <p className="newsletter-label">FOR THOSE WHO KNOW.</p>
-
         <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
           <input
             type="email"
@@ -499,23 +314,15 @@ export default function Preview() {
             placeholder="EMAIL"
             value={newsletterEmail}
             onChange={(e) => setNewsletterEmail(e.target.value)}
-            onFocus={() => {
-              inputFocusedRef.current = true;
-            }}
-            onBlur={() => {
-              inputFocusedRef.current = false;
-            }}
+            onFocus={() => { inputFocusedRef.current = true; }}
+            onBlur={() => { inputFocusedRef.current = false; }}
             className="newsletter-input"
           />
           <button
             type="submit"
             className="newsletter-btn"
             disabled={isSubmittingNewsletter}
-            onPointerUp={(e) =>
-              onTouchActivate(e, () => {
-                (e.currentTarget as HTMLButtonElement).form?.requestSubmit?.();
-              })
-            }
+            onPointerUp={(e) => onTouchActivate(e, () => { (e.currentTarget as HTMLButtonElement).form?.requestSubmit?.(); })}
             onClick={(e) => onClickActivate(e, () => {})}
           >
             {isSubmittingNewsletter ? 'SENDING…' : 'JOIN'}
@@ -523,7 +330,6 @@ export default function Preview() {
         </form>
         {newsletterMessage && <p className="newsletter-message">{newsletterMessage}</p>}
       </div>
-
       <div className="homebtn-wrapper upcoming-homebtn">
         <button
           className="homebtn"
@@ -538,10 +344,7 @@ export default function Preview() {
 
   const renderPast = () => {
     const rows: string[][] = [];
-    for (let i = 0; i < PAST_FLYERS.length; i += 2) {
-      rows.push(PAST_FLYERS.slice(i, i + 2));
-    }
-
+    for (let i = 0; i < PAST_FLYERS.length; i += 2) { rows.push(PAST_FLYERS.slice(i, i + 2)); }
     return (
       <section className="section section-past">
         <div className="flyer-grid">
@@ -549,26 +352,18 @@ export default function Preview() {
             <div
               key={rowIndex}
               className={`flyer-row ${rowVisible[rowIndex] ? 'flyer-row-visible' : ''}`}
-              ref={(el) => {
-                rowRefs.current[rowIndex] = el;
-              }}
+              ref={(el) => { rowRefs.current[rowIndex] = el; }}
               data-row-index={rowIndex}
               style={{ transitionDelay: `${rowIndex * 80}ms` }}
             >
               {row.map((src, index) => (
                 <div className="flyer-cell" key={index}>
-                  <img
-                    src={src}
-                    alt={`ARCHIVE 404 PAST EVENT ${rowIndex * 2 + index + 1}`}
-                    decoding="async"
-                    loading="lazy"
-                  />
+                  <img src={src} alt={`ARCHIVE 404 PAST EVENT ${rowIndex * 2 + index + 1}`} decoding="async" loading="lazy" />
                 </div>
               ))}
             </div>
           ))}
         </div>
-
         <div className="homebtn-wrapper">
           <button
             className="homebtn"
@@ -584,34 +379,14 @@ export default function Preview() {
 
   const IconBar = () => (
     <div className="icons">
-      
-        href={WHATSAPP_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Join WhatsApp Community"
-        className="iconlink"
-      >
+      <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" aria-label="Join WhatsApp Community" className="iconlink">
         <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
-          <path
-            d="M12 2.75C7.17 2.75 3.25 6.67 3.25 11.5c0 1.86.53 3.57 1.52 5.03L4 21l4.62-.78A8.6 8.6 0 0 0 12 20.25c4.83 0 8.75-3.92 8.75-8.75S16.83 2.75 12 2.75Z"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M9.05 8.7c.1-.24.16-.39.16-.39.08-.18.14-.27.33-.3.2-.03.33-.01.48.2.15.2.63.77.69.83.06.07.1.16.03.3-.07.13-.11.2-.21.32-.1.12-.21.26-.3.35-.1.1-.2.21-.09.4.12.2.52.86 1.21 1.39.84.66 1.54.86 1.77.96.23.1.37.08.5-.06.15-.16.52-.6.7-.81.18-.22.35-.18.58-.1.24.07 1.51.71 1.51.71.22.09.37.15.4.24.05.14.05.81-.19 1.28-.24.47-.72.96-1.23 1.01-.51.05-1.37.01-2.29-.38-.92-.39-1.79-1.06-2.61-1.9-.82-.84-1.38-1.73-1.74-2.44-.36-.71-.53-1.32-.58-1.62-.05-.3-.05-.48-.05-.61 0-.13.05-.3.15-.54Z"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          <path d="M12 2.75C7.17 2.75 3.25 6.67 3.25 11.5c0 1.86.53 3.57 1.52 5.03L4 21l4.62-.78A8.6 8.6 0 0 0 12 20.25c4.83 0 8.75-3.92 8.75-8.75S16.83 2.75 12 2.75Z" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M9.05 8.7c.1-.24.16-.39.16-.39.08-.18.14-.27.33-.3.2-.03.33-.01.48.2.15.2.63.77.69.83.06.07.1.16.03.3-.07.13-.11.2-.21.32-.1.12-.21.26-.3.35-.1.1-.2.21-.09.4.12.2.52.86 1.21 1.39.84.66 1.54.86 1.77.96.23.1.37.08.5-.06.15-.16.52-.6.7-.81.18-.22.35-.18.58-.1.24.07 1.51.71 1.51.71.22.09.37.15.4.24.05.14.05.81-.19 1.28-.24.47-.72.96-1.23 1.01-.51.05-1.37.01-2.29-.38-.92-.39-1.79-1.06-2.61-1.9-.82-.84-1.38-1.73-1.74-2.44-.36-.71-.53-1.32-.58-1.62-.05-.3-.05-.48-.05-.61 0-.13.05-.3.15-.54Z" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </a>
       <span className="dot">·</span>
-      
-        href={INSTAGRAM_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Open Instagram"
-        className="iconlink"
-      >
+      <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" aria-label="Open Instagram" className="iconlink">
         <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
           <rect x="4" y="4" width="16" height="16" rx="4.5" ry="4.5" />
           <circle cx="12" cy="12" r="3.25" />
@@ -619,13 +394,7 @@ export default function Preview() {
         </svg>
       </a>
       <span className="dot">·</span>
-      
-        href={SOUNDCLOUD_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Open SoundCloud"
-        className="iconlink"
-      >
+      <a href={SOUNDCLOUD_URL} target="_blank" rel="noopener noreferrer" aria-label="Open SoundCloud" className="iconlink">
         <svg width="26" height="22" viewBox="0 0 28 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <path d="M2 16v-4" />
           <path d="M5 17v-7" />
@@ -636,14 +405,7 @@ export default function Preview() {
         </svg>
       </a>
       <span className="dot">·</span>
-      
-        href={MAILTO_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Email Archive 404"
-        className="iconlink"
-        style={{ lineHeight: 0 }}
-      >
+      <a href={MAILTO_URL} target="_blank" rel="noopener noreferrer" aria-label="Email Archive 404" className="iconlink" style={{ lineHeight: 0 }}>
         <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
           <rect x="3" y="6" width="18" height="12" rx="2" ry="2" />
           <path d="M5 8.5 12 13l7-4.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -662,12 +424,7 @@ export default function Preview() {
     <>
       <div className="root" style={{ fontFamily: FONT_STACK }}>
         <div className="bg-layer" aria-hidden="true" style={{ transform: `translateZ(0) scale(${bgZoom})` }} />
-
-        <div
-          className={`center ${page === 'home' ? 'center-home' : 'center-subpage'} ${
-            page === 'upcoming' ? 'center-upcoming' : ''
-          } ${page === 'about' ? 'center-about' : ''}`}
-        >
+        <div className={`center ${page === 'home' ? 'center-home' : 'center-subpage'} ${page === 'upcoming' ? 'center-upcoming' : ''} ${page === 'about' ? 'center-about' : ''}`}>
           <h1
             key={logoAnimKey}
             className="logo-main logo-animate"
@@ -677,9 +434,7 @@ export default function Preview() {
           >
             {LOGO_TEXT}
           </h1>
-
           <p className={`tag ${tagClass}`}>THE ART OF SOUND</p>
-
           <nav
             aria-label="Primary"
             className={`nav ${navClass} ${navOffHomeClass}`}
@@ -698,7 +453,6 @@ export default function Preview() {
               </button>
             ))}
           </nav>
-
           <main className={`panel ${panelClass}`}>
             {page === 'about' && (
               <section className="section about-section">
@@ -716,23 +470,18 @@ export default function Preview() {
                 </div>
               </section>
             )}
-
             {page === 'upcoming' && renderUpcoming()}
             {page === 'past' && renderPast()}
-
             {page === 'artists' && (
               <section className="section">
                 <div className="artists-list">
                   <p className="az-label">A–Z</p>
-
                   {SORTED_ARTISTS.map((artist, index) => {
                     const isHighlight = HIGHLIGHT_ARTISTS.has(artist);
                     return (
                       <div key={artist} className="artist-block">
                         <p
-                          className={`artist-name ${
-                            artistVisible[index] ? 'artist-name-visible' : ''
-                          } ${isHighlight ? 'artist-name-highlight' : ''}`}
+                          className={`artist-name ${artistVisible[index] ? 'artist-name-visible' : ''} ${isHighlight ? 'artist-name-highlight' : ''}`}
                           ref={(el) => {
                             artistRefs.current[index] = el;
                             if (el) (el as HTMLElement).dataset.artistIndex = String(index);
@@ -745,7 +494,6 @@ export default function Preview() {
                     );
                   })}
                 </div>
-
                 <div className="homebtn-wrapper">
                   <button
                     className="homebtn"
@@ -759,12 +507,10 @@ export default function Preview() {
             )}
           </main>
         </div>
-
         <footer className={`footer ${footerFadeClass}`}>
           <IconBar />
         </footer>
-
-        <style>{`
+<style>{`
 :root { color-scheme: dark; }
 html, body {
   margin: 0;
@@ -784,7 +530,6 @@ html, body {
   padding-bottom: 0;
 }
 
-/* Fixed background image */
 .bg-layer {
   position: fixed;
   inset: 0;
@@ -822,7 +567,7 @@ html, body {
   min-height: auto;
 }
 .center-about { padding-top: 8vh; }
-.center-upcoming { padding-top: 8vh !important; padding-bottom: 4vh; }
+.center-upcoming { padding-top: 8vh; padding-bottom: 4vh; }
 
 .logo-main {
   margin: 0 auto;
@@ -871,33 +616,27 @@ html, body {
   overflow: hidden !important;
 }
 
-/* Shared glass buttons (same feel everywhere) */
 .navbtn,
 .newsletter-btn,
 .homebtn {
   position: relative;
   pointer-events: auto;
-
   background: rgba(255, 255, 255, 0.008);
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
-
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.06);
   outline: 1px solid rgba(255, 255, 255, 0.015);
-
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-size: 11px;
   cursor: pointer;
-
   transition:
     opacity 0.6s ease,
     transform 0.2s ease,
     background 0.2s ease,
     border-color 0.2s ease,
     box-shadow 0.25s ease;
-
   touch-action: manipulation;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0.12);
   -webkit-user-select: none;
@@ -933,7 +672,6 @@ html, body {
   text-decoration: none;
 }
 
-/* UPCOMING */
 .upcoming {
   text-align: center;
   text-transform: uppercase;
@@ -941,7 +679,7 @@ html, body {
   line-height: 1.45;
   font-size: 16px;
   opacity: 0.95;
-  margin-top: 0 !important;
+  margin-top: 0;
 }
 .upcoming p { margin: 0; font-weight: 700; }
 
@@ -955,7 +693,7 @@ html, body {
 }
 .upcoming-head{ margin: 0; font-weight: 700; }
 .upcoming-next{
-  margin-top: 0 !important;
+  margin-top: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -970,7 +708,7 @@ html, body {
 }
 
 .upcoming-line {
-  margin-top: 0 !important;
+  margin-top: 0;
 }
 
 .upcoming-head {
@@ -996,33 +734,27 @@ html, body {
   border-radius: 10px;
   text-decoration: none;
   box-sizing: border-box;
-
   background: rgba(255, 255, 255, 0.045);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.12);
   outline: 1px solid rgba(255, 255, 255, 0.03);
-
   text-transform: uppercase;
   letter-spacing: 0.14em;
   font-size: 12px;
   font-weight: 700;
   line-height: 1;
   cursor: pointer;
-
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.06),
     0 6px 18px rgba(0, 0, 0, 0.22);
-
   transition:
     opacity 0.6s ease,
     transform 0.2s ease,
     background 0.2s ease,
     border-color 0.2s ease,
     box-shadow 0.25s ease;
-
   touch-action: manipulation;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0.12);
   -webkit-user-select: none;
@@ -1113,7 +845,7 @@ html, body {
   min-height: 72vh;
 }
 .upcoming-section .upcoming{
-  margin-top: 0 !important;
+  margin-top: 0;
 }
 .upcoming-newsletter{
   margin-top: auto;
@@ -1123,7 +855,6 @@ html, body {
   margin-top: 28px;
 }
 
-/* Newsletter */
 .newsletter {
   margin: 40px auto 0;
   max-width: 420px;
@@ -1189,7 +920,6 @@ input:-webkit-autofill:active {
   opacity: 0.8;
 }
 
-/* PAST */
 .flyer-grid {
   display: flex;
   flex-direction: column;
@@ -1217,7 +947,6 @@ input:-webkit-autofill:active {
   content-visibility: auto;
 }
 
-/* ARTISTS */
 .artists-list {
   max-width: 76ch;
   margin: 8px auto 0;
@@ -1253,7 +982,6 @@ input:-webkit-autofill:active {
   text-transform: uppercase;
 }
 
-/* FOOTER / ICONS */
 .icons { display: flex; align-items: center; justify-content: center; }
 .iconlink {
   pointer-events: auto;
@@ -1326,7 +1054,7 @@ input:-webkit-autofill:active {
   }
 
   .center-upcoming {
-    padding-top: 12vh !important;
+    padding-top: 12vh;
     padding-bottom: 2vh;
     min-height: 96vh;
     justify-content: flex-start;
@@ -1345,14 +1073,14 @@ input:-webkit-autofill:active {
   .center-home .nav { margin-top: 96px; }
 
   .upcoming-section{ min-height: 76vh; }
-  .upcoming-section .upcoming{ margin-top: 0 !important; }
+  .upcoming-section .upcoming{ margin-top: 0; }
   .upcoming-homebtn{ margin-bottom: 80px; }
 
   .upcoming-updated { gap: 12px; }
-  .upcoming-next{ margin-top: 0 !important; }
+  .upcoming-next{ margin-top: 0; }
 
   .upcoming-line {
-    margin-top: 0 !important;
+    margin-top: 0;
   }
 
   .upcoming-flyer-wrap {
