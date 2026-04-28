@@ -8,6 +8,7 @@ const FONT_STACK = 'Helvetica Neue, Helvetica, Arial, sans-serif';
 const INSTAGRAM_URL = 'https://instagram.com/archv404';
 const MAILTO_URL = 'mailto:info@archv404.com';
 const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
+const SOUNDCLOUD_URL = 'https://on.soundcloud.com/rIrQWYEiZFeBBI2o4i';
 
 // MAY 8 flyer + ticket link
 const MAY8_FLYER_URL =
@@ -458,7 +459,7 @@ export default function Preview() {
         </div>
 
         <div className="upcoming-ticket-wrap upcoming-ticket-wrap-top">
-          <a
+          
             href={MAY8_TICKET_URL}
             target="_blank"
             rel="noopener noreferrer"
@@ -469,7 +470,7 @@ export default function Preview() {
         </div>
 
         <div className="upcoming-flyer-wrap">
-          <a
+          
             href={MAY8_TICKET_URL}
             target="_blank"
             rel="noopener noreferrer"
@@ -583,7 +584,7 @@ export default function Preview() {
 
   const IconBar = () => (
     <div className="icons">
-      <a
+      
         href={WHATSAPP_URL}
         target="_blank"
         rel="noopener noreferrer"
@@ -604,7 +605,7 @@ export default function Preview() {
         </svg>
       </a>
       <span className="dot">·</span>
-      <a
+      
         href={INSTAGRAM_URL}
         target="_blank"
         rel="noopener noreferrer"
@@ -618,7 +619,24 @@ export default function Preview() {
         </svg>
       </a>
       <span className="dot">·</span>
-      <a
+      
+        href={SOUNDCLOUD_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Open SoundCloud"
+        className="iconlink"
+      >
+        <svg width="26" height="22" viewBox="0 0 28 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M2 16v-4" />
+          <path d="M5 17v-7" />
+          <path d="M8 18v-9" />
+          <path d="M11 18.5V8" />
+          <path d="M14 19V5.5" />
+          <path d="M14 19h9.5a3.5 3.5 0 0 0 0-7c-.4 0-.78.06-1.14.18A6 6 0 0 0 14 9" />
+        </svg>
+      </a>
+      <span className="dot">·</span>
+      
         href={MAILTO_URL}
         target="_blank"
         rel="noopener noreferrer"
@@ -804,7 +822,7 @@ html, body {
   min-height: auto;
 }
 .center-about { padding-top: 8vh; }
-.center-upcoming { padding-top: 14vh; padding-bottom: 4vh; }
+.center-upcoming { padding-top: 8vh; padding-bottom: 4vh; }
 
 .logo-main {
   margin: 0 auto;
@@ -923,7 +941,7 @@ html, body {
   line-height: 1.45;
   font-size: 16px;
   opacity: 0.95;
-  margin-top: 10px;
+  margin-top: 0;
 }
 .upcoming p { margin: 0; font-weight: 700; }
 
@@ -937,7 +955,7 @@ html, body {
 }
 .upcoming-head{ margin: 0; font-weight: 700; }
 .upcoming-next{
-  margin-top: 20px;
+  margin-top: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -952,7 +970,7 @@ html, body {
 }
 
 .upcoming-line {
-  margin-top: 20px;
+  margin-top: 0;
 }
 
 .upcoming-head {
@@ -1095,7 +1113,7 @@ html, body {
   min-height: 72vh;
 }
 .upcoming-section .upcoming{
-  margin-top: 34px;
+  margin-top: 0;
 }
 .upcoming-newsletter{
   margin-top: auto;
@@ -1308,7 +1326,7 @@ input:-webkit-autofill:active {
   }
 
   .center-upcoming {
-    padding-top: 10vh;
+    padding-top: 12vh;
     padding-bottom: 2vh;
     min-height: 96vh;
     justify-content: flex-start;
@@ -1327,14 +1345,14 @@ input:-webkit-autofill:active {
   .center-home .nav { margin-top: 96px; }
 
   .upcoming-section{ min-height: 76vh; }
-  .upcoming-section .upcoming{ margin-top: 26px; }
+  .upcoming-section .upcoming{ margin-top: 0; }
   .upcoming-homebtn{ margin-bottom: 80px; }
 
   .upcoming-updated { gap: 12px; }
-  .upcoming-next{ margin-top: 18px; }
+  .upcoming-next{ margin-top: 0; }
 
   .upcoming-line {
-    margin-top: 18px;
+    margin-top: 0;
   }
 
   .upcoming-flyer-wrap {
