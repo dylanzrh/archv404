@@ -298,7 +298,7 @@ export default function Preview() {
           <p className="upcoming-head">MAY 8 SAMIGO</p>
         </div>
         <div className="upcoming-ticket-wrap upcoming-ticket-wrap-top">
-          <a href={MAY8_TICKET_URL} target="_blank" rel="noopener noreferrer" className="ticketbtn">TICKETS</a>
+          <a href={MAY8_TICKET_URL} target="_blank" rel="noopener noreferrer" className="ticketbtn"> LAST TICKETS</a>
         </div>
         <div className="upcoming-flyer-wrap">
           <a href={MAY8_TICKET_URL} target="_blank" rel="noopener noreferrer" className="upcoming-flyer-link" aria-label="Open tickets for Archive 404 May 8 Samigo">
