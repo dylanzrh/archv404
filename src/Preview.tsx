@@ -848,12 +848,12 @@ html, body {
 .upcoming-section {
   display: flex;
   flex-direction: column;
-  min-height: 160vh;
+  min-height: 72vh;
   padding-bottom: 100px;
 }
 .upcoming-section .upcoming { margin-top: 0; }
 .upcoming-newsletter {
-  margin-top: auto;
+  margin-top: 80px;
   padding-top: 18px;
 }
 .upcoming-homebtn { margin-top: 28px; }
@@ -1076,7 +1076,7 @@ input:-webkit-autofill:active {
   .center-home .nav { margin-top: 96px; }
 
   .upcoming-section {
-    min-height: 170vh;
+    min-height: 76vh;
     padding-bottom: 110px;
   }
   .upcoming-section .upcoming { margin-top: 0; }
