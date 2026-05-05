@@ -298,7 +298,7 @@ export default function Preview() {
           <p className="upcoming-head">MAY 8 SAMIGO</p>
         </div>
         <div className="upcoming-ticket-wrap upcoming-ticket-wrap-top">
-          <a href={MAY8_TICKET_URL} target="_blank" rel="noopener noreferrer" className="ticketbtn"> LAST TICKETS</a>
+          <a href={MAY8_TICKET_URL} target="_blank" rel="noopener noreferrer" className="ticketbtn">LAST TICKETS</a>
         </div>
         <div className="upcoming-flyer-wrap">
           <a href={MAY8_TICKET_URL} target="_blank" rel="noopener noreferrer" className="upcoming-flyer-link" aria-label="Open tickets for Archive 404 May 8 Samigo">
@@ -737,7 +737,7 @@ html, body {
   align-items: center;
   justify-content: center;
   min-height: 36px;
-  min-width: 168px;
+  min-width: 214px;
   padding: 10px 18px;
   border-radius: 10px;
   text-decoration: none;
@@ -750,7 +750,7 @@ html, body {
   outline: 1px solid rgba(255, 255, 255, 0.03);
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   line-height: 1;
   cursor: pointer;
@@ -847,19 +847,20 @@ html, body {
   letter-spacing: 0.02em;
 }
 
-.upcoming-section{
+.upcoming-section {
   display: flex;
   flex-direction: column;
   min-height: 72vh;
+  padding-bottom: 100px;
 }
-.upcoming-section .upcoming{
+.upcoming-section .upcoming {
   margin-top: 0;
 }
-.upcoming-newsletter{
+.upcoming-newsletter {
   margin-top: auto;
   padding-top: 18px;
 }
-.upcoming-homebtn{
+.upcoming-homebtn {
   margin-top: 28px;
 }
 
@@ -1080,12 +1081,15 @@ input:-webkit-autofill:active {
   .nav { margin-top: 32px; gap: 16px; }
   .center-home .nav { margin-top: 96px; }
 
-  .upcoming-section{ min-height: 76vh; }
-  .upcoming-section .upcoming{ margin-top: 0; }
-  .upcoming-homebtn{ margin-bottom: 80px; }
+  .upcoming-section {
+    min-height: 76vh;
+    padding-bottom: 110px;
+  }
+  .upcoming-section .upcoming { margin-top: 0; }
+  .upcoming-homebtn { margin-bottom: 80px; }
 
   .upcoming-updated { gap: 12px; }
-  .upcoming-next{ margin-top: 0; }
+  .upcoming-next { margin-top: 0; }
 
   .upcoming-line {
     margin-top: 0;
@@ -1097,10 +1101,10 @@ input:-webkit-autofill:active {
   }
 
   .ticketbtn {
-    min-width: 152px;
+    min-width: 194px;
     min-height: 36px;
     padding: 10px 16px;
-    font-size: 11px;
+    font-size: 12px;
   }
 }
 
