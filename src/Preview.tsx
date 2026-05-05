@@ -6,6 +6,7 @@ const INSTAGRAM_URL = 'https://instagram.com/archv404';
 const MAILTO_URL = 'mailto:info@archv404.com';
 const WHATSAPP_URL = 'https://chat.whatsapp.com/LhIUP32cBH25L9Pn4u78ZN';
 const SOUNDCLOUD_URL = 'https://on.soundcloud.com/rIrQWYEiZFeBBI2o4i';
+const YOUTUBE_URL = 'https://youtube.com/@archv404?si=NT6lnimYaA58Lg6o';
 
 const MAY8_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1776801767/AR405_Instagram-Post-Lineup-Grey-4-5_260409_lsw2xb.jpg';
 const MAY8_TICKET_URL = 'https://tickets.samigo.ch/en/events/archive-404';
@@ -402,6 +403,13 @@ export default function Preview() {
           <path d="M11 18.5V8" />
           <path d="M14 19V5.5" />
           <path d="M14 19h9.5a3.5 3.5 0 0 0 0-7c-.4 0-.78.06-1.14.18A6 6 0 0 0 14 9" />
+        </svg>
+      </a>
+      <span className="dot">·</span>
+      <a href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer" aria-label="Open YouTube" className="iconlink">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="2" y="5" width="20" height="14" rx="3" ry="3" />
+          <polygon points="10,9 16,12 10,15" fill="currentColor" stroke="none" />
         </svg>
       </a>
       <span className="dot">·</span>
@@ -1100,7 +1108,7 @@ input:-webkit-autofill:active {
   from { opacity: 0; transform: translateY(-32px); }
   to { opacity: 1; transform: translateY(0); }
 }
-        `}</style>
+`}</style>
       </div>
     </>
   );
