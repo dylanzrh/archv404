@@ -691,7 +691,7 @@ html, body {
 }
 .upcoming p { margin: 0; font-weight: 700; }
 
-.upcoming-updated{
+.upcoming-updated {
   max-width: 520px;
   margin: 0 auto;
   display: flex;
@@ -699,15 +699,15 @@ html, body {
   align-items: center;
   gap: 14px;
 }
-.upcoming-head{ margin: 0; font-weight: 700; }
-.upcoming-next{
+.upcoming-head { margin: 0; font-weight: 700; }
+.upcoming-next {
   margin-top: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0;
 }
-.upcoming-sub{
+.upcoming-sub {
   margin-top: -6px;
   font-weight: 700;
   color: rgba(255,255,255,0.75);
@@ -715,9 +715,7 @@ html, body {
   font-size: 12px;
 }
 
-.upcoming-line {
-  margin-top: 0;
-}
+.upcoming-line { margin-top: 0; }
 
 .upcoming-head {
   letter-spacing: 0.2em;
@@ -750,7 +748,7 @@ html, body {
   outline: 1px solid rgba(255, 255, 255, 0.03);
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   line-height: 1;
   cursor: pointer;
@@ -850,19 +848,15 @@ html, body {
 .upcoming-section {
   display: flex;
   flex-direction: column;
-  min-height: 72vh;
+  min-height: 160vh;
   padding-bottom: 100px;
 }
-.upcoming-section .upcoming {
-  margin-top: 0;
-}
+.upcoming-section .upcoming { margin-top: 0; }
 .upcoming-newsletter {
   margin-top: auto;
   padding-top: 18px;
 }
-.upcoming-homebtn {
-  margin-top: 28px;
-}
+.upcoming-homebtn { margin-top: 28px; }
 
 .newsletter {
   margin: 40px auto 0;
@@ -1082,7 +1076,7 @@ input:-webkit-autofill:active {
   .center-home .nav { margin-top: 96px; }
 
   .upcoming-section {
-    min-height: 76vh;
+    min-height: 170vh;
     padding-bottom: 110px;
   }
   .upcoming-section .upcoming { margin-top: 0; }
@@ -1090,10 +1084,7 @@ input:-webkit-autofill:active {
 
   .upcoming-updated { gap: 12px; }
   .upcoming-next { margin-top: 0; }
-
-  .upcoming-line {
-    margin-top: 0;
-  }
+  .upcoming-line { margin-top: 0; }
 
   .upcoming-flyer-wrap {
     max-width: 280px;
@@ -1104,7 +1095,7 @@ input:-webkit-autofill:active {
     min-width: 194px;
     min-height: 36px;
     padding: 10px 16px;
-    font-size: 12px;
+    font-size: 13px;
   }
 }
 
