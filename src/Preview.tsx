@@ -297,13 +297,18 @@ export default function Preview() {
         <div className="upcoming-next upcoming-line">
           <p className="upcoming-head">MAY 8 SAMIGO</p>
         </div>
+        <p className="upcoming-soldout">ROOFTOP SOLD OUT</p>
         <div className="upcoming-ticket-wrap upcoming-ticket-wrap-top">
-          <a href={MAY8_TICKET_URL} target="_blank" rel="noopener noreferrer" className="ticketbtn">LAST TICKETS</a>
+          <a href={MAY8_TICKET_URL} target="_blank" rel="noopener noreferrer" className="ticketbtn">CLUB ONLY</a>
         </div>
         <div className="upcoming-flyer-wrap">
           <a href={MAY8_TICKET_URL} target="_blank" rel="noopener noreferrer" className="upcoming-flyer-link" aria-label="Open tickets for Archive 404 May 8 Samigo">
             <img src={MAY8_FLYER_URL} alt="ARCHIVE 404 MAY 8 SAMIGO" className="upcoming-flyer" decoding="async" loading="eager" fetchPriority="high" />
           </a>
+        </div>
+        <div className="upcoming-tables">
+          <p className="upcoming-tables-label">FOR TABLE RESERVATIONS MAIL TO</p>
+          <a href={MAILTO_URL} className="upcoming-tables-mail">INFO@ARCHV404.COM</a>
         </div>
       </div>
       <div className="newsletter upcoming-newsletter">
@@ -725,6 +730,15 @@ html, body {
   text-transform: uppercase;
 }
 
+.upcoming-soldout {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 700;
+}
+
 .upcoming-ticket-wrap-top {
   margin-top: 0;
   margin-bottom: 0;
@@ -784,6 +798,35 @@ html, body {
   width: 100%;
   height: auto;
   border-radius: 0;
+}
+
+.upcoming-tables {
+  margin-top: 22px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.upcoming-tables-label {
+  margin: 0;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 500;
+}
+.upcoming-tables-mail {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+.upcoming-tables-mail:hover {
+  opacity: 0.7;
 }
 
 @media (hover: hover) and (pointer: fine) {
