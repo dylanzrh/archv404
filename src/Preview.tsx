@@ -9,7 +9,6 @@ const SOUNDCLOUD_URL = 'https://on.soundcloud.com/rIrQWYEiZFeBBI2o4i';
 const YOUTUBE_URL = 'https://youtube.com/@archv404?si=NT6lnimYaA58Lg6o';
 
 const MAY8_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1776801767/AR405_Instagram-Post-Lineup-Grey-4-5_260409_lsw2xb.jpg';
-const MAY8_TICKET_URL = 'https://tickets.samigo.ch/en/events/archive-404';
 const APR17_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1774627082/AR402_Instagram-Post_SH_260227_01_Instapost_Grau_tcxhpc.jpg';
 
 const BASE_ZOOM = 1.02;
@@ -22,6 +21,7 @@ const FEB27_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_aut
 const ABOUT_TEXT = 'ARCHIVE 404 IS A ZURICH-BASED EVENT LABEL CRAFTING CAREFULLY DESIGNED EXPERIENCES WHERE MUSIC, LIGHT AND SPACE CREATE IMMERSIVE MOMENTS. ITS NAME REINTERPRETS A DIGITAL ERROR AS AN INVITATION TO RECONNECT THROUGH PEOPLE AND SOUND. BY BRINGING TOGETHER RESPECTED INTERNATIONAL ARTISTS AND SOME OF THE MOST PROMISING LOCAL TALENTS, ARCHIVE 404 CREATES A DISTINCT ENERGY THAT FEELS CONTEMPORARY YET TIMELESS.';
 
 const PAST_FLYERS: string[] = [
+  MAY8_FLYER_URL,
   APR17_FLYER_URL,
   FEB27_FLYER_URL,
   ZURICH_JAN30_FLYER_URL,
@@ -148,7 +148,7 @@ export default function Preview() {
   useEffect(() => { playIntro(); }, []);
 
   useEffect(() => {
-    const urls = [MAY8_FLYER_URL, ST_MORITZ_FLYER_URL, ZURICH_JAN30_FLYER_URL, FEB27_FLYER_URL, APR17_FLYER_URL];
+    const urls = [ST_MORITZ_FLYER_URL, ZURICH_JAN30_FLYER_URL, FEB27_FLYER_URL, APR17_FLYER_URL, MAY8_FLYER_URL];
     urls.forEach((url) => { const img = new Image(); img.decoding = 'async'; img.src = url; });
   }, []);
 
@@ -295,20 +295,7 @@ export default function Preview() {
     <section className="section upcoming-section">
       <div className="upcoming upcoming-updated">
         <div className="upcoming-next upcoming-line">
-          <p className="upcoming-head">MAY 8 SAMIGO</p>
-        </div>
-        <p className="upcoming-soldout">ROOFTOP SOLD OUT</p>
-        <div className="upcoming-ticket-wrap upcoming-ticket-wrap-top">
-          <a href={MAY8_TICKET_URL} target="_blank" rel="noopener noreferrer" className="ticketbtn">CLUB ONLY</a>
-        </div>
-        <div className="upcoming-flyer-wrap">
-          <a href={MAY8_TICKET_URL} target="_blank" rel="noopener noreferrer" className="upcoming-flyer-link" aria-label="Open tickets for Archive 404 May 8 Samigo">
-            <img src={MAY8_FLYER_URL} alt="ARCHIVE 404 MAY 8 SAMIGO" className="upcoming-flyer" decoding="async" loading="eager" fetchPriority="high" />
-          </a>
-        </div>
-        <div className="upcoming-tables">
-          <p className="upcoming-tables-label">FOR TABLE RESERVATIONS MAIL TO</p>
-          <a href={MAILTO_URL} className="upcoming-tables-mail">INFO@ARCHV404.COM</a>
+          <p className="upcoming-head">JUL 3 TBA</p>
         </div>
       </div>
       <div className="newsletter upcoming-newsletter">
@@ -523,7 +510,7 @@ export default function Preview() {
         <footer className={`footer ${footerFadeClass}`}>
           <IconBar />
         </footer>
-<style>{`
+        <style>{`
 :root { color-scheme: dark; }
 html, body {
   margin: 0;
@@ -727,13 +714,6 @@ html, body {
   align-items: center;
   gap: 0;
 }
-.upcoming-sub {
-  margin-top: -6px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.75);
-  letter-spacing: 0.22em;
-  font-size: 12px;
-}
 
 .upcoming-line { margin-top: 0; }
 
@@ -745,110 +725,10 @@ html, body {
   text-transform: uppercase;
 }
 
-.upcoming-soldout {
-  margin: 0;
-  font-size: 11px;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.55);
-  font-weight: 700;
-}
-
-.upcoming-ticket-wrap-top {
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.ticketbtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 36px;
-  min-width: 214px;
-  padding: 10px 18px;
-  border-radius: 10px;
-  text-decoration: none;
-  box-sizing: border-box;
-  background: rgba(255, 255, 255, 0.045);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  outline: 1px solid rgba(255, 255, 255, 0.03);
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1;
-  cursor: pointer;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    0 6px 18px rgba(0, 0, 0, 0.22);
-  transition:
-    opacity 0.6s ease,
-    transform 0.2s ease,
-    background 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.25s ease;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.12);
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-.upcoming-flyer-wrap {
-  width: 100%;
-  max-width: 300px;
-  margin: 0 auto;
-}
-
-.upcoming-flyer-link {
-  display: block;
-  text-decoration: none;
-  line-height: 0;
-}
-
-.upcoming-flyer {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 0;
-}
-
-.upcoming-tables {
-  margin-top: 22px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-.upcoming-tables-label {
-  margin: 0;
-  font-size: 10px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.55);
-  font-weight: 500;
-}
-.upcoming-tables-mail {
-  font-size: 10px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: #fff;
-  text-decoration: none;
-  font-weight: 500;
-  transition: opacity 0.2s ease;
-}
-.upcoming-tables-mail:hover {
-  opacity: 0.7;
-}
-
 @media (hover: hover) and (pointer: fine) {
   .navbtn:hover,
   .newsletter-btn:hover:not(:disabled),
-  .homebtn:hover,
-  .ticketbtn:hover {
+  .homebtn:hover {
     background: rgba(255, 255, 255, 0.07);
     border-color: rgba(255, 255, 255, 0.18);
     box-shadow:
@@ -1158,18 +1038,6 @@ input:-webkit-autofill:active {
   .upcoming-updated { gap: 12px; }
   .upcoming-next { margin-top: 0; }
   .upcoming-line { margin-top: 0; }
-
-  .upcoming-flyer-wrap {
-    max-width: 280px;
-    margin-top: 0;
-  }
-
-  .ticketbtn {
-    min-width: 194px;
-    min-height: 36px;
-    padding: 10px 16px;
-    font-size: 13px;
-  }
 }
 
 @keyframes logo-intro {
