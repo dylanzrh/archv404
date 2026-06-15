@@ -73,7 +73,6 @@ export default function Preview() {
   const [logoAnimKey, setLogoAnimKey] = useState(0);
   const [bgZoom, setBgZoom] = useState(BASE_ZOOM);
 
-  const scrollYRef = useRef(0);
   const inputFocusedRef = useRef(false);
   const lastTouchActivateTsRef = useRef<number>(0);
   const TOUCH_DEDUPE_MS = 800;
@@ -179,7 +178,6 @@ export default function Preview() {
     const handleScroll = () => {
       if (inputFocusedRef.current) return;
       const y = window.scrollY || window.pageYOffset || 0;
-      scrollYRef.current = y;
       targetZoomRef.current = calcZoom(y);
       requestAnimate();
     };
@@ -761,14 +759,9 @@ html, body {
 }
 .ticket-btn {
   min-width: 160px;
+  min-height: 30px;
   margin-top: 2px;
-  padding-top: 7px;
-  padding-bottom: 7px;
-  background: rgba(255, 255, 255, 0.10);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-color: rgba(255, 255, 255, 0.22);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  padding: 4px 18px;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -784,10 +777,6 @@ html, body {
   }
   .iconlink:hover { opacity: 1; }
   .upcoming-flyer:hover { opacity: 0.88; transform: translateY(-1px); }
-  .ticket-btn:hover {
-    background: rgba(255, 255, 255, 0.16);
-    border-color: rgba(255, 255, 255, 0.30);
-  }
 }
 
 .newsletter-btn:disabled {
@@ -1089,6 +1078,23 @@ input:-webkit-autofill:active {
   .upcoming-updated { gap: 12px; }
   .upcoming-next { margin-top: 0; }
   .upcoming-line { margin-top: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-animate { animation: none !important; }
+  .bg-layer { transform: none !important; }
+  .tag,
+  .panel-steady,
+  .footer-visible,
+  .nav.fade-visible .navbtn,
+  .flyer-row,
+  .artist-name,
+  .upcoming-flyer,
+  .navbtn,
+  .newsletter-btn,
+  .homebtn {
+    transition: none !important;
+  }
 }
 
 @keyframes logo-intro {
