@@ -308,9 +308,15 @@ export default function Preview() {
         >
           TICKETS
         </a>
-        <div className="upcoming-flyer">
+        <a
+          className="upcoming-flyer"
+          href={JUL3_TICKET_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="JUL 3 SUPERMARKET CLUB — tickets"
+        >
           <img src={JUL3_FLYER_URL} alt="ARCHIVE 404 — JUL 3 SUPERMARKET CLUB" decoding="async" />
-        </div>
+        </a>
       </div>
       <div className="newsletter upcoming-newsletter">
         <p className="newsletter-label">FOR THOSE WHO KNOW.</p>
@@ -740,9 +746,12 @@ html, body {
 }
 
 .upcoming-flyer {
+  display: block;
   width: 100%;
-  max-width: 240px;
+  max-width: 290px;
   margin: 4px auto 0;
+  border-radius: 4px;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 .upcoming-flyer img {
   display: block;
@@ -753,6 +762,13 @@ html, body {
 .ticket-btn {
   min-width: 160px;
   margin-top: 2px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -767,6 +783,11 @@ html, body {
     transform: translateY(-1px);
   }
   .iconlink:hover { opacity: 1; }
+  .upcoming-flyer:hover { opacity: 0.88; transform: translateY(-1px); }
+  .ticket-btn:hover {
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.30);
+  }
 }
 
 .newsletter-btn:disabled {
