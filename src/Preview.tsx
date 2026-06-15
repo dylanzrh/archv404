@@ -18,6 +18,9 @@ const ST_MORITZ_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f
 const ZURICH_JAN30_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1769005674/AR402_Instagram-Post_SH_260121-08_qxhube.png';
 const FEB27_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1770251160/IMG_1687_wvmczm.png';
 
+const JUL3_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1781546120/IMG_7975_a3evta.jpg';
+const JUL3_TICKET_URL = 'https://supermarket.li/events/archive-404-7/';
+
 const ABOUT_TEXT = 'ARCHIVE 404 IS A ZURICH-BASED EVENT LABEL CRAFTING CAREFULLY DESIGNED EXPERIENCES WHERE MUSIC, LIGHT AND SPACE CREATE IMMERSIVE MOMENTS. ITS NAME REINTERPRETS A DIGITAL ERROR AS AN INVITATION TO RECONNECT THROUGH PEOPLE AND SOUND. BY BRINGING TOGETHER RESPECTED INTERNATIONAL ARTISTS AND SOME OF THE MOST PROMISING LOCAL TALENTS, ARCHIVE 404 CREATES A DISTINCT ENERGY THAT FEELS CONTEMPORARY YET TIMELESS.';
 
 const PAST_FLYERS: string[] = [
@@ -36,7 +39,7 @@ const PAST_FLYERS: string[] = [
 ];
 
 const ARTISTS: string[] = [
-  'ANCHI','ARWIN AZIZ','AXEL NORD','BOYSDONTCRY','CALI:BER','CAMILLO','DARREN','DE:AN','DEBARRO','DANGEL TWINS','DYZEN','FELIX DE LEON','GIANNI','GIORGIO','HEUER','HOMEOFFICE','JOSEPH','JULIA LINKOGEL','KASSETTE','LOU COMBO','MATTEOMIE','MICHELLE VANJA','MORIS','ORSAY','PAUL ALMQVIST','ROCCO','RONNY GRAUER','RUBEN SCORZA','SAM MADI','SEBASTIAN KONRAD','SIELLE','SOLIQUE','TIM ENGELHARDT','WHEREISVERO','YENI:SAM','2M',
+  'ALEX DALLAS','AMOUR PROPRE','ANCHI','ARWIN AZIZ','AXEL NORD','BOYSDONTCRY','CALI:BER','CAMILLO','DARREN','DE:AN','DEBARRO','DANGEL TWINS','D-JOURNEY','DYZEN','FELIX DE LEON','GIANNI','GIORGIO','GUAVED','HEUER','HOMEOFFICE','JOSEPH','JULIA LINKOGEL','KASSETTE','LOU COMBO','MATTEOMIE','MICHELLE VANJA','MORIS','NELLE','ORSAY','PAUL ALMQVIST','ROCCO','RONNY GRAUER','RUBEN SCORZA','SAM MADI','SEBASTIAN KONRAD','SIELLE','SOLIQUE','TIM ENGELHARDT','WHEREISVERO','YENI:SAM','2M',
 ];
 
 const HIGHLIGHT_ARTISTS = new Set<string>(['DANGEL TWINS','DYZEN','SEBASTIAN KONRAD','TIM ENGELHARDT']);
@@ -148,7 +151,7 @@ export default function Preview() {
   useEffect(() => { playIntro(); }, []);
 
   useEffect(() => {
-    const urls = [ST_MORITZ_FLYER_URL, ZURICH_JAN30_FLYER_URL, FEB27_FLYER_URL, APR17_FLYER_URL, MAY8_FLYER_URL];
+    const urls = [ST_MORITZ_FLYER_URL, ZURICH_JAN30_FLYER_URL, FEB27_FLYER_URL, APR17_FLYER_URL, MAY8_FLYER_URL, JUL3_FLYER_URL];
     urls.forEach((url) => { const img = new Image(); img.decoding = 'async'; img.src = url; });
   }, []);
 
@@ -295,8 +298,19 @@ export default function Preview() {
     <section className="section upcoming-section">
       <div className="upcoming upcoming-updated">
         <div className="upcoming-next upcoming-line">
-          <p className="upcoming-head">JUL 3 TBA</p>
+          <p className="upcoming-head">JUL 3 SUPERMARKET CLUB</p>
         </div>
+        <div className="upcoming-flyer">
+          <img src={JUL3_FLYER_URL} alt="ARCHIVE 404 — JUL 3 SUPERMARKET CLUB" decoding="async" />
+        </div>
+        <a
+          className="homebtn ticket-btn"
+          href={JUL3_TICKET_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          TICKETS
+        </a>
       </div>
       <div className="newsletter upcoming-newsletter">
         <p className="newsletter-label">FOR THOSE WHO KNOW.</p>
@@ -723,6 +737,21 @@ html, body {
   font-size: 16px;
   opacity: 0.95;
   text-transform: uppercase;
+}
+
+.upcoming-flyer {
+  width: 100%;
+  max-width: 360px;
+  margin: 8px auto 0;
+}
+.upcoming-flyer img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+.ticket-btn {
+  margin-top: 4px;
 }
 
 @media (hover: hover) and (pointer: fine) {
