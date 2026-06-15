@@ -300,9 +300,6 @@ export default function Preview() {
         <div className="upcoming-next upcoming-line">
           <p className="upcoming-head">JUL 3 SUPERMARKET CLUB</p>
         </div>
-        <div className="upcoming-flyer">
-          <img src={JUL3_FLYER_URL} alt="ARCHIVE 404 — JUL 3 SUPERMARKET CLUB" decoding="async" />
-        </div>
         <a
           className="homebtn ticket-btn"
           href={JUL3_TICKET_URL}
@@ -311,6 +308,9 @@ export default function Preview() {
         >
           TICKETS
         </a>
+        <div className="upcoming-flyer">
+          <img src={JUL3_FLYER_URL} alt="ARCHIVE 404 — JUL 3 SUPERMARKET CLUB" decoding="async" />
+        </div>
       </div>
       <div className="newsletter upcoming-newsletter">
         <p className="newsletter-label">FOR THOSE WHO KNOW.</p>
@@ -741,8 +741,8 @@ html, body {
 
 .upcoming-flyer {
   width: 100%;
-  max-width: 360px;
-  margin: 8px auto 0;
+  max-width: 240px;
+  margin: 4px auto 0;
 }
 .upcoming-flyer img {
   display: block;
@@ -751,7 +751,8 @@ html, body {
   border-radius: 4px;
 }
 .ticket-btn {
-  margin-top: 4px;
+  min-width: 160px;
+  margin-top: 2px;
 }
 
 @media (hover: hover) and (pointer: fine) {
