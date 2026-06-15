@@ -762,6 +762,14 @@ html, body {
   min-height: 30px;
   margin-top: 2px;
   padding: 4px 18px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 4px 14px rgba(0, 0, 0, 0.22);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -777,6 +785,14 @@ html, body {
   }
   .iconlink:hover { opacity: 1; }
   .upcoming-flyer:hover { opacity: 0.88; transform: translateY(-1px); }
+  .ticket-btn:hover {
+    background: rgba(255, 255, 255, 0.13);
+    border-color: rgba(255, 255, 255, 0.30);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.20),
+      0 8px 22px rgba(0, 0, 0, 0.28);
+    transform: translateY(-1px);
+  }
 }
 
 .newsletter-btn:disabled {
