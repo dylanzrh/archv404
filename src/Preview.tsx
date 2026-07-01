@@ -304,7 +304,7 @@ export default function Preview() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          TICKETS
+          LAST TICKETS
         </a>
         <a
           className="upcoming-flyer"
