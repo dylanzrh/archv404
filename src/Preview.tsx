@@ -19,11 +19,11 @@ const ZURICH_JAN30_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/uploa
 const FEB27_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1770251160/IMG_1687_wvmczm.png';
 
 const JUL3_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1781546120/IMG_7975_a3evta.jpg';
-const JUL3_TICKET_URL = 'https://supermarket.li/events/archive-404-7/';
 
 const ABOUT_TEXT = 'ARCHIVE 404 IS A ZURICH-BASED EVENT LABEL CRAFTING CAREFULLY DESIGNED EXPERIENCES WHERE MUSIC, LIGHT AND SPACE CREATE IMMERSIVE MOMENTS. ITS NAME REINTERPRETS A DIGITAL ERROR AS AN INVITATION TO RECONNECT THROUGH PEOPLE AND SOUND. BY BRINGING TOGETHER RESPECTED INTERNATIONAL ARTISTS AND SOME OF THE MOST PROMISING LOCAL TALENTS, ARCHIVE 404 CREATES A DISTINCT ENERGY THAT FEELS CONTEMPORARY YET TIMELESS.';
 
 const PAST_FLYERS: string[] = [
+  JUL3_FLYER_URL,
   MAY8_FLYER_URL,
   APR17_FLYER_URL,
   FEB27_FLYER_URL,
@@ -296,25 +296,8 @@ export default function Preview() {
     <section className="section upcoming-section">
       <div className="upcoming upcoming-updated">
         <div className="upcoming-next upcoming-line">
-          <p className="upcoming-head">JUL 3 SUPERMARKET CLUB</p>
+          <p className="upcoming-head">NEXT DATE TBA</p>
         </div>
-        <a
-          className="homebtn ticket-btn"
-          href={JUL3_TICKET_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          LAST TICKETS
-        </a>
-        <a
-          className="upcoming-flyer"
-          href={JUL3_TICKET_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="JUL 3 SUPERMARKET CLUB — tickets"
-        >
-          <img src={JUL3_FLYER_URL} alt="ARCHIVE 404 — JUL 3 SUPERMARKET CLUB" decoding="async" />
-        </a>
       </div>
       <div className="newsletter upcoming-newsletter">
         <p className="newsletter-label">FOR THOSE WHO KNOW.</p>
@@ -397,6 +380,13 @@ export default function Preview() {
         </svg>
       </a>
       <span className="dot">·</span>
+      <a href={MAILTO_URL} target="_blank" rel="noopener noreferrer" aria-label="Email Archive 404" className="iconlink" style={{ lineHeight: 0 }}>
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
+          <rect x="3" y="6" width="18" height="12" rx="2" ry="2" />
+          <path d="M5 8.5 12 13l7-4.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </a>
+      <span className="dot">·</span>
       <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" aria-label="Open Instagram" className="iconlink">
         <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
           <rect x="4" y="4" width="16" height="16" rx="4.5" ry="4.5" />
@@ -420,13 +410,6 @@ export default function Preview() {
         <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <rect x="2" y="5" width="20" height="14" rx="3" ry="3" />
           <polygon points="10,9 16,12 10,15" fill="currentColor" stroke="none" />
-        </svg>
-      </a>
-      <span className="dot">·</span>
-      <a href={MAILTO_URL} target="_blank" rel="noopener noreferrer" aria-label="Email Archive 404" className="iconlink" style={{ lineHeight: 0 }}>
-        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
-          <rect x="3" y="6" width="18" height="12" rx="2" ry="2" />
-          <path d="M5 8.5 12 13l7-4.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </a>
     </div>
@@ -743,35 +726,6 @@ html, body {
   text-transform: uppercase;
 }
 
-.upcoming-flyer {
-  display: block;
-  width: 100%;
-  max-width: 290px;
-  margin: 4px auto 0;
-  border-radius: 4px;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-.upcoming-flyer img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 4px;
-}
-.ticket-btn {
-  min-width: 160px;
-  min-height: 30px;
-  margin-top: 2px;
-  padding: 4px 18px;
-  font-weight: 700;
-  background: rgba(255, 255, 255, 0.07);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    0 4px 14px rgba(0, 0, 0, 0.22);
-}
-
 @media (hover: hover) and (pointer: fine) {
   .navbtn:hover,
   .newsletter-btn:hover:not(:disabled),
@@ -784,15 +738,6 @@ html, body {
     transform: translateY(-1px);
   }
   .iconlink:hover { opacity: 1; }
-  .upcoming-flyer:hover { opacity: 0.88; transform: translateY(-1px); }
-  .ticket-btn:hover {
-    background: rgba(255, 255, 255, 0.13);
-    border-color: rgba(255, 255, 255, 0.30);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.20),
-      0 8px 22px rgba(0, 0, 0, 0.28);
-    transform: translateY(-1px);
-  }
 }
 
 .newsletter-btn:disabled {
@@ -848,7 +793,7 @@ html, body {
 }
 .upcoming-section .upcoming { margin-top: 0; }
 .upcoming-newsletter {
-  margin-top: 80px;
+  margin-top: 48px;
   padding-top: 18px;
 }
 .upcoming-homebtn { margin-top: 28px; }
@@ -1089,6 +1034,7 @@ input:-webkit-autofill:active {
     padding-bottom: 110px;
   }
   .upcoming-section .upcoming { margin-top: 0; }
+  .upcoming-newsletter { margin-top: 40px; }
   .upcoming-homebtn { margin-bottom: 80px; }
 
   .upcoming-updated { gap: 12px; }
@@ -1105,7 +1051,6 @@ input:-webkit-autofill:active {
   .nav.fade-visible .navbtn,
   .flyer-row,
   .artist-name,
-  .upcoming-flyer,
   .navbtn,
   .newsletter-btn,
   .homebtn {
