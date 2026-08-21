@@ -296,7 +296,7 @@ export default function Preview() {
     <section className="section upcoming-section">
       <div className="upcoming upcoming-updated">
         <div className="upcoming-next upcoming-line">
-          <p className="upcoming-head">NEXT DATE TBA</p>
+          <p className="upcoming-head">OCT 2 TBA</p>
         </div>
       </div>
       <div className="newsletter upcoming-newsletter">
