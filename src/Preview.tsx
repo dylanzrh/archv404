@@ -739,7 +739,7 @@ height: auto;
 .upcoming-tickets {
 display: flex;
 width: 100%;
-max-width: 340px;
+max-width: 190px;
 margin: 22px auto 0;
 min-height: 0;
 padding: 9px 18px;
