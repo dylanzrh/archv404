@@ -19,6 +19,8 @@ const ZURICH_JAN30_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/uploa
 const FEB27_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1770251160/IMG_1687_wvmczm.png';
 
 const JUL3_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1781546120/IMG_7975_a3evta.jpg';
+const TICKETS_URL = 'https://www.supermarket.li/tickets/18c8eed3-857b-4e25-b45e-224087b61305';
+const OCT2_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1789670348/AR407_Static_260917_01_Instapost_Grau_copy_2_dpdxis.png';
 
 const ABOUT_TEXT = 'ARCHIVE 404 IS A ZURICH-BASED EVENT LABEL CRAFTING CAREFULLY DESIGNED EXPERIENCES WHERE MUSIC, LIGHT AND SPACE CREATE IMMERSIVE MOMENTS. ITS NAME REINTERPRETS A DIGITAL ERROR AS AN INVITATION TO RECONNECT THROUGH PEOPLE AND SOUND. BY BRINGING TOGETHER RESPECTED INTERNATIONAL ARTISTS AND SOME OF THE MOST PROMISING LOCAL TALENTS, ARCHIVE 404 CREATES A DISTINCT ENERGY THAT FEELS CONTEMPORARY YET TIMELESS.';
 
@@ -296,7 +298,12 @@ export default function Preview() {
     <section className="section upcoming-section">
       <div className="upcoming upcoming-updated">
         <div className="upcoming-next upcoming-line">
-          <p className="upcoming-head">OCT 2 TBA</p>
+          <p className="upcoming-head">OCT 2</p>
+          <p className="upcoming-head">SUPERMARKET CLUB</p>
+          <a className="homebtn" href={TICKETS_URL} target="_blank" rel="noopener noreferrer" style={{ marginTop: '20px' }}>TICKETS</a>
+          <a className="upcoming-flyer-link" href={TICKETS_URL} target="_blank" rel="noopener noreferrer" aria-label="ARCHIVE 404 OCT 2 TICKETS">
+            <img className="upcoming-flyer" src={OCT2_FLYER_URL} alt="ARCHIVE 404 OCT 2 SUPERMARKET CLUB" decoding="async" />
+          </a>
         </div>
       </div>
       <div className="newsletter upcoming-newsletter">
@@ -717,6 +724,19 @@ html, body {
 }
 
 .upcoming-line { margin-top: 0; }
+
+.upcoming-flyer-link {
+display: block;
+width: 100%;
+max-width: 340px;
+margin: 18px auto 0;
+line-height: 0;
+}
+.upcoming-flyer {
+display: block;
+width: 100%;
+height: auto;
+}
 
 .upcoming-head {
   letter-spacing: 0.2em;
