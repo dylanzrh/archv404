@@ -41,7 +41,7 @@ const PAST_FLYERS: string[] = [
 ];
 
 const ARTISTS: string[] = [
-  'ALEX DALLAS','AMOUR PROPRE','ANCHI','ARWIN AZIZ','AXEL NORD','BOYSDONTCRY','CALI:BER','CAMILLO','DARREN','DE:AN','DEBARRO','DANGEL TWINS','D-JOURNEY','DYZEN','FELIX DE LEON','GIANNI','GIORGIO','GUAVED','HEUER','HOMEOFFICE','JOSEPH','JULIA LINKOGEL','KASSETTE','LOU COMBO','MATTEOMIE','MICHELLE VANJA','MORIS','NELLE','ORSAY','PAUL ALMQVIST','ROCCO','RONNY GRAUER','RUBEN SCORZA','SAM MADI','SEBASTIAN KONRAD','SIELLE','SOLIQUE','TIM ENGELHARDT','WHEREISVERO','YENI:SAM','2M',
+  'ALEX DALLAS','AMOUR PROPRE','ANCHI','ARWIN AZIZ','AXEL NORD','BOYSDONTCRY','CALI:BER','CAMILLO','CAROL FERNANDEZ','DARREN','DE:AN','DEBARRO','DANGEL TWINS','D-JOURNEY','DYZEN','FELIX DE LEON','FRANC FALA','GIANNI','GIORGIO','GUAVED','HEUER','HOMEOFFICE','JOSEPH','JULIA LINKOGEL','KASSETTE','LOU COMBO','MATTEOMIE','MICHELLE VANJA','MORIS','NELLE','ORSAY','PAUL ALMQVIST','ROCCO','RONNY GRAUER','RUBEN SCORZA','SAM MADI','SEBASTIAN KONRAD','SIELLE','SOLIQUE','TIM ENGELHARDT','WHEREISVERO','YENI:SAM','2M',
 ];
 
 const HIGHLIGHT_ARTISTS = new Set<string>(['DANGEL TWINS','DYZEN','SEBASTIAN KONRAD','TIM ENGELHARDT']);
@@ -298,9 +298,8 @@ export default function Preview() {
     <section className="section upcoming-section">
       <div className="upcoming upcoming-updated">
         <div className="upcoming-next upcoming-line">
-          <p className="upcoming-head">OCT 2</p>
-          <p className="upcoming-head">SUPERMARKET CLUB</p>
-          <a className="homebtn" href={TICKETS_URL} target="_blank" rel="noopener noreferrer" style={{ marginTop: '20px' }}>TICKETS</a>
+          <p className="upcoming-head">OCT 2 SUPERMARKET CLUB</p>
+          <a className="homebtn upcoming-tickets" href={TICKETS_URL} target="_blank" rel="noopener noreferrer">TICKETS</a>
           <a className="upcoming-flyer-link" href={TICKETS_URL} target="_blank" rel="noopener noreferrer" aria-label="ARCHIVE 404 OCT 2 TICKETS">
             <img className="upcoming-flyer" src={OCT2_FLYER_URL} alt="ARCHIVE 404 OCT 2 SUPERMARKET CLUB" decoding="async" />
           </a>
@@ -729,13 +728,33 @@ html, body {
 display: block;
 width: 100%;
 max-width: 340px;
-margin: 18px auto 0;
+margin: 14px auto 0;
 line-height: 0;
 }
 .upcoming-flyer {
 display: block;
 width: 100%;
 height: auto;
+}
+.upcoming-tickets {
+display: flex;
+width: 100%;
+max-width: 340px;
+margin: 22px auto 0;
+min-height: 0;
+padding: 9px 18px;
+font-weight: 700;
+font-size: 12px;
+letter-spacing: 0.24em;
+background: rgba(255, 255, 255, 0.12);
+border-color: rgba(255, 255, 255, 0.30);
+text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+}
+@media (hover: hover) and (pointer: fine) {
+.upcoming-tickets:hover {
+background: rgba(255, 255, 255, 0.18);
+border-color: rgba(255, 255, 255, 0.45);
+}
 }
 
 .upcoming-head {
