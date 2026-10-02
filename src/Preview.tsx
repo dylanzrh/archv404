@@ -299,7 +299,7 @@ export default function Preview() {
       <div className="upcoming upcoming-updated">
         <div className="upcoming-next upcoming-line">
           <p className="upcoming-head">OCT 2 SUPERMARKET CLUB</p>
-          <a className="homebtn upcoming-tickets" href={TICKETS_URL} target="_blank" rel="noopener noreferrer">TICKETS</a>
+          <a className="homebtn upcoming-tickets" href={TICKETS_URL} target="_blank" rel="noopener noreferrer">LAST TICKETS</a>
           <a className="upcoming-flyer-link" href={TICKETS_URL} target="_blank" rel="noopener noreferrer" aria-label="ARCHIVE 404 OCT 2 TICKETS">
             <img className="upcoming-flyer" src={OCT2_FLYER_URL} alt="ARCHIVE 404 OCT 2 SUPERMARKET CLUB" decoding="async" />
           </a>
