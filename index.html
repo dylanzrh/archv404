@@ -4,6 +4,27 @@
     <meta charset="UTF-8" />
     <title>ARCHIVE 404 · THE ART OF SOUND</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // iOS: prevent auto zoom on input focus (pinch zoom stays available on iOS)
+      if (/iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+        document.querySelector('meta[name=viewport]').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0');
+      }
+    </script>
+    <style>
+      /* Keep autofilled newsletter field transparent with white text */
+      input.newsletter-input:-webkit-autofill,
+      input.newsletter-input:-webkit-autofill:hover,
+      input.newsletter-input:-webkit-autofill:focus,
+      input.newsletter-input:-webkit-autofill:active {
+        -webkit-text-fill-color: #fff !important;
+        caret-color: #fff !important;
+        -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+        transition: background-color 600000s 0s, color 600000s 0s !important;
+      }
+      input.newsletter-input:autofill {
+        background-color: transparent !important;
+      }
+    </style>
     <meta name="description" content="A Zurich-based event label crafting immersive experiences where music, light and space converge." />
     <!-- Meta Pixel Code -->
     <script>
