@@ -253,7 +253,7 @@ export default function Preview() {
         body: JSON.stringify({ email: newsletterEmail.trim() }),
       });
       if (!res.ok) throw new Error('Request failed');
-      setNewsletterMessage('WELCOME TO THE ARCHIVE FAMILY.');
+      setNewsletterMessage('WELCOME TO THE FAMILY.');
       setNewsletterEmail('');
     } catch {
       setNewsletterMessage('SOMETHING WENT WRONG. PLEASE TRY AGAIN.');
