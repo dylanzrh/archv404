@@ -99,6 +99,8 @@ export default function Preview() {
   const [isSubmittingGuest, setIsSubmittingGuest] = useState(false);
   const [guestError, setGuestError] = useState<string | null>(null);
   const [guestDone, setGuestDone] = useState(false);
+  const [guestPlusOne, setGuestPlusOne] = useState(false);
+  const [guestPlusOneName, setGuestPlusOneName] = useState('');
 
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
   const artistRefs = useRef<(HTMLParagraphElement | null)[]>([]);
@@ -285,6 +287,7 @@ export default function Preview() {
           name: guestName.trim(),
           email: guestEmail.trim(),
           instagram: guestInstagram.trim(),
+          plusOne: guestPlusOne ? guestPlusOneName.trim() : '',
           website: guestHoneypot,
         }),
       });
@@ -293,12 +296,15 @@ export default function Preview() {
         if (data?.error === 'invalid_instagram') throw new Error('CHECK YOUR INSTAGRAM HANDLE.');
         if (data?.error === 'invalid_email') throw new Error('CHECK YOUR EMAIL.');
         if (data?.error === 'invalid_name') throw new Error('CHECK YOUR NAME.');
+        if (data?.error === 'invalid_plusone') throw new Error('CHECK THE NAME OF YOUR +1.');
         throw new Error('SOMETHING WENT WRONG. PLEASE TRY AGAIN.');
       }
       setGuestDone(true);
       setGuestName('');
       setGuestEmail('');
       setGuestInstagram('');
+      setGuestPlusOne(false);
+      setGuestPlusOneName('');
     } catch (err) {
       setGuestError(err instanceof Error ? err.message : 'SOMETHING WENT WRONG. PLEASE TRY AGAIN.');
     } finally {
@@ -401,6 +407,30 @@ export default function Preview() {
               {...guestInputHandlers}
               className="newsletter-input"
             />
+            <button
+              type="button"
+              className={guestPlusOne ? 'newsletter-btn guestlist-plusone is-active' : 'newsletter-btn guestlist-plusone'}
+              aria-pressed={guestPlusOne}
+              onPointerUp={(e) => onTouchActivate(e, () => setGuestPlusOne((v) => !v))}
+              onClick={(e) => onClickActivate(e, () => setGuestPlusOne((v) => !v))}
+            >
+              {guestPlusOne ? 'REMOVE +1' : 'ADD +1'}
+            </button>
+            {guestPlusOne && (
+              <input
+                type="text"
+                name="plusone"
+                required
+                minLength={2}
+                maxLength={80}
+                autoComplete="off"
+                placeholder="NAME OF YOUR +1"
+                value={guestPlusOneName}
+                onChange={(e) => setGuestPlusOneName(e.target.value)}
+                {...guestInputHandlers}
+                className="newsletter-input"
+              />
+            )}
             <input
               type="text"
               name="website"
@@ -1034,6 +1064,16 @@ input:-webkit-autofill:active {
 .guestlist { margin-top: 40px; }
 .guestlist-image { margin-top: 36px; }
 .guestlist-label { font-weight: 700; }
+.guestlist-plusone {
+  align-self: center;
+  min-width: 130px;
+  padding: 7px 16px;
+  font-size: 10px;
+}
+.guestlist-plusone.is-active {
+  background: rgba(255, 255, 255, 0.10);
+  border-color: rgba(255, 255, 255, 0.30);
+}
 .guestlist-form {
   display: flex;
   flex-direction: column;
