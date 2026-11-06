@@ -418,7 +418,7 @@ export default function Preview() {
             >
               {isSubmittingGuest ? 'SENDING…' : 'REQUEST ACCESS'}
             </button>
-            <p className="guestlist-note">USED FOR THIS GUESTLIST ONLY.</p>
+            <p className="guestlist-note">LIMITED CAPACITY. REVIEWED, NOT GUARANTEED.</p>
           </form>
         )}
         {guestError && <p className="newsletter-message">{guestError}</p>}
