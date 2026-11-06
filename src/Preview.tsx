@@ -420,7 +420,7 @@ export default function Preview() {
             >
               {isSubmittingGuest ? 'SENDING…' : 'REQUEST ACCESS'}
             </button>
-            <p className="guestlist-note">LIMITED CAPACITY. REVIEWED, NOT GUARANTEED.</p>
+            <p className="guestlist-note">LIMITED CAPACITY. ACCESS SUBJECT TO AVAILABILITY.</p>
           </form>
         )}
         {guestError && <p className="newsletter-message">{guestError}</p>}
