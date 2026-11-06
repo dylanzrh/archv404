@@ -34,6 +34,7 @@ export default async function handler(req: any, res: any) {
   const name = typeof body?.name === 'string' ? body.name.trim().replace(/\s+/g, ' ') : '';
   const email = typeof body?.email === 'string' ? body.email.trim().toLowerCase() : '';
   const instagram = normalizeInstagram(body?.instagram);
+  const plusOne = typeof body?.plusOne === 'string' ? body.plusOne.trim().replace(/\s+/g, ' ') : '';
 
   if (name.length < 2 || name.length > 80) {
     return res.status(400).json({ error: 'invalid_name' });
@@ -43,6 +44,9 @@ export default async function handler(req: any, res: any) {
   }
   if (instagram === null) {
     return res.status(400).json({ error: 'invalid_instagram' });
+  }
+  if (plusOne && (plusOne.length < 2 || plusOne.length > 80)) {
+    return res.status(400).json({ error: 'invalid_plusone' });
   }
 
   const env = (globalThis as any)?.process?.env ?? {};
@@ -58,6 +62,7 @@ export default async function handler(req: any, res: any) {
     NAME: name,
     FIRSTNAME: firstName,
     LASTNAME: rest.join(' '),
+    PLUSONE: plusOne,
   };
   if (instagram) attributes.INSTAGRAM = instagram;
 
