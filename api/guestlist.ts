@@ -34,7 +34,6 @@ export default async function handler(req: any, res: any) {
   const name = typeof body?.name === 'string' ? body.name.trim().replace(/\s+/g, ' ') : '';
   const email = typeof body?.email === 'string' ? body.email.trim().toLowerCase() : '';
   const instagram = normalizeInstagram(body?.instagram);
-  const plusOne = body?.plusOne === true;
 
   if (name.length < 2 || name.length > 80) {
     return res.status(400).json({ error: 'invalid_name' });
@@ -59,7 +58,6 @@ export default async function handler(req: any, res: any) {
     NAME: name,
     FIRSTNAME: firstName,
     LASTNAME: rest.join(' '),
-    PLUSONE: plusOne ? 'YES' : 'NO',
   };
   if (instagram) attributes.INSTAGRAM = instagram;
 
