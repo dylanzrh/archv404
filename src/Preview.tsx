@@ -90,6 +90,14 @@ export default function Preview() {
   const [isSubmittingNewsletter, setIsSubmittingNewsletter] = useState(false);
   const [newsletterMessage, setNewsletterMessage] = useState<string | null>(null);
 
+  const [guestName, setGuestName] = useState('');
+  const [guestEmail, setGuestEmail] = useState('');
+  const [guestInstagram, setGuestInstagram] = useState('');
+  const [guestHoneypot, setGuestHoneypot] = useState('');
+  const [isSubmittingGuest, setIsSubmittingGuest] = useState(false);
+  const [guestError, setGuestError] = useState<string | null>(null);
+  const [guestDone, setGuestDone] = useState(false);
+
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
   const artistRefs = useRef<(HTMLParagraphElement | null)[]>([]);
 
@@ -262,6 +270,45 @@ export default function Preview() {
     }
   };
 
+  const handleGuestlistSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!guestName.trim() || !guestEmail.trim()) return;
+    setIsSubmittingGuest(true);
+    setGuestError(null);
+    try {
+      const res = await fetch('/api/guestlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: guestName.trim(),
+          email: guestEmail.trim(),
+          instagram: guestInstagram.trim(),
+          website: guestHoneypot,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        if (data?.error === 'invalid_instagram') throw new Error('CHECK YOUR INSTAGRAM HANDLE.');
+        if (data?.error === 'invalid_email') throw new Error('CHECK YOUR EMAIL.');
+        if (data?.error === 'invalid_name') throw new Error('CHECK YOUR NAME.');
+        throw new Error('SOMETHING WENT WRONG. PLEASE TRY AGAIN.');
+      }
+      setGuestDone(true);
+      setGuestName('');
+      setGuestEmail('');
+      setGuestInstagram('');
+    } catch (err) {
+      setGuestError(err instanceof Error ? err.message : 'SOMETHING WENT WRONG. PLEASE TRY AGAIN.');
+    } finally {
+      setIsSubmittingGuest(false);
+    }
+  };
+
+  const guestInputHandlers = {
+    onFocus: () => { inputFocusedRef.current = true; },
+    onBlur: () => { inputFocusedRef.current = false; },
+  };
+
   const resetScrollToTop = () => {
     if (typeof window === 'undefined') return;
     requestAnimationFrame(() => {
@@ -300,6 +347,81 @@ export default function Preview() {
         <div className="upcoming-next upcoming-line">
           <p className="upcoming-head">NOV 21 TBA</p>
         </div>
+      </div>
+      <div className="newsletter guestlist">
+        <p className="newsletter-label">GUESTLIST</p>
+        {guestDone ? (
+          <div className="guestlist-done" role="status">
+            <p className="guestlist-done-head">REQUEST RECEIVED.</p>
+            <p className="guestlist-done-text">
+              YOU ARE NOT ON THE LIST YET.
+              <br />
+              CONFIRMATION FOLLOWS BY EMAIL.
+            </p>
+          </div>
+        ) : (
+          <form className="guestlist-form" onSubmit={handleGuestlistSubmit}>
+            <input
+              type="text"
+              name="name"
+              required
+              minLength={2}
+              maxLength={80}
+              autoComplete="name"
+              placeholder="NAME"
+              value={guestName}
+              onChange={(e) => setGuestName(e.target.value)}
+              {...guestInputHandlers}
+              className="newsletter-input"
+            />
+            <input
+              type="email"
+              name="email"
+              required
+              maxLength={254}
+              autoComplete="email"
+              placeholder="EMAIL"
+              value={guestEmail}
+              onChange={(e) => setGuestEmail(e.target.value)}
+              {...guestInputHandlers}
+              className="newsletter-input"
+            />
+            <input
+              type="text"
+              name="instagram"
+              maxLength={60}
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
+              placeholder="INSTAGRAM (OPTIONAL)"
+              value={guestInstagram}
+              onChange={(e) => setGuestInstagram(e.target.value)}
+              {...guestInputHandlers}
+              className="newsletter-input"
+            />
+            <input
+              type="text"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              value={guestHoneypot}
+              onChange={(e) => setGuestHoneypot(e.target.value)}
+              className="guestlist-hp"
+            />
+            <button
+              type="submit"
+              className="newsletter-btn guestlist-btn"
+              disabled={isSubmittingGuest}
+              onPointerUp={(e) => onTouchActivate(e, () => { (e.currentTarget as HTMLButtonElement).form?.requestSubmit?.(); })}
+              onClick={(e) => onClickActivate(e, () => {})}
+            >
+              {isSubmittingGuest ? 'SENDING…' : 'REQUEST ACCESS'}
+            </button>
+            <p className="guestlist-note">USED FOR THIS GUESTLIST ONLY.</p>
+          </form>
+        )}
+        {guestError && <p className="newsletter-message">{guestError}</p>}
       </div>
       <div className="newsletter upcoming-newsletter">
         <p className="newsletter-label">FOR THOSE WHO KNOW.</p>
@@ -895,6 +1017,47 @@ input:-webkit-autofill:active {
   font-size: 11px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.guestlist { margin-top: 40px; }
+.guestlist-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+.guestlist-form .newsletter-input { flex: none; width: 100%; box-sizing: border-box; }
+.guestlist-btn { align-self: center; min-width: 190px; font-weight: 700; margin-top: 4px; }
+.guestlist-hp {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.guestlist-note {
+  margin: 4px 0 0;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.45;
+}
+.guestlist-done {
+  margin-top: 14px;
+  text-transform: uppercase;
+}
+.guestlist-done-head {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+}
+.guestlist-done-text {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.7;
+  letter-spacing: 0.16em;
   opacity: 0.8;
 }
 
