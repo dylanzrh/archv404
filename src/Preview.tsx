@@ -99,7 +99,6 @@ export default function Preview() {
   const [isSubmittingGuest, setIsSubmittingGuest] = useState(false);
   const [guestError, setGuestError] = useState<string | null>(null);
   const [guestDone, setGuestDone] = useState(false);
-  const [guestPlusOne, setGuestPlusOne] = useState(false);
 
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
   const artistRefs = useRef<(HTMLParagraphElement | null)[]>([]);
@@ -286,7 +285,6 @@ export default function Preview() {
           name: guestName.trim(),
           email: guestEmail.trim(),
           instagram: guestInstagram.trim(),
-          plusOne: guestPlusOne,
           website: guestHoneypot,
         }),
       });
@@ -301,7 +299,6 @@ export default function Preview() {
       setGuestName('');
       setGuestEmail('');
       setGuestInstagram('');
-      setGuestPlusOne(false);
     } catch (err) {
       setGuestError(err instanceof Error ? err.message : 'SOMETHING WENT WRONG. PLEASE TRY AGAIN.');
     } finally {
@@ -404,28 +401,6 @@ export default function Preview() {
               {...guestInputHandlers}
               className="newsletter-input"
             />
-            <div className="guestlist-plusone" role="radiogroup" aria-label="Plus one">
-              <button
-                type="button"
-                role="radio"
-                aria-checked={!guestPlusOne}
-                className={!guestPlusOne ? 'newsletter-btn guestlist-choice is-active' : 'newsletter-btn guestlist-choice'}
-                onPointerUp={(e) => onTouchActivate(e, () => setGuestPlusOne(false))}
-                onClick={(e) => onClickActivate(e, () => setGuestPlusOne(false))}
-              >
-                SOLO
-              </button>
-              <button
-                type="button"
-                role="radio"
-                aria-checked={guestPlusOne}
-                className={guestPlusOne ? 'newsletter-btn guestlist-choice is-active' : 'newsletter-btn guestlist-choice'}
-                onPointerUp={(e) => onTouchActivate(e, () => setGuestPlusOne(true))}
-                onClick={(e) => onClickActivate(e, () => setGuestPlusOne(true))}
-              >
-                +1
-              </button>
-            </div>
             <input
               type="text"
               name="website"
@@ -1059,22 +1034,6 @@ input:-webkit-autofill:active {
 .guestlist { margin-top: 40px; }
 .guestlist-image { margin-top: 36px; }
 .guestlist-label { font-weight: 700; }
-.guestlist-plusone {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 2px;
-}
-.guestlist-choice {
-  min-width: 90px;
-  padding: 7px 16px;
-  font-size: 10px;
-}
-.guestlist-choice.is-active {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.35);
-  font-weight: 700;
-}
 .guestlist-form {
   display: flex;
   flex-direction: column;
