@@ -351,7 +351,7 @@ export default function Preview() {
         </div>
       </div>
       <div className="newsletter guestlist">
-        <p className="newsletter-label">GUESTLIST</p>
+        <p className="newsletter-label guestlist-label">GUESTLIST</p>
         {guestDone ? (
           <div className="guestlist-done" role="status">
             <p className="guestlist-done-head">REQUEST RECEIVED.</p>
@@ -1033,6 +1033,7 @@ input:-webkit-autofill:active {
 
 .guestlist { margin-top: 40px; }
 .guestlist-image { margin-top: 36px; }
+.guestlist-label { font-weight: 700; }
 .guestlist-form {
   display: flex;
   flex-direction: column;
