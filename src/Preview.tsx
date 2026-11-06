@@ -11,6 +11,8 @@ const YOUTUBE_URL = 'https://youtube.com/@archv404?si=NT6lnimYaA58Lg6o';
 const MAY8_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1776801767/AR405_Instagram-Post-Lineup-Grey-4-5_260409_lsw2xb.jpg';
 const APR17_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1774627082/AR402_Instagram-Post_SH_260227_01_Instapost_Grau_tcxhpc.jpg';
 
+const NOV21_IMAGE_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1793980928/IMG_1634_hdbgpp.jpg';
+
 const BASE_ZOOM = 1.02;
 const MAX_ZOOM = 1.1;
 
@@ -422,6 +424,15 @@ export default function Preview() {
           </form>
         )}
         {guestError && <p className="newsletter-message">{guestError}</p>}
+      </div>
+      <div className="upcoming-flyer-link guestlist-image">
+        <img
+          src={NOV21_IMAGE_URL}
+          alt="ARCHIVE 404"
+          className="upcoming-flyer"
+          loading="lazy"
+          decoding="async"
+        />
       </div>
       <div className="newsletter upcoming-newsletter">
         <p className="newsletter-label">FOR THOSE WHO KNOW.</p>
@@ -1021,6 +1032,7 @@ input:-webkit-autofill:active {
 }
 
 .guestlist { margin-top: 40px; }
+.guestlist-image { margin-top: 36px; }
 .guestlist-form {
   display: flex;
   flex-direction: column;
