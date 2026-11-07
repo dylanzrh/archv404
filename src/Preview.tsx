@@ -370,7 +370,7 @@ export default function Preview() {
               minLength={2}
               maxLength={80}
               autoComplete="name"
-              placeholder="NAME"
+              placeholder="FULL NAME"
               value={guestName}
               onChange={(e) => setGuestName(e.target.value)}
               {...guestInputHandlers}
