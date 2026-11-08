@@ -92,7 +92,8 @@ export default function Preview() {
   const [isSubmittingNewsletter, setIsSubmittingNewsletter] = useState(false);
   const [newsletterMessage, setNewsletterMessage] = useState<string | null>(null);
 
-  const [guestName, setGuestName] = useState('');
+  const [guestFirstName, setGuestFirstName] = useState('');
+  const [guestLastName, setGuestLastName] = useState('');
   const [guestEmail, setGuestEmail] = useState('');
   const [guestInstagram, setGuestInstagram] = useState('');
   const [guestHoneypot, setGuestHoneypot] = useState('');
@@ -274,7 +275,10 @@ export default function Preview() {
 
   const handleGuestlistSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!guestName.trim() || !guestEmail.trim()) return;
+    if (!guestFirstName.trim() || !guestLastName.trim() || !guestEmail.trim()) {
+      setGuestError('PLEASE FILL IN FIRST NAME, LAST NAME AND EMAIL.');
+      return;
+    }
     setIsSubmittingGuest(true);
     setGuestError(null);
     try {
@@ -282,7 +286,8 @@ export default function Preview() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: guestName.trim(),
+          firstName: guestFirstName.trim(),
+          lastName: guestLastName.trim(),
           email: guestEmail.trim(),
           instagram: guestInstagram.trim(),
           website: guestHoneypot,
@@ -292,11 +297,14 @@ export default function Preview() {
         const data = await res.json().catch(() => ({}));
         if (data?.error === 'invalid_instagram') throw new Error('CHECK YOUR INSTAGRAM HANDLE.');
         if (data?.error === 'invalid_email') throw new Error('CHECK YOUR EMAIL.');
+        if (data?.error === 'invalid_firstname') throw new Error('CHECK YOUR FIRST NAME.');
+        if (data?.error === 'invalid_lastname') throw new Error('CHECK YOUR LAST NAME.');
         if (data?.error === 'invalid_name') throw new Error('CHECK YOUR NAME.');
         throw new Error('SOMETHING WENT WRONG. PLEASE TRY AGAIN.');
       }
       setGuestDone(true);
-      setGuestName('');
+      setGuestFirstName('');
+      setGuestLastName('');
       setGuestEmail('');
       setGuestInstagram('');
     } catch (err) {
@@ -365,14 +373,27 @@ export default function Preview() {
           <form className="guestlist-form" onSubmit={handleGuestlistSubmit}>
             <input
               type="text"
-              name="name"
+              name="firstName"
               required
               minLength={2}
-              maxLength={80}
-              autoComplete="name"
-              placeholder="FULL NAME"
-              value={guestName}
-              onChange={(e) => setGuestName(e.target.value)}
+              maxLength={50}
+              autoComplete="given-name"
+              placeholder="FIRST NAME"
+              value={guestFirstName}
+              onChange={(e) => setGuestFirstName(e.target.value)}
+              {...guestInputHandlers}
+              className="newsletter-input"
+            />
+            <input
+              type="text"
+              name="lastName"
+              required
+              minLength={2}
+              maxLength={50}
+              autoComplete="family-name"
+              placeholder="LAST NAME"
+              value={guestLastName}
+              onChange={(e) => setGuestLastName(e.target.value)}
               {...guestInputHandlers}
               className="newsletter-input"
             />
