@@ -31,12 +31,23 @@ export default async function handler(req: any, res: any) {
     return res.status(200).json({ ok: true });
   }
 
-  const name = typeof body?.name === 'string' ? body.name.trim().replace(/\s+/g, ' ') : '';
+  const clean = (v: unknown) => (typeof v === 'string' ? v.trim().replace(/\s+/g, ' ') : '');
+  // New form sends firstName + lastName. Old clients (cached page) send a single "name".
+  let firstName = clean(body?.firstName);
+  let lastName = clean(body?.lastName);
+  if (!firstName && !lastName) {
+    const parts = clean(body?.name).split(' ').filter(Boolean);
+    firstName = parts[0] || '';
+    lastName = parts.slice(1).join(' ');
+  }
   const email = typeof body?.email === 'string' ? body.email.trim().toLowerCase() : '';
   const instagram = normalizeInstagram(body?.instagram);
 
-  if (name.length < 2 || name.length > 80) {
-    return res.status(400).json({ error: 'invalid_name' });
+  if (firstName.length < 2 || firstName.length > 50) {
+    return res.status(400).json({ error: 'invalid_firstname' });
+  }
+  if (lastName.length < 2 || lastName.length > 50) {
+    return res.status(400).json({ error: 'invalid_lastname' });
   }
   if (!EMAIL_RE.test(email) || email.length > 254) {
     return res.status(400).json({ error: 'invalid_email' });
@@ -53,11 +64,10 @@ export default async function handler(req: any, res: any) {
     return res.status(500).json({ error: 'Missing BREVO_API_KEY' });
   }
 
-  const [firstName, ...rest] = name.split(' ');
   const attributes: Record<string, string> = {
-    NAME: name,
+    NAME: `${firstName} ${lastName}`,
     FIRSTNAME: firstName,
-    LASTNAME: rest.join(' '),
+    LASTNAME: lastName,
   };
   if (instagram) attributes.INSTAGRAM = instagram;
 
