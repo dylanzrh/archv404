@@ -12,6 +12,7 @@ const MAY8_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto
 const APR17_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1774627082/AR402_Instagram-Post_SH_260227_01_Instapost_Grau_tcxhpc.jpg';
 
 const NOV21_IMAGE_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1794258192/AR408_Static-November-1_oposvn.png';
+const CAMERA_IMAGE_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1793980928/IMG_1634_hdbgpp.jpg';
 
 const BASE_ZOOM = 1.02;
 const MAX_ZOOM = 1.1;
@@ -450,6 +451,15 @@ export default function Preview() {
         <img
           src={NOV21_IMAGE_URL}
           alt="ARCHIVE 404 November flyer"
+          className="upcoming-flyer"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      <div className="upcoming-flyer-link">
+        <img
+          src={CAMERA_IMAGE_URL}
+          alt="ARCHIVE 404 Camera"
           className="upcoming-flyer"
           loading="lazy"
           decoding="async"
