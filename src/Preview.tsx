@@ -11,7 +11,7 @@ const YOUTUBE_URL = 'https://youtube.com/@archv404?si=NT6lnimYaA58Lg6o';
 const MAY8_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1776801767/AR405_Instagram-Post-Lineup-Grey-4-5_260409_lsw2xb.jpg';
 const APR17_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1774627082/AR402_Instagram-Post_SH_260227_01_Instapost_Grau_tcxhpc.jpg';
 
-const NOV21_IMAGE_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1793980928/IMG_1634_hdbgpp.jpg';
+const NOV21_IMAGE_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1794258192/AR408_Static-November-1_oposvn.png';
 
 const BASE_ZOOM = 1.02;
 const MAX_ZOOM = 1.1;
@@ -449,7 +449,7 @@ export default function Preview() {
       <div className="upcoming-flyer-link guestlist-image">
         <img
           src={NOV21_IMAGE_URL}
-          alt="ARCHIVE 404"
+          alt="ARCHIVE 404 November flyer"
           className="upcoming-flyer"
           loading="lazy"
           decoding="async"
