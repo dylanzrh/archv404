@@ -456,7 +456,7 @@ export default function Preview() {
           decoding="async"
         />
       </div>
-      <div className="upcoming-flyer-link">
+      <div className="upcoming-flyer-link guestlist-image">
         <img
           src={CAMERA_IMAGE_URL}
           alt="ARCHIVE 404 Camera"
