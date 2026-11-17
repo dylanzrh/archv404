@@ -456,6 +456,10 @@ export default function Preview() {
           decoding="async"
         />
       </div>
+      <p className="table-note">
+        FOR TABLE RESERVATIONS CONTACT{' '}
+        <a href={MAILTO_URL}>INFO@ARCHV404.COM</a>
+      </p>
       <div className="upcoming-flyer-link guestlist-image">
         <img
           src={CAMERA_IMAGE_URL}
@@ -1079,6 +1083,18 @@ input:-webkit-autofill:active {
   width: 1px;
   height: 1px;
   opacity: 0;
+}
+.table-note {
+  margin: 28px 0 0;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+.table-note a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 .guestlist-note {
   margin: 4px 0 0;
