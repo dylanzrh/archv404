@@ -1085,16 +1085,23 @@ input:-webkit-autofill:active {
   opacity: 0;
 }
 .table-note {
-  margin: 28px 0 0;
+  margin: 28px auto 0;
   font-size: 11px;
+  font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  opacity: 0.8;
+  text-align: center;
+  opacity: 0.9;
 }
 .table-note a {
   color: inherit;
+  font-weight: 700;
   text-decoration: underline;
   text-underline-offset: 3px;
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .table-note a { display: block; margin-top: 6px; }
 }
 .guestlist-note {
   margin: 4px 0 0;
