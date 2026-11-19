@@ -360,14 +360,14 @@ export default function Preview() {
         </div>
       </div>
       <div className="newsletter guestlist">
-        <p className="newsletter-label guestlist-label">GUESTLIST</p>
-        {guestDone ? (
+        
+        {guestDone || true ? (
           <div className="guestlist-done" role="status">
-            <p className="guestlist-done-head">REQUEST RECEIVED.</p>
-            <p className="guestlist-done-text">
-              YOU ARE NOT ON THE LIST YET.
+            <p className="guestlist-done-head">GUESTLIST REMAINS CLOSED FOR NOW.</p>
+            <p className="guestlist-done-text table-note">
+              FOR TABLE RESERVATIONS CONTACT
               <br />
-              CONFIRMATION FOLLOWS BY EMAIL.
+              <a href={MAILTO_URL}>INFO@ARCHV404.COM</a>
             </p>
           </div>
         ) : (
@@ -456,7 +456,7 @@ export default function Preview() {
           decoding="async"
         />
       </div>
-      <p className="table-note">
+      <p className="table-note" hidden>
         FOR TABLE RESERVATIONS CONTACT{' '}
         <a href={MAILTO_URL}>INFO@ARCHV404.COM</a>
       </p>
