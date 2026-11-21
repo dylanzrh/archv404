@@ -359,15 +359,15 @@ export default function Preview() {
           <p className="upcoming-head">NOV 21 CAMERA MINI MARKET</p>
         </div>
       </div>
-      <div className="newsletter guestlist">
+      <div className="newsletter guestlist"><p className="newsletter-label guestlist-label">GUESTLIST · LAST SPOTS</p>
         
-        {guestDone || true ? (
+        {guestDone ? (
           <div className="guestlist-done" role="status">
-            <p className="guestlist-done-head">GUESTLIST REMAINS CLOSED FOR NOW.</p>
-            <p className="guestlist-done-text table-note">
-              FOR TABLE RESERVATIONS CONTACT
+            <p className="guestlist-done-head">REQUEST RECEIVED.</p>
+            <p className="guestlist-done-text">
+              YOU ARE NOT ON THE LIST YET.
               <br />
-              <a href={MAILTO_URL}>INFO@ARCHV404.COM</a>
+              CONFIRMATION FOLLOWS BY EMAIL.
             </p>
           </div>
         ) : (
@@ -442,7 +442,7 @@ export default function Preview() {
             >
               {isSubmittingGuest ? 'SENDING…' : 'REQUEST ACCESS'}
             </button>
-            <p className="guestlist-note">LIMITED CAPACITY. ACCESS SUBJECT TO AVAILABILITY.</p>
+            <p className="guestlist-note">LAST SPOTS. ACCESS SUBJECT TO AVAILABILITY.</p>
           </form>
         )}
         {guestError && <p className="newsletter-message">{guestError}</p>}
@@ -456,7 +456,7 @@ export default function Preview() {
           decoding="async"
         />
       </div>
-      <p className="table-note" hidden>
+      <p className="table-note">
         FOR TABLE RESERVATIONS CONTACT{' '}
         <a href={MAILTO_URL}>INFO@ARCHV404.COM</a>
       </p>
