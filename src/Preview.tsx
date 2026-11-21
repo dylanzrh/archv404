@@ -362,6 +362,10 @@ export default function Preview() {
       <div className="newsletter guestlist"><p className="newsletter-label guestlist-label">GUESTLIST CLOSED</p>
         
       </div>
+      <p className="table-note">
+        FOR TABLE RESERVATIONS CONTACT{' '}
+        <a href={MAILTO_URL}>INFO@ARCHV404.COM</a>
+      </p>
       <div className="upcoming-flyer-link guestlist-image">
         <img
           src={NOV21_IMAGE_URL}
@@ -371,10 +375,6 @@ export default function Preview() {
           decoding="async"
         />
       </div>
-      <p className="table-note">
-        FOR TABLE RESERVATIONS CONTACT{' '}
-        <a href={MAILTO_URL}>INFO@ARCHV404.COM</a>
-      </p>
       <div className="newsletter upcoming-newsletter">
         <p className="newsletter-label">FOR THOSE WHO KNOW.</p>
         <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
