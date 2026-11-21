@@ -359,93 +359,8 @@ export default function Preview() {
           <p className="upcoming-head">NOV 21 CAMERA MINI MARKET</p>
         </div>
       </div>
-      <div className="newsletter guestlist"><p className="newsletter-label guestlist-label">LAST GUESTLIST SPOTS</p>
+      <div className="newsletter guestlist"><p className="newsletter-label guestlist-label">GUESTLIST CLOSED</p>
         
-        {guestDone ? (
-          <div className="guestlist-done" role="status">
-            <p className="guestlist-done-head">REQUEST RECEIVED.</p>
-            <p className="guestlist-done-text">
-              YOU ARE NOT ON THE LIST YET.
-              <br />
-              CONFIRMATION FOLLOWS BY EMAIL.
-            </p>
-          </div>
-        ) : (
-          <form className="guestlist-form" onSubmit={handleGuestlistSubmit}>
-            <input
-              type="text"
-              name="firstName"
-              required
-              minLength={2}
-              maxLength={50}
-              autoComplete="given-name"
-              placeholder="FIRST NAME"
-              value={guestFirstName}
-              onChange={(e) => setGuestFirstName(e.target.value)}
-              {...guestInputHandlers}
-              className="newsletter-input"
-            />
-            <input
-              type="text"
-              name="lastName"
-              required
-              minLength={2}
-              maxLength={50}
-              autoComplete="family-name"
-              placeholder="LAST NAME"
-              value={guestLastName}
-              onChange={(e) => setGuestLastName(e.target.value)}
-              {...guestInputHandlers}
-              className="newsletter-input"
-            />
-            <input
-              type="email"
-              name="email"
-              required
-              maxLength={254}
-              autoComplete="email"
-              placeholder="EMAIL"
-              value={guestEmail}
-              onChange={(e) => setGuestEmail(e.target.value)}
-              {...guestInputHandlers}
-              className="newsletter-input"
-            />
-            <input
-              type="text"
-              name="instagram"
-              maxLength={60}
-              autoCapitalize="none"
-              autoCorrect="off"
-              spellCheck={false}
-              placeholder="INSTAGRAM (OPTIONAL)"
-              value={guestInstagram}
-              onChange={(e) => setGuestInstagram(e.target.value)}
-              {...guestInputHandlers}
-              className="newsletter-input"
-            />
-            <input
-              type="text"
-              name="website"
-              tabIndex={-1}
-              autoComplete="off"
-              aria-hidden="true"
-              value={guestHoneypot}
-              onChange={(e) => setGuestHoneypot(e.target.value)}
-              className="guestlist-hp"
-            />
-            <button
-              type="submit"
-              className="newsletter-btn guestlist-btn"
-              disabled={isSubmittingGuest}
-              onPointerUp={(e) => onTouchActivate(e, () => { (e.currentTarget as HTMLButtonElement).form?.requestSubmit?.(); })}
-              onClick={(e) => onClickActivate(e, () => {})}
-            >
-              {isSubmittingGuest ? 'SENDING…' : 'REQUEST ACCESS'}
-            </button>
-            <p className="guestlist-note">ACCESS SUBJECT TO AVAILABILITY.</p>
-          </form>
-        )}
-        {guestError && <p className="newsletter-message">{guestError}</p>}
       </div>
       <div className="upcoming-flyer-link guestlist-image">
         <img
@@ -460,15 +375,6 @@ export default function Preview() {
         FOR TABLE RESERVATIONS CONTACT{' '}
         <a href={MAILTO_URL}>INFO@ARCHV404.COM</a>
       </p>
-      <div className="upcoming-flyer-link guestlist-image">
-        <img
-          src={CAMERA_IMAGE_URL}
-          alt="ARCHIVE 404 table plan"
-          className="upcoming-flyer"
-          loading="lazy"
-          decoding="async"
-        />
-      </div>
       <div className="newsletter upcoming-newsletter">
         <p className="newsletter-label">FOR THOSE WHO KNOW.</p>
         <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
