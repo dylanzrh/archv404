@@ -359,7 +359,7 @@ export default function Preview() {
           <p className="upcoming-head">NOV 21 CAMERA MINI MARKET</p>
         </div>
       </div>
-      <div className="newsletter guestlist"><p className="newsletter-label guestlist-label">GUESTLIST · LAST SPOTS</p>
+      <div className="newsletter guestlist"><p className="newsletter-label guestlist-label">LAST GUESTLIST SPOTS</p>
         
         {guestDone ? (
           <div className="guestlist-done" role="status">
@@ -442,7 +442,7 @@ export default function Preview() {
             >
               {isSubmittingGuest ? 'SENDING…' : 'REQUEST ACCESS'}
             </button>
-            <p className="guestlist-note">LAST SPOTS. ACCESS SUBJECT TO AVAILABILITY.</p>
+            <p className="guestlist-note">ACCESS SUBJECT TO AVAILABILITY.</p>
           </form>
         )}
         {guestError && <p className="newsletter-message">{guestError}</p>}
