@@ -27,6 +27,7 @@ const OCT2_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto
 const ABOUT_TEXT = 'ARCHIVE 404 IS A ZURICH-BASED EVENT LABEL CRAFTING CAREFULLY DESIGNED EXPERIENCES WHERE MUSIC, LIGHT AND SPACE CREATE IMMERSIVE MOMENTS. ITS NAME REINTERPRETS A DIGITAL ERROR AS AN INVITATION TO RECONNECT THROUGH PEOPLE AND SOUND. BY BRINGING TOGETHER RESPECTED INTERNATIONAL ARTISTS AND SOME OF THE MOST PROMISING LOCAL TALENTS, ARCHIVE 404 CREATES A DISTINCT ENERGY THAT FEELS CONTEMPORARY YET TIMELESS.';
 
 const PAST_FLYERS: string[] = [
+  NOV21_IMAGE_URL,
   OCT2_FLYER_URL,
   JUL3_FLYER_URL,
   MAY8_FLYER_URL,
@@ -164,7 +165,7 @@ export default function Preview() {
   useEffect(() => { playIntro(); }, []);
 
   useEffect(() => {
-    const urls = [ST_MORITZ_FLYER_URL, ZURICH_JAN30_FLYER_URL, FEB27_FLYER_URL, APR17_FLYER_URL, MAY8_FLYER_URL, JUL3_FLYER_URL];
+    const urls = [ST_MORITZ_FLYER_URL, ZURICH_JAN30_FLYER_URL, FEB27_FLYER_URL, APR17_FLYER_URL, MAY8_FLYER_URL, JUL3_FLYER_URL, OCT2_FLYER_URL, NOV21_IMAGE_URL];
     urls.forEach((url) => { const img = new Image(); img.decoding = 'async'; img.src = url; });
   }, []);
 
@@ -356,24 +357,9 @@ export default function Preview() {
     <section className="section upcoming-section">
       <div className="upcoming upcoming-updated">
         <div className="upcoming-next upcoming-line">
-          <p className="upcoming-head">NOV 21 CAMERA MINI MARKET</p>
+          <p className="upcoming-head">DEC 18</p>
+          <p className="upcoming-head">TBA</p>
         </div>
-      </div>
-      <div className="newsletter guestlist"><p className="newsletter-label guestlist-label">GUESTLIST CLOSED</p>
-        
-      </div>
-      <p className="table-note">
-        FOR TABLE RESERVATIONS CONTACT{' '}
-        <a href={MAILTO_URL}>INFO@ARCHV404.COM</a>
-      </p>
-      <div className="upcoming-flyer-link guestlist-image">
-        <img
-          src={NOV21_IMAGE_URL}
-          alt="ARCHIVE 404 November flyer"
-          className="upcoming-flyer"
-          loading="lazy"
-          decoding="async"
-        />
       </div>
       <div className="newsletter upcoming-newsletter">
         <p className="newsletter-label">FOR THOSE WHO KNOW.</p>
