@@ -129,6 +129,18 @@ export default function Preview() {
     }
   };
 
+  const openExternal = (url: string) => {
+    const w = window.open(url, '_blank');
+    if (w) { w.opener = null; } else { window.location.href = url; }
+  };
+
+  const ticketLinkHandlers = {
+    onPointerUp: (e: React.PointerEvent<HTMLAnchorElement>) => onTouchActivate(e, () => openExternal(DEC18_TICKETS_URL)),
+    onClick: (e: React.MouseEvent<HTMLAnchorElement>) => {
+      if (Date.now() - lastTouchActivateTsRef.current < TOUCH_DEDUPE_MS) { e.preventDefault(); e.stopPropagation(); }
+    },
+  };
+
   const onClickActivate = (e: React.MouseEvent, action: () => void) => {
     if (Date.now() - lastTouchActivateTsRef.current < TOUCH_DEDUPE_MS) {
       e.preventDefault();
@@ -360,8 +372,8 @@ export default function Preview() {
       <div className="upcoming upcoming-updated">
         <div className="upcoming-next upcoming-line">
           <p className="upcoming-head">DEC 18 SUPERMARKET CLUB</p>
-          <a className="homebtn upcoming-tickets" href={DEC18_TICKETS_URL} target="_blank" rel="noopener noreferrer">TICKETS</a>
-          <a className="upcoming-flyer-link" href={DEC18_TICKETS_URL} target="_blank" rel="noopener noreferrer" aria-label="ARCHIVE 404 DEC 18 TICKETS">
+          <a className="homebtn upcoming-tickets" href={DEC18_TICKETS_URL} target="_blank" rel="noopener noreferrer" {...ticketLinkHandlers}>TICKETS</a>
+          <a className="upcoming-flyer-link" href={DEC18_TICKETS_URL} target="_blank" rel="noopener noreferrer" aria-label="ARCHIVE 404 DEC 18 TICKETS" {...ticketLinkHandlers}>
             <img className="upcoming-flyer" src={DEC18_FLYER_URL} alt="ARCHIVE 404 DEC 18 SUPERMARKET CLUB" decoding="async" />
           </a>
         </div>
