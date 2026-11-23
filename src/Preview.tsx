@@ -11,6 +11,8 @@ const YOUTUBE_URL = 'https://youtube.com/@archv404?si=NT6lnimYaA58Lg6o';
 const MAY8_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1776801767/AR405_Instagram-Post-Lineup-Grey-4-5_260409_lsw2xb.jpg';
 const APR17_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1774627082/AR402_Instagram-Post_SH_260227_01_Instapost_Grau_tcxhpc.jpg';
 
+const DEC18_FLYER_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1795446935/AR408_Static-December-3_ww0spd.png';
+const DEC18_TICKETS_URL = 'https://supermarket-website-eta.vercel.app/tickets/archive-404-18-12-2026';
 const NOV21_IMAGE_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/f_auto,q_auto,w_900/v1794258192/AR408_Static-November-1_oposvn.png';
 const CAMERA_IMAGE_URL = 'https://res.cloudinary.com/dsas5i0fx/image/upload/v1795113993/IMG_2669_m3cuck.png';
 
@@ -357,8 +359,11 @@ export default function Preview() {
     <section className="section upcoming-section">
       <div className="upcoming upcoming-updated">
         <div className="upcoming-next upcoming-line">
-          <p className="upcoming-head">DEC 18</p>
-          <p className="upcoming-head">TBA</p>
+          <p className="upcoming-head">DEC 18 SUPERMARKET CLUB</p>
+          <a className="homebtn upcoming-tickets" href={DEC18_TICKETS_URL} target="_blank" rel="noopener noreferrer">TICKETS</a>
+          <a className="upcoming-flyer-link" href={DEC18_TICKETS_URL} target="_blank" rel="noopener noreferrer" aria-label="ARCHIVE 404 DEC 18 TICKETS">
+            <img className="upcoming-flyer" src={DEC18_FLYER_URL} alt="ARCHIVE 404 DEC 18 SUPERMARKET CLUB" decoding="async" />
+          </a>
         </div>
       </div>
       <div className="newsletter upcoming-newsletter">
